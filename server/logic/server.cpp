@@ -17,6 +17,7 @@ LogicServer::~LogicServer()
 bool LogicServer::Init(int maxSession,int maxWaiting,  int backLog)
 {
     mMaxSession = maxSession;
+    LOG_INFO("LogicServer::Init", "mMaxSession 초기화됨: {}", mMaxSession);
 
     if (!Core::Init(maxSession, maxWaiting, backLog))
     {
@@ -77,6 +78,7 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
         LogicManager::Get().DisPatchPacket(session->GetUniqueId(), packetData, packetSize);
        
         recvBuffer->MoveReadPos(packetSize);
+        //LOG_INFO("OnRecv", "Recv packet - uID:{} : {}", session->GetUniqueId(), packetSize);
     }
 
     if (!session->RecvReady())
@@ -147,6 +149,7 @@ bool LogicServer::OnClose(unsigned int uID)
         return false;
     }
 
+    LOG_INFO("Session", "disconnect id:{}", uID);
     return true;
 }
 
@@ -202,7 +205,7 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
             session->SendPacket(buf.data(), size);
 
             WaitingManager::Get().Enqueue(session);
-            LOG_INFO("OnAccept", "Session {} pushed to waiting queue", uID);
+            LOG_INFO("Waiting Enqueue", "Session {} pushed to waiting queue", uID);
         }
     }
 }
@@ -217,10 +220,10 @@ void LogicServer::OnSend(unsigned int uID, unsigned long ioSize)
 
     BufferEx* sendBuffer = session->GetSendBuffer();
     if (sendBuffer)
-        sendBuffer->MoveReadPos(ioSize);
-    
-    session->SendReady();
-    LOG_INFO("OnSend", "uid:{} ioSize:{} → SendReady 호출", uID, ioSize);
+    {
+        sendBuffer->Read(ioSize);
+        LOG_INFO("OnSend", "uid:{} byte:{}", uID, ioSize);
+    }
 
 }
 
@@ -236,10 +239,5 @@ void LogicServer::BindSession(ClientSession* session)
     mActiveSessionMap.emplace(session->GetUniqueId(), session);
     session->RecvReady();
 
-    LOG_INFO("대기열 해제", "uid:{} ", session->GetUniqueId() );
-}
-
-ClientSession* LogicServer::GetSession(int sessionId) 
-{ 
-    return Core::GetSession(sessionId); 
+    LOG_INFO("Waiting Release", "uid:{} ", session->GetUniqueId() );
 }

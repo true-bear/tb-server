@@ -11,6 +11,9 @@
     <Filter Include="src\common">
       <UniqueIdentifier>{06ffb2bc-fde3-4b25-9618-40ac0519be9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\infra">
+      <UniqueIdentifier>{8cf805f0-da13-4447-80ca-5519e3b3c974}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="socket.h">

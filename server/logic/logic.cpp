@@ -56,8 +56,7 @@ void LogicManager::RunThread()
 
                 PacketType type = header.type();
                 mDispatcher.Dispatch(static_cast<size_t>(type), session, packet->mData.data(), packet->mSize);
-                
-                delete packet;
+
             }
             else
             {
@@ -75,7 +74,6 @@ void LogicManager::RunThread()
 
 void LogicManager::DisPatchPacket(const int sessionId, const char* data, uint16_t packetSize)
 {
-    //todo : uniqueptr 써도 될듯
     PacketEx* pkt = new PacketEx(sessionId, packetSize, data);
     if (!mPacketQueue.push(pkt))
     {

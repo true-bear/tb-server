@@ -114,7 +114,7 @@ void Core::WorkerThread()
 	while (mIsRunThread)
 	{
 		Iocp::IocpEvents events;
-		GQCSEx(events, 10);
+		GQCSEx(events, 5);
 
 		for (int i = 0; i < events.m_eventCount; ++i)
 		{
@@ -147,10 +147,7 @@ void Core::WorkerThread()
 
 			if (0 >= ioSize && IO_TYPE::ACCEPT != ioType)
 			{
-				LOG_ERR("WorkerThread", "ioSize <= 0. uid={}, ioType={}", sessionID, static_cast<int>(ioType));
-
 				OnClose(sessionID);
-				LOG_INFO("Session", "disconnect id:{}", sessionID);
 				continue;
 			}
 
@@ -158,7 +155,6 @@ void Core::WorkerThread()
 			{
 			case IO_TYPE::ACCEPT:
 				OnAccept(sessionID, getIoEvent.lpCompletionKey);
-				LOG_INFO("Session", "connect id:{}", sessionID);
 				break;
 			case IO_TYPE::RECV:
 				OnRecv(sessionID, ioSize);

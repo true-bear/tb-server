@@ -23,7 +23,7 @@ public:
 	virtual void OnSend(unsigned int uID, unsigned long ioSize);
 
 public:
-	ClientSession* GetSession(int sessionId);
+	ClientSession* GetSession(int sessionId){return Core::GetSession(sessionId);}
 	//void ActivateWaitingClient();
 	bool Init(int maxSessionCount, int maxWaitingCount, int backLog);
 	bool HasFreeSlot();

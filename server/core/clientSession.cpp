@@ -179,62 +179,55 @@ bool ClientSession::SendPacket(const char* data, unsigned long long packetSize)
 	if (!mSendBuffer->Write((char*)&sizeHeaderBE, sizeof(sizeHeaderBE)) ||
 		!mSendBuffer->Write(data, packetSize))
 	{
-		LOG_ERR("SendPacket", "send buffer full? stored:{} remain:{} uid:{}",
-			mSendBuffer->GetStoredSize(), mSendBuffer->GetRemainSize(), mUID);
-
+		LOG_ERR("SendPacket", "send buffer header size:{} id:{}", sizeof(sizeHeaderBE), mUID);
 		return false;
 	}
 
-	bool expected = false;
-	if (mIsSending.compare_exchange_strong(expected, true))
-	{
-		return SendReady();
-	}
-
-	return true;
+	return SendReady();
 }
 
 bool ClientSession::SendReady()
 {
-
 	size_t storedSize = mSendBuffer->GetStoredSize();
-	if (storedSize == 0)
-	{
-		mIsSending.store(false);
+
+	if (storedSize <= 0)
 		return true;
-	}
-
-	LOG_INFO("SendReady", "storedSize:{} / mIsSending:{}", storedSize, mIsSending.load());
-
 
 	std::vector<char> sendData(storedSize);
 	if (!mSendBuffer->Read(sendData.data(), storedSize))
 	{
-		mIsSending.store(false);
+		LOG_ERR("SendReady", "send buffer read size:{} id:{}", storedSize, mUID);
 		return false;
 	}
 
-	mSendOverEx.mUID = mUID;
-	mSendOverEx.mIOType = IO_TYPE::SEND;
-	mSendOverEx.mWsaBuf.buf = sendData.data();
-	mSendOverEx.mWsaBuf.len = static_cast<ULONG>(storedSize);
 
-	int ret = WSASend(mRemoteSock.GetSocket(), &mSendOverEx.mWsaBuf, 1, nullptr, 0,
-		reinterpret_cast<LPWSAOVERLAPPED>(&mSendOverEx), nullptr);
+	mSendOverEx.mUID = mUID;
+	mSendOverEx.mWsaBuf = { (ULONG)storedSize , sendData.data() };
+
+	unsigned long sendBytes = 0;
+	unsigned long flags = 0;
+
+	int ret = WSASend(
+		mRemoteSock.GetSocket(),
+		&mSendOverEx.mWsaBuf,
+		1,
+		&sendBytes,
+		flags,
+		reinterpret_cast<LPWSAOVERLAPPED>(&mSendOverEx),
+		NULL
+	);
 
 	if (ret == SOCKET_ERROR)
 	{
-		int err = WSAGetLastError();
-		if (err != WSA_IO_PENDING)
+		if (int error = WSAGetLastError(); error != WSA_IO_PENDING)
 		{
-			mIsSending.store(false);
+			LOG_ERR("SendReady", "WSASend err:{} id:{}", error, mUID);
 			return false;
 		}
 	}
 
 	return true;
 }
-
 
 bool ClientSession::IsConnected() const {
 	return mRemoteSock.GetSocket() != INVALID_SOCKET;

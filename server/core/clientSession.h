@@ -55,10 +55,11 @@ private:
 	OverlappedIoEx				mSendOverEx;
 	OverlappedIoEx              mAcceptOverEx;
 
-	int				mUID{ -1 };
+	unsigned int				mUID = -1;
 	char						mAcceptBuf[64]{};
 
-	std::atomic<bool> mIsSending{ false };
+	//volatile long m_pendingRecvFlag = 0;
+
 private:
 	std::unique_ptr<BufferEx> mRecvBuffer{ std::make_unique<BufferEx>(RECV_BUFFER_MAX_SIZE) };
 	std::unique_ptr<BufferEx> mSendBuffer{ std::make_unique<BufferEx>(SEND_BUFFER_MAX_SIZE) };
