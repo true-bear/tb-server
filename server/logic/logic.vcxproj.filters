@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="proto">
+      <UniqueIdentifier>{9a3da0cb-6b3c-46fb-8752-aab38debfcb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logic">
+      <UniqueIdentifier>{57255599-9ca7-4cfc-bfd6-4688f058ca9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thread">
+      <UniqueIdentifier>{791553a5-86fc-48e1-baf0-20fa85e91029}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\message.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="logic_chat.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="logic_dispatch.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="waiting.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
+    <ClCompile Include="logic.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="server.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="logic_dispatch.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="logic_chat.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="waiting.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="logic.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

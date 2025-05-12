@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\network">
+      <UniqueIdentifier>{1b078476-1cdd-47f7-9fbc-d2dcad4438e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{06ffb2bc-fde3-4b25-9618-40ac0519be9e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="socket.h">
+      <Filter>src\network</Filter>
+    </ClInclude>
+    <ClInclude Include="iocp.h">
+      <Filter>src\network</Filter>
+    </ClInclude>
+    <ClInclude Include="clientSession.h">
+      <Filter>src\network</Filter>
+    </ClInclude>
+    <ClInclude Include="bufferEx.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="threadManager.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="core.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="singleton.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="packetEx.h">
+      <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="clientSession.cpp">
+      <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp.cpp">
+      <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="socket.cpp">
+      <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="bufferEx.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="packetEx.cpp">
+      <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
