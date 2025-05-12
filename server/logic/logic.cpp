@@ -80,4 +80,6 @@ void LogicManager::DisPatchPacket(const int sessionId, const char* data, uint16_
         delete pkt; 
         LOG_ERR("Logic", "packet push failed");
     }
+
+    LOG_INFO("OnRecv", "Recv packet - uID:{} : {}", sessionId, packetSize);
 }

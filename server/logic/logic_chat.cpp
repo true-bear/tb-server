@@ -19,9 +19,6 @@ void ProcessChat(ClientSession* session, const char* data, uint16_t size)
         return;
     }
 
-
-    LOG_INFO("Chat", "recv uid:{} msg:'{}'", session->GetUniqueId(), chatPacket.message());
-
     std::vector<char> serializedData(chatPacket.ByteSizeLong());
     if (!chatPacket.SerializeToArray(serializedData.data(), static_cast<int>(serializedData.size())))
     {
@@ -33,4 +30,6 @@ void ProcessChat(ClientSession* session, const char* data, uint16_t size)
     {
         LOG_ERR("ProcessChat", "SendPacket failed uid:{} size:{}", session->GetUniqueId(), serializedData.size());
     }
+
+    LOG_INFO("Chat", "Send uid:{} msg:'{}'", session->GetUniqueId(), chatPacket.message());
 }

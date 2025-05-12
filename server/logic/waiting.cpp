@@ -59,7 +59,6 @@ void WaitingManager::RunThread()
 
         if (LogicServer::Get().HasFreeSlot())
         {
-            // 사실 여기서 대기열에 있는 모든 세션 돌면서 broad cast 해야함
             LogicServer::Get().BindSession(session);
         }
         else

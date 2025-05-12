@@ -78,7 +78,6 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
         LogicManager::Get().DisPatchPacket(session->GetUniqueId(), packetData, packetSize);
        
         recvBuffer->MoveReadPos(packetSize);
-        //LOG_INFO("OnRecv", "Recv packet - uID:{} : {}", session->GetUniqueId(), packetSize);
     }
 
     if (!session->RecvReady())
@@ -222,9 +221,7 @@ void LogicServer::OnSend(unsigned int uID, unsigned long ioSize)
     if (sendBuffer)
     {
         sendBuffer->Read(ioSize);
-        LOG_INFO("OnSend", "uid:{} byte:{}", uID, ioSize);
     }
-
 }
 
 bool LogicServer::HasFreeSlot()
