@@ -12,7 +12,7 @@ public:
     Core();
     virtual ~Core();
 
-    bool Init(int maxSession, int maxWaiting, int backLog);
+    bool Init(int maxSession, int maxWaiting);
     void Stop();
 
     void WorkerThread();

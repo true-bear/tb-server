@@ -14,12 +14,12 @@ LogicServer::~LogicServer()
     mActiveSessionMap.clear();
 }
 
-bool LogicServer::Init(int maxSession,int maxWaiting,  int backLog)
+bool LogicServer::Init(int maxSession,int maxWaiting)
 {
     mMaxSession = maxSession;
     LOG_INFO("LogicServer::Init", "mMaxSession √ ±‚»≠µ : {}", mMaxSession);
 
-    if (!Core::Init(maxSession, maxWaiting, backLog))
+    if (!Core::Init(maxSession, maxWaiting))
     {
         LOG_ERR("Core Init", "** failed **");
         return false;

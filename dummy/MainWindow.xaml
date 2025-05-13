@@ -1,0 +1,55 @@
+﻿<Window x:Class="dummyClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Chat Stress Client" Height="600" Width="1000">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- 버튼 1 -->
+            <RowDefinition Height="Auto"/>
+            <!-- 버튼 2 -->
+            <RowDefinition Height="*"/>
+            <!-- 로그 -->
+        </Grid.RowDefinitions>
+
+        <!-- 버튼 영역 1 -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Row="0">
+            <Label Content="Dummy Count:" VerticalAlignment="Center"/>
+            <TextBox x:Name="txtDummyCount" Width="60" Margin="5,0"/>
+            <Button Content="Dummy Connect" Click="BtnDummyConnect_Click" Margin="5,0"/>
+            <Button Content="Dummy Disconnect" Click="BtnDummyDisconnect_Click" Margin="5,0"/>
+            <Button Content="Dummy Chat Start" Click="BtnDummyChatStart_Click" Margin="5,0"/>
+            <Button Content="Dummy Chat Stop" Click="BtnDummyChatStop_Click" Margin="5,0"/>
+        </StackPanel>
+
+        <!-- 버튼 영역 2 -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Row="1">
+            <Button Content="Single Connect" Click="BtnSingleConnect_Click" Margin="5,0"/>
+            <Button Content="Single Disconnect" Click="BtnSingleDisconnect_Click" Margin="5,0"/>
+            <Button Content="Single Chat" Click="BtnSingleChat_Click" Margin="5,0"/>
+            <Button Content="Single Chat Stop" Click="BtnSingleChatStop_Click" Margin="5,0"/>
+        </StackPanel>
+
+        <!-- 로그 영역: 좌우 분할 -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- 왼쪽 로그 (예: 서버 메시지) -->
+            <TextBox x:Name="txtLog" Grid.Column="0" Margin="0,0,5,0"
+                     VerticalScrollBarVisibility="Auto"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     IsReadOnly="True"/>
+
+            <!-- 오른쪽 로그 (예: 패킷 로그) -->
+            <TextBox x:Name="txtPacketLog" Grid.Column="1" Margin="5,0,0,0"
+                     VerticalScrollBarVisibility="Auto"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     IsReadOnly="True"/>
+        </Grid>
+    </Grid>
+</Window>

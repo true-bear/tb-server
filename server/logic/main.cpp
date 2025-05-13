@@ -5,17 +5,14 @@ int main()
 {
     const int maxSession = Config::Load(CATEGORY_NET, MAX_SESSION_COUNT);
 	const int maxWaiting = Config::Load(CATEGORY_NET, MAX_WAITING_COUNT);
-    const int backlog = Config::Load(CATEGORY_NET, BACKLOG);
 	const int threadCount = Config::Load(CATEGORY_NET, MAX_WORK_THEAD_CNT);
     const int port = Config::Load(CATEGORY_NET, PORT);
 
-
-    if (!LogicServer::Get().Init(maxSession, maxWaiting, backlog))
+    if (!LogicServer::Get().Init(maxSession, maxWaiting))
     {
         LOG_ERR("main()", "server init");
         return -1;
     }
-
 
     LOG_INFO("SERVER INIT","");
     LOG_INFO("Worker Thread Count: {}","", threadCount);

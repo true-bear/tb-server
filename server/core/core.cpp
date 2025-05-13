@@ -18,7 +18,7 @@ Core::~Core()
 	mSessionPool.clear();
 }
 
-bool Core::Init(int maxSession, int maxWaiting, int backLog)
+bool Core::Init(int maxSession, int maxWaiting)
 {
 	if (maxSession <= 0)
 	{
@@ -41,7 +41,7 @@ bool Core::Init(int maxSession, int maxWaiting, int backLog)
 		return false;
 	}
 
-	if (!mListenSocket.BindAndListen(backLog))
+	if (!mListenSocket.BindAndListen())
 	{
 		LOG_ERR("", "BindAndListen");
 		return false;

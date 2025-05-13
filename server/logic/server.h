@@ -24,8 +24,7 @@ public:
 
 public:
 	ClientSession* GetSession(int sessionId){return Core::GetSession(sessionId);}
-	//void ActivateWaitingClient();
-	bool Init(int maxSessionCount, int maxWaitingCount, int backLog);
+	bool Init(int maxSessionCount, int maxWaitingCount);
 	bool HasFreeSlot();
 	void BindSession(ClientSession* session);
 
@@ -33,7 +32,7 @@ private:
 	std::unordered_map<size_t, RecvPakcetType> mRecvFuncMap;
 	std::atomic<bool> mIsRunning;
 	std::unordered_map<int, ClientSession*> mActiveSessionMap;
-	std::mutex mActiveSessionLock; // Protects mActiveSessionMap
+	std::mutex mActiveSessionLock;
 	std::unique_ptr<ThreadManager> mThread;
 	int mMaxSession{ 0 };
 };

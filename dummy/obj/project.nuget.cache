@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "/uz9qcClyH0=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\truebear\\Desktop\\dev\\Engine\\dummy\\dummyClient.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\truebear\\.nuget\\packages\\google.protobuf\\3.29.2\\google.protobuf.3.29.2.nupkg.sha512",
+    "C:\\Users\\truebear\\.nuget\\packages\\google.protobuf.tools\\3.29.2\\google.protobuf.tools.3.29.2.nupkg.sha512"
+  ],
+  "logs": []
+}

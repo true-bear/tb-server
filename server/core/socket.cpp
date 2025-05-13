@@ -25,7 +25,7 @@ bool SocketEx::Init()
 	return true;
 }
 
-bool SocketEx::BindAndListen(int backLog)
+bool SocketEx::BindAndListen()
 {
 	int port = Config::Load(CATEGORY_NET, PORT);
 
@@ -41,7 +41,7 @@ bool SocketEx::BindAndListen(int backLog)
 		return false;
 	}
 
-	ret = ::listen(mSocket, backLog);
+	ret = ::listen(mSocket, SOMAXCONN);
 	if (ret != 0)
 	{
 		LOG_ERR("::listen", "ret:{}", ret);

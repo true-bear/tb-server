@@ -7,7 +7,7 @@ public:
 	bool Init();
 	bool Close();
 
-	bool BindAndListen(int backLog);
+	bool BindAndListen();
 
 	void Detach();
 
