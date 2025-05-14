@@ -22,7 +22,8 @@
 #include <array>
 
 #include <functional>
-
+#include <cstdint>
+#include <cassert>
 #include <format>
 #include <string_view>
 #include <chrono>

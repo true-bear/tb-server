@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "message.pb.h"
-#include "clientSession.h"
+#include "iocp\clientSession.h"
 
 
 void ProcessChat(ClientSession* session, const char* data, uint16_t size)

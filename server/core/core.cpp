@@ -1,11 +1,11 @@
 ﻿#pragma once
 #include "pch.h"
 #include "core.h"
-#include "iocp.h"
+#include "iocp/iocp.h"
 #include "socket.h"
 #include "threadManager.h"
 #include "config.h"
-#include "clientSession.h"
+#include "iocp\clientSession.h"
 #include "logger.h"
 
 Core::Core()
