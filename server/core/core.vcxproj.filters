@@ -5,43 +5,34 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="src\network">
-      <UniqueIdentifier>{1b078476-1cdd-47f7-9fbc-d2dcad4438e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\common">
-      <UniqueIdentifier>{06ffb2bc-fde3-4b25-9618-40ac0519be9e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\rio">
       <UniqueIdentifier>{4641ce32-528c-4c07-a6f7-7861b09e4e5f}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\iocp">
       <UniqueIdentifier>{3d236bba-ab30-488d-a759-8d9838ab74c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{06ffb2bc-fde3-4b25-9618-40ac0519be9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="socket.h">
-      <Filter>src\network</Filter>
+    <ClInclude Include="util\config.h">
+      <Filter>src\util</Filter>
     </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>src\common</Filter>
+    <ClInclude Include="util\logger.h">
+      <Filter>src\util</Filter>
     </ClInclude>
-    <ClInclude Include="logger.h">
-      <Filter>src\common</Filter>
+    <ClInclude Include="util\threadManager.h">
+      <Filter>src\util</Filter>
     </ClInclude>
-    <ClInclude Include="threadManager.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
-    <ClInclude Include="core.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="define.h">
-      <Filter>src\common</Filter>
+    <ClInclude Include="util\define.h">
+      <Filter>src\util</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="singleton.h">
-      <Filter>src\common</Filter>
+    <ClInclude Include="util\singleton.h">
+      <Filter>src\util</Filter>
     </ClInclude>
     <ClInclude Include="rio\rio.h">
       <Filter>src\rio</Filter>
@@ -58,26 +49,26 @@
     <ClInclude Include="rio\rioDispatcher.h">
       <Filter>src\rio</Filter>
     </ClInclude>
-    <ClInclude Include="iocp\bufferEx.h">
+    <ClInclude Include="iocp\iocpBuffer.h">
       <Filter>src\iocp</Filter>
     </ClInclude>
-    <ClInclude Include="iocp\clientSession.h">
+    <ClInclude Include="iocp\iocpSession.h">
       <Filter>src\iocp</Filter>
     </ClInclude>
+    <ClInclude Include="iocp\iocpSocket.h">
+      <Filter>src\iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="rio\rioSocket.h">
+      <Filter>src\rio</Filter>
+    </ClInclude>
+    <ClInclude Include="iocp\iocpCore.h">
+      <Filter>src\iocp</Filter>
+    </ClInclude>
+    <ClCompile Include="util\packetEx.h">
+      <Filter>src\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="packetEx.h">
-      <Filter>src\network</Filter>
-    </ClCompile>
-    <ClCompile Include="socket.cpp">
-      <Filter>src\network</Filter>
-    </ClCompile>
-    <ClCompile Include="packetEx.cpp">
-      <Filter>src\network</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -96,10 +87,22 @@
     <ClCompile Include="rio\rioBuffer.cpp">
       <Filter>src\rio</Filter>
     </ClCompile>
-    <ClCompile Include="iocp\bufferEx.cpp">
+    <ClCompile Include="iocp\iocpBuffer.cpp">
       <Filter>src\iocp</Filter>
     </ClCompile>
-    <ClCompile Include="iocp\clientSession.cpp">
+    <ClCompile Include="iocp\iocpSession.cpp">
+      <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp\iocpSocket.cpp">
+      <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="util\packetEx.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="rio\rioSocket.cpp">
+      <Filter>src\rio</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp\iocpCore.cpp">
       <Filter>src\iocp</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,12 +3,12 @@
 #include "logic.h"
 
 class Logic;
-class ClientSession;
+class IocpSession;
 class WaitingManager;
 
-using RecvPakcetType = std::function<void(ClientSession*, const char*, uint16_t)>;
+using RecvPakcetType = std::function<void(IocpSession*, const char*, uint16_t)>;
 
-class LogicServer : public Core, public Singleton<LogicServer>
+class LogicServer : public IocpCore, public Singleton<LogicServer>
 {
 public:
 	LogicServer();
@@ -23,15 +23,15 @@ public:
 	virtual void OnSend(unsigned int uID, unsigned long ioSize);
 
 public:
-	ClientSession* GetSession(int sessionId){return Core::GetSession(sessionId);}
+	IocpSession* GetSession(int sessionId){return IocpCore::GetSession(sessionId);}
 	bool Init(int maxSessionCount, int maxWaitingCount);
 	bool HasFreeSlot();
-	void BindSession(ClientSession* session);
+	void BindSession(IocpSession* session);
 
 private:
 	std::unordered_map<size_t, RecvPakcetType> mRecvFuncMap;
 	std::atomic<bool> mIsRunning;
-	std::unordered_map<int, ClientSession*> mActiveSessionMap;
+	std::unordered_map<int, IocpSession*> mActiveSessionMap;
 	std::mutex mActiveSessionLock;
 	std::unique_ptr<ThreadManager> mThread;
 	int mMaxSession{ 0 };

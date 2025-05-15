@@ -31,7 +31,7 @@ bool Iocp::AddDeviceListenSocket(SOCKET listenSock)
     return true;
 }
 
-bool Iocp::AddDeviceRemoteSocket(ClientSession* RemoteSession)
+bool Iocp::AddDeviceRemoteSocket(IocpSession* RemoteSession)
 {
     HANDLE ret = CreateIoCompletionPort(
         (HANDLE)RemoteSession->GetRemoteSocket(),

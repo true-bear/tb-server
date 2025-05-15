@@ -19,13 +19,12 @@ bool LogicServer::Init(int maxSession,int maxWaiting)
     mMaxSession = maxSession;
     LOG_INFO("LogicServer::Init", "mMaxSession ÃÊ±âÈ­µÊ: {}", mMaxSession);
 
-    if (!Core::Init(maxSession, maxWaiting))
+    if (!IocpCore::Init(maxSession, maxWaiting))
     {
-        LOG_ERR("Core Init", "** failed **");
+        LOG_ERR("IocpCore Init", "** failed **");
         return false;
     }
 
-    
     if (!LogicManager::Get().Init(
         [this](int sessionId) { return this->GetSession(sessionId); }))
     {
@@ -111,11 +110,11 @@ void LogicServer::Stop()
     LogicManager::Get().Stop();
 
     mThread->Join();
-    Core::Stop();
+    IocpCore::Stop();
 }
 bool LogicServer::OnClose(unsigned int uID)
 {
-    ClientSession* session{ nullptr };
+    IocpSession* session{ nullptr };
     bool wasActiveSession{ false };
 
     {
@@ -217,7 +216,7 @@ void LogicServer::OnSend(unsigned int uID, unsigned long ioSize)
     if (!session)
         return;
 
-    BufferEx* sendBuffer = session->GetSendBuffer();
+    IocpBuffer* sendBuffer = session->GetSendBuffer();
     if (sendBuffer)
     {
         sendBuffer->Read(ioSize);
@@ -230,7 +229,7 @@ bool LogicServer::HasFreeSlot()
     return static_cast<int>(mActiveSessionMap.size()) < mMaxSession;
 }
 
-void LogicServer::BindSession(ClientSession* session)
+void LogicServer::BindSession(IocpSession* session)
 {
     std::lock_guard<std::mutex> lock(mActiveSessionLock);
     mActiveSessionMap.emplace(session->GetUniqueId(), session);

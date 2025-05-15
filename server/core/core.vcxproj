@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -26,7 +26,6 @@
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -69,7 +68,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -78,7 +76,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-    <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)rio;$(ProjectDir)network;$(ProjectDir)iocp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories></ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)rio;$(ProjectDir)util;$(ProjectDir)network;$(ProjectDir)iocp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -90,7 +89,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-    <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)rio;$(ProjectDir)network;$(ProjectDir)iocp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories></ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)rio;$(ProjectDir)util;$(ProjectDir)network;$(ProjectDir)iocp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -102,7 +102,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:preprocessor %(AdditionalOptions)</AdditionalOptions>
-    <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)rio;$(ProjectDir)network;$(ProjectDir)iocp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories></ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)rio;$(ProjectDir)util;$(ProjectDir)network;$(ProjectDir)iocp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -114,44 +115,48 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-    <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)rio;$(ProjectDir)network;$(ProjectDir)iocp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories></ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)rio;$(ProjectDir)util;$(ProjectDir)network;$(ProjectDir)iocp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
-  
   <ItemGroup>
-    <ClInclude Include="config.h" />
-    <ClInclude Include="core.h" />
-    <ClInclude Include="define.h" />
-    <ClInclude Include="iocp\bufferEx.h" />
-    <ClInclude Include="iocp\clientSession.h" />
+    <ClInclude Include="util\config.h" />
+    <ClInclude Include="iocp\iocpCore.h" />
+    <ClInclude Include="util\define.h" />
+    <ClInclude Include="iocp\iocpBuffer.h" />
+    <ClInclude Include="iocp\iocpSession.h" />
     <ClInclude Include="iocp\iocp.h" />
-    <ClInclude Include="logger.h" />
+    <ClInclude Include="iocp\iocpSocket.h" />
+    <ClInclude Include="util\logger.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="rio\rioSocket.h" />
     <ClInclude Include="rio\rioBuffer.h" />
     <ClInclude Include="rio\rioSession.h" />
     <ClInclude Include="rio\rioDispatcher.h" />
     <ClInclude Include="rio\rio.h" />
-    <ClInclude Include="singleton.h" />
-    <ClInclude Include="socket.h" />
-    <ClInclude Include="threadManager.h" />
+    <ClInclude Include="util\singleton.h" />
+    <ClInclude Include="util\threadManager.h" />
+    <ClCompile Include="util\packetEx.h" />
+
   </ItemGroup>
-  
   <ItemGroup>
-    <ClCompile Include="core.cpp" />
-    <ClCompile Include="iocp\bufferEx.cpp" />
-    <ClCompile Include="iocp\clientSession.cpp" />
-    <ClCompile Include="packetEx.cpp" />
-    <ClCompile Include="packetEx.h" />
+    <ClCompile Include="iocp\iocpCore.cpp" />
+    <ClCompile Include="iocp\iocpBuffer.cpp" />
+    <ClCompile Include="iocp\iocpSession.cpp" />
+    <ClCompile Include="iocp\iocpSocket.cpp" />
+    <ClCompile Include="util\packetEx.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="rio\rioSocket.cpp" />
     <ClCompile Include="rio\rioBuffer.cpp" />
     <ClCompile Include="rio\rioSession.cpp" />
     <ClCompile Include="rio\rioDispatcher.cpp" />
-    <ClCompile Include="socket.cpp" />
+    <ClCompile Include="rio\rio.cpp" />
+    <ClCompile Include="iocp\iocp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
-<ItemGroup><ClCompile Include="rio\rio.cpp" /><ClCompile Include="iocp\iocp.cpp" /></ItemGroup></Project>
+</Project>

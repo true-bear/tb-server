@@ -2,7 +2,7 @@
 #include "pch.h"
 
 #include "waiting.h"
-#include "iocp\ClientSession.h"
+#include "iocp\iocpSession.h"
 #include "server.h"
 
 WaitingManager::WaitingManager()
@@ -14,13 +14,13 @@ WaitingManager::~WaitingManager()
 {
 }
 
-void WaitingManager::Enqueue(ClientSession* session)
+void WaitingManager::Enqueue(IocpSession* session)
 {
     std::lock_guard<std::mutex> lock(mMutex);
     mQueue.push(session);
 }
 
-ClientSession* WaitingManager::TryDequeue()
+IocpSession* WaitingManager::TryDequeue()
 {
     std::lock_guard<std::mutex> lock(mMutex);
     if (mQueue.empty())

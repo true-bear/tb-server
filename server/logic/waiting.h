@@ -2,15 +2,15 @@
 #include "pch.h"
 #include "Singleton.h"
 
-class ClientSession;
+class IocpSession;
 
 class WaitingManager : public Singleton<WaitingManager>
 {
     friend class Singleton<WaitingManager>;
 
 public:
-    void Enqueue(ClientSession* session);
-    ClientSession* TryDequeue();
+    void Enqueue(IocpSession* session);
+    IocpSession* TryDequeue();
     size_t Size() const;
 
     void Start();
@@ -26,7 +26,7 @@ private:
 private:
     std::unique_ptr<ThreadManager> mWorker;
 
-    std::queue<ClientSession*> mQueue;
+    std::queue<IocpSession*> mQueue;
     mutable std::mutex mMutex;
 
     std::atomic<bool> mRunning{ false };

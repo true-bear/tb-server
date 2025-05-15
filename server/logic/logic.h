@@ -3,7 +3,7 @@
 #include "Singleton.h"
 #include "logic_dispatch.h" 
 
-using SessionGetFunc = std::function<ClientSession* (int)>;
+using SessionGetFunc = std::function<IocpSession* (int)>;
 
 class LogicManager : public Singleton<LogicManager>
 {
