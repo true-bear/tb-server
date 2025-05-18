@@ -7,7 +7,7 @@ RioBuffer::RioBuffer(size_t size)
     : mSize(size)
 {
     mBuffer = new char[size];
-    mBufferId = RIOCore::Table.RIORegisterBuffer(mBuffer, static_cast<DWORD>(size));
+    mBufferId = RIOFns::Table.RIORegisterBuffer(mBuffer, static_cast<DWORD>(size));
     assert(mBufferId != RIO_INVALID_BUFFERID);
 }
 
@@ -15,7 +15,7 @@ RioBuffer::~RioBuffer()
 {
     if (mBufferId != RIO_INVALID_BUFFERID)
     {
-        RIOCore::Table.RIODeregisterBuffer(mBufferId);
+        RIOFns::Table.RIODeregisterBuffer(mBufferId);
     }
 
     delete[] mBuffer;

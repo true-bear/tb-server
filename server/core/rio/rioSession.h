@@ -18,6 +18,7 @@ public:
 
     SOCKET GetSocket() const { return mSocket; }
     RIO_RQ GetRequestQueue() const { return mRequestQueue; }
+    char* GetReadPointer() const { return mRecvBuffer.GetReadPointer(); }
 
 private:
     SOCKET mSocket = INVALID_SOCKET;

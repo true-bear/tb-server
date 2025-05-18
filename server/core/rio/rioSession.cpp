@@ -16,7 +16,7 @@ bool RIOSession::Init(SOCKET socket, RIO_CQ recvCQ, RIO_CQ sendCQ, size_t buffer
 {
     mSocket = socket;
 
-    mRequestQueue = RIOCore::Table.RIOCreateRequestQueue(
+    mRequestQueue = RIOFns::Table.RIOCreateRequestQueue(
         socket,
         1, 1,  // recv entries
         1, 1,  // send entries
@@ -35,7 +35,7 @@ bool RIOSession::PostRecv()
     buf.Offset = (ULONG)mRecvBuffer.GetWriteOffset();
     buf.Length = (ULONG)mRecvBuffer.GetWritableSize();
 
-    return RIOCore::Table.RIOReceive(mRequestQueue, &buf, 1, 0, this);
+    return RIOFns::Table.RIOReceive(mRequestQueue, &buf, 1, 0, this);
 }
 
 bool RIOSession::PostSend(const char* data, size_t size)
@@ -51,7 +51,7 @@ bool RIOSession::PostSend(const char* data, size_t size)
     buf.Offset = (ULONG)mSendBuffer.GetReadOffset();
     buf.Length = (ULONG)mSendBuffer.GetReadableSize();
 
-    return RIOCore::Table.RIOSend(mRequestQueue, &buf, 1, 0, this);
+    return RIOFns::Table.RIOSend(mRequestQueue, &buf, 1, 0, this);
 }
 
 void RIOSession::OnRecvCompleted(size_t transferred)

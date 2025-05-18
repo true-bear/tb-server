@@ -1,10 +1,17 @@
 #pragma once
-#include "pch.h"
+namespace RIONetwork
+{
+    bool Init(int port, int maxSession);
+    void Run();
+    void Stop();
+}
 
-class RIOCore
+class RIOFns
 {
 public:
     static bool Init();
+    static RIO_EXTENSION_FUNCTION_TABLE Table;
 
-    static RIO_EXTENSION_FUNCTION_TABLE Table;  // 모든 함수 포인터가 여기에 있음
+private:
+    static bool sInitialized;
 };
