@@ -116,6 +116,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)rio;$(ProjectDir)util;$(ProjectDir)network;$(ProjectDir)iocp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/Zc:preprocessor %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -131,19 +133,17 @@
     <ClInclude Include="rio\rioSocket.h" />
     <ClInclude Include="rio\rioBuffer.h" />
     <ClInclude Include="rio\rioSession.h" />
-    <ClInclude Include="rio\rioDispatcher.h" />
+    <ClInclude Include="rio\rioCore.h" />
     <ClInclude Include="rio\rio.h" />
     <ClInclude Include="util\singleton.h" />
     <ClInclude Include="util\threadManager.h" />
     <ClCompile Include="util\packetEx.h" />
-
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="iocp\iocpCore.cpp" />
     <ClCompile Include="iocp\iocpBuffer.cpp" />
     <ClCompile Include="iocp\iocpSession.cpp" />
     <ClCompile Include="iocp\iocpSocket.cpp" />
-    <ClCompile Include="util\packetEx.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -153,7 +153,7 @@
     <ClCompile Include="rio\rioSocket.cpp" />
     <ClCompile Include="rio\rioBuffer.cpp" />
     <ClCompile Include="rio\rioSession.cpp" />
-    <ClCompile Include="rio\rioDispatcher.cpp" />
+    <ClCompile Include="rio\rioCore.cpp" />
     <ClCompile Include="rio\rio.cpp" />
     <ClCompile Include="iocp\iocp.cpp" />
   </ItemGroup>

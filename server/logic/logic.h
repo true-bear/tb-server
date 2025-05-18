@@ -1,6 +1,5 @@
 #pragma once
 #include "pch.h"
-#include "Singleton.h"
 #include "logic_dispatch.h" 
 
 using SessionGetFunc = std::function<IocpSession* (int)>;

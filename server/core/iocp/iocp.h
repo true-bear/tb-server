@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "config.h"
+#include "util\config.h"
 #include "iocpSession.h"
 
 class Iocp

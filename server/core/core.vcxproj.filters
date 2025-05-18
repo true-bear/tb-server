@@ -46,7 +46,7 @@
     <ClInclude Include="rio\rioSession.h">
       <Filter>src\rio</Filter>
     </ClInclude>
-    <ClInclude Include="rio\rioDispatcher.h">
+    <ClInclude Include="rio\rioCore.h">
       <Filter>src\rio</Filter>
     </ClInclude>
     <ClInclude Include="iocp\iocpBuffer.h">
@@ -81,7 +81,7 @@
     <ClCompile Include="rio\rioSession.cpp">
       <Filter>src\rio</Filter>
     </ClCompile>
-    <ClCompile Include="rio\rioDispatcher.cpp">
+    <ClCompile Include="rio\rioCore.cpp">
       <Filter>src\rio</Filter>
     </ClCompile>
     <ClCompile Include="rio\rioBuffer.cpp">
@@ -95,9 +95,6 @@
     </ClCompile>
     <ClCompile Include="iocp\iocpSocket.cpp">
       <Filter>src\iocp</Filter>
-    </ClCompile>
-    <ClCompile Include="util\packetEx.cpp">
-      <Filter>src\util</Filter>
     </ClCompile>
     <ClCompile Include="rio\rioSocket.cpp">
       <Filter>src\rio</Filter>

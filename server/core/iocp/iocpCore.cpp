@@ -1,10 +1,9 @@
-﻿#pragma once
-#include "pch.h"
+﻿#include "pch.h"
 #include "iocpCore.h"
-#include "iocp/iocp.h"
-#include "iocp/iocpSocket.h"
-#include "threadManager.h"
-#include "config.h"
+#include "iocp.h"
+#include "iocpSocket.h"
+#include "util\threadManager.h"
+#include "util\config.h"
 #include "iocpSession.h"
 #include "logger.h"
 

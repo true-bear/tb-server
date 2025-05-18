@@ -1,8 +1,8 @@
-#include "pch.h"
-#include "define.h"
+#include "..\pch.h"
+#include "util\define.h"
 #include "iocp\iocp.h"
 #include "iocp\iocpSocket.h"
-#include "threadManager.h"
+#include "util\threadManager.h"
 #include "iocp\iocpSession.h"
 
 class IocpCore : public Iocp

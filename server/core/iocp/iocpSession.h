@@ -56,8 +56,6 @@ private:
 	unsigned int				mUID = -1;
 	char						mAcceptBuf[64]{};
 
-	//volatile long m_pendingRecvFlag = 0;
-
 private:
 	std::unique_ptr<IocpBuffer> mRecvBuffer{ std::make_unique<IocpBuffer>(RECV_BUFFER_MAX_SIZE) };
 	std::unique_ptr<IocpBuffer> mSendBuffer{ std::make_unique<IocpBuffer>(SEND_BUFFER_MAX_SIZE) };

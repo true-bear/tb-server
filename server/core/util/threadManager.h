@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 
-class ThreadManager
+class ThreadManager 
 {
 public:
 	void Run(std::function<void(void)> callback)

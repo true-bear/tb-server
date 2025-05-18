@@ -1,6 +1,5 @@
 #pragma once
 #include "pch.h"
-#include "Singleton.h"
 
 class IocpSession;
 
@@ -21,7 +20,6 @@ private:
     WaitingManager();
     ~WaitingManager();
 
-    void ProcessQueue();
 
 private:
     std::unique_ptr<ThreadManager> mWorker;

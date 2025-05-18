@@ -16,9 +16,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="generated\message.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
@@ -38,11 +35,11 @@
     <ClCompile Include="logic.cpp">
       <Filter>thread</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="server.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -57,6 +54,9 @@
     </ClInclude>
     <ClInclude Include="logic.h">
       <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
