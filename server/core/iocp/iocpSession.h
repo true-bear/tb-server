@@ -23,7 +23,7 @@ class IocpSession
 {
 public:
 	IocpSession();
-	~IocpSession();
+	virtual ~IocpSession();
 
 	void			Init();
 	void			DisconnectFinish();

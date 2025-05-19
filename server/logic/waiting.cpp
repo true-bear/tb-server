@@ -9,6 +9,7 @@ WaitingManager::WaitingManager()
 
 WaitingManager::~WaitingManager()
 {
+
 }
 
 void WaitingManager::Enqueue(IocpSession* session)

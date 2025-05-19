@@ -5,7 +5,7 @@ class IocpBuffer
 {
 public:
     explicit IocpBuffer(size_t capacity);
-    ~IocpBuffer() = default;
+    virtual ~IocpBuffer() {};
 
     bool Write(const char* data, size_t size);
 

@@ -6,11 +6,10 @@ using SessionGetFunc = std::function<IocpSession* (int)>;
 
 class LogicManager : public Singleton<LogicManager>
 {
-    friend class Singleton<LogicManager>;
 
 public:
     LogicManager();
-    ~LogicManager();
+    virtual ~LogicManager();
 
     bool Init(SessionGetFunc sessionObj);
     void Start();

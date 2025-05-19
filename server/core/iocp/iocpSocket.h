@@ -4,6 +4,7 @@
 class IocpSocket
 {
 public:
+
 	bool Init();
 	bool Close();
 

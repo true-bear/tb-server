@@ -5,21 +5,16 @@ class IocpSession;
 
 class WaitingManager : public Singleton<WaitingManager>
 {
-    friend class Singleton<WaitingManager>;
-
 public:
+    WaitingManager();
+    virtual ~WaitingManager();
     void Enqueue(IocpSession* session);
     IocpSession* TryDequeue();
     size_t Size() const;
 
     void Start();
     void Stop();
-    void RunThread();  // 스레드 루프 함수
-
-private:
-    WaitingManager();
-    ~WaitingManager();
-
+    void RunThread();
 
 private:
     std::unique_ptr<ThreadManager> mWorker;

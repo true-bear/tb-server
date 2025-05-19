@@ -12,7 +12,7 @@ public:
         int m_eventCount;
     };
 
-    ~Iocp();
+    virtual ~Iocp();
 
     bool CreateNewIocp(unsigned long threadCnt);
     bool AddDeviceListenSocket(SOCKET listenSock);
