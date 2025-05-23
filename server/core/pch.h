@@ -1,7 +1,6 @@
 ﻿#ifndef PCH_H
 #define PCH_H
 
-#include "define.h"
 #include <vector>
 #include <thread>
 #include <iostream>

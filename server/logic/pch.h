@@ -29,22 +29,25 @@
 #include <filesystem>
 #include <atlstr.h>
 #include <unordered_map>
+#include <condition_variable>
 
 #include <boost/lockfree/queue.hpp>
 
-#include "generated\message.pb.h"
+#include "proto\message.pb.h"
+
+
 #include "util\define.h"
 #include "util\packetEx.h"
 #include "util\threadManager.h"
 #include "util\logger.h"
 #include "util\singleton.h"
+#include "util\config.h"
+
 #include "iocp\iocpSession.h"
 #include "iocp\iocpBuffer.h"
 #include "iocp\iocpSocket.h"
 #include "iocp\iocp.h"
 #include "iocp\iocpCore.h"
-#include "logic.h"
-#include "util\config.h"
 
 static std::atomic<int> gWaitCount = 0;
 

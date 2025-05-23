@@ -2,6 +2,7 @@
 #include "iocpSocket.h"
 #include "config.h"
 #include "logger.h"
+#include "define.h"
 
 bool IocpSocket::Init()
 {

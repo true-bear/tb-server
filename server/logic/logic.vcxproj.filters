@@ -9,54 +9,78 @@
       <UniqueIdentifier>{9a3da0cb-6b3c-46fb-8752-aab38debfcb5}</UniqueIdentifier>
     </Filter>
     <Filter Include="logic">
-      <UniqueIdentifier>{57255599-9ca7-4cfc-bfd6-4688f058ca9c}</UniqueIdentifier>
+      <UniqueIdentifier>{76a236f1-942a-431e-8d24-dc1f565441a2}</UniqueIdentifier>
     </Filter>
     <Filter Include="thread">
-      <UniqueIdentifier>{791553a5-86fc-48e1-baf0-20fa85e91029}</UniqueIdentifier>
+      <UniqueIdentifier>{ecef01ea-7344-4465-bf20-214b98f850ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="db">
+      <UniqueIdentifier>{80da7247-da68-4c80-ba9e-65509ee7020b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="generated\message.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
-    <ClCompile Include="logic_chat.cpp">
-      <Filter>logic</Filter>
-    </ClCompile>
     <ClCompile Include="server.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="logic_dispatch.cpp">
-      <Filter>logic</Filter>
-    </ClCompile>
-    <ClCompile Include="waiting.cpp">
-      <Filter>thread</Filter>
-    </ClCompile>
-    <ClCompile Include="logic.cpp">
-      <Filter>thread</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="logic\logic_chat.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="logic\logic_dispatch.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\message.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\logic.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\waiting.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
+    <ClCompile Include="db\connector.cpp">
+      <Filter>db</Filter>
+    </ClCompile>
+    <ClCompile Include="db\dbJob.cpp">
+      <Filter>db</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\db.cpp">
+      <Filter>thread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="server.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="logic_dispatch.h">
-      <Filter>logic</Filter>
-    </ClInclude>
-    <ClInclude Include="logic_chat.h">
-      <Filter>logic</Filter>
-    </ClInclude>
-    <ClInclude Include="waiting.h">
-      <Filter>thread</Filter>
-    </ClInclude>
-    <ClInclude Include="logic.h">
-      <Filter>thread</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="logic\logic_chat.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="logic\logic_dispatch.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\message.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="thread\logic.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="thread\waiting.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="thread\db.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="db\connector.h">
+      <Filter>db</Filter>
+    </ClInclude>
+    <ClInclude Include="db\dbJob.h">
+      <Filter>db</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

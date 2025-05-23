@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "server.h"
-#include "waiting.h"
-#include "logic.h"
+#include "thread\waiting.h"
+#include "thread\logic.h"
+#include "thread\db.h"
+
 LogicServer::LogicServer()
 {
     mThread = std::make_unique<ThreadManager>();
@@ -25,7 +27,7 @@ bool LogicServer::Init(int maxSession,int maxWaiting)
         return false;
     }
 
-    if (!LogicManager::Get().Init(
+    if (!LogicThread::Get().Init(
         [this](int sessionId) { return this->GetSession(sessionId); }))
     {
         LOG_ERR("logic Init", "** failed **");
@@ -74,7 +76,7 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
         }
 
         char* packetData = recvBuffer->GetReadPtr();
-        LogicManager::Get().DisPatchPacket(session->GetUniqueId(), packetData, packetSize);
+        LogicThread::Get().DisPatchPacket(session->GetUniqueId(), packetData, packetSize);
        
         recvBuffer->MoveReadPos(packetSize);
     }
@@ -90,26 +92,36 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
 
 void LogicServer::Run()
 {
-    WaitingManager::Get().Start();
+    WaitingThread::Get().Start();
 
     mThread->Run([]()
     {
-            WaitingManager::Get().RunThread();
+            WaitingThread::Get().RunThread();
     });
 
-    LogicManager::Get().Start();
+    LogicThread::Get().Start();
     mThread->Run([]()
     {
-            LogicManager::Get().RunThread();
+            LogicThread::Get().RunThread();
     });
+
+	DBThread::Get().Start();
+
+	mThread->Run([]()
+	{
+            DBThread::Get().RunThread();
+	});
+
 }
 
 void LogicServer::Stop()
 {
-    WaitingManager::Get().Stop();
-    LogicManager::Get().Stop();
+    WaitingThread::Get().Stop();
+    LogicThread::Get().Stop();
+	DBThread::Get().Stop();
 
     mThread->Join();
+
     IocpCore::Stop();
 }
 bool LogicServer::OnClose(unsigned int uID)
@@ -190,7 +202,7 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
             
             packet.set_allocated_header(header);
             packet.set_message("waiting...");
-            packet.set_waiting_number(WaitingManager::Get().Size());
+            packet.set_waiting_number(WaitingThread::Get().Size());
 
             int size = packet.ByteSizeLong();
             std::vector<char> buf(size);
@@ -202,7 +214,7 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
 
             session->SendPacket(buf.data(), size);
 
-            WaitingManager::Get().Enqueue(session);
+            WaitingThread::Get().Enqueue(session);
             LOG_INFO("Waiting Enqueue", "Session {} pushed to waiting queue", uID);
         }
     }

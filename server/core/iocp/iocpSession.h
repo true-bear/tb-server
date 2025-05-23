@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "iocpBuffer.h"
 #include "iocp\iocpSocket.h"
+#include "util/define.h"
+
 enum class IO_TYPE
 {
 	NONE,

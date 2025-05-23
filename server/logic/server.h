@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "logic.h"
+#include "thread\logic.h"
 
 class Logic;
 class IocpSession;
