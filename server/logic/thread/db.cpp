@@ -6,10 +6,10 @@
 DBThread::DBThread()
 {
 }
-DBThread::DBThread(const std::string& host,
-    const std::string& user,
-    const std::string& password,
-    const std::string& db,
+DBThread::DBThread(std::string_view host,
+    std::string_view user,
+    std::string_view password,
+    std::string_view db,
     uint16_t port)
 {
     mConn = Connector::MySQLConnect(host, user, password, db, port);

@@ -8,10 +8,10 @@ using DBCallback = std::function<void(bool, const std::vector<RowData>&)>;
 class DBJob
 {
 public:
-    DBJob(const std::string& query, DBCallback callback);
+    DBJob(std::string_view query, DBCallback callback);
 
     void Execute(MYSQL* conn);
-    const std::string& GetQuery() const;
+    std::string_view GetQuery() const;
 
 private:
     std::string _query;

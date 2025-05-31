@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "dbJob.h"
 
-DBJob::DBJob(const std::string& query, DBCallback callback)
+DBJob::DBJob(std::string_view query, DBCallback callback)
     : _query(query), _callback(std::move(callback))
 {
 }
 
-const std::string& DBJob::GetQuery() const
+std::string_view DBJob::GetQuery() const
 {
     return _query;
 }
