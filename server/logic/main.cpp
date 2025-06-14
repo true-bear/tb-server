@@ -22,24 +22,6 @@ int main()
 
     LogicServer::Get().Run();
 
-
-    DBThread* gDBThread = new DBThread("127.0.0.1", "admin", "123123", "test", 3306);
-
-    gDBThread->Start();
-
-    auto job = std::make_shared<DBJob>(
-        "SELECT uid FROM users",
-        [](bool success, const std::vector<RowData>& rows)
-        {
-            if (!success) return;
-            for (const auto& row : rows)
-                std::cout << "id: " << row[0] << "\n";
-
-        });
-
-    gDBThread->PushJob(job);
-
-
     std::string wait;
     std::getline(std::cin, wait);
 
