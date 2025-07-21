@@ -21,7 +21,7 @@
 #include <array>
 
 #include <functional>
-#include <cstdint>
+#include <coroutine>
 #include <cassert>
 #include <format>
 #include <string_view>
