@@ -12,16 +12,27 @@ public:
         int m_eventCount;
     };
 
-    virtual ~Iocp();
+    Iocp() = default;
+    ~Iocp() = default;
 
-    bool CreateNewIocp(unsigned long threadCnt);
+public:
+    bool CreateNewIocp(std::uint32_t threadCnt);
     bool AddDeviceListenSocket(SOCKET listenSock);
-    bool AddDeviceRemoteSocket(IocpSession* RemoteSession);
-    void GQCSEx(Iocp::IocpEvents& IoEvent, unsigned long timeOut);
-    bool PQCS(unsigned long byte, ULONG_PTR completeKey, OVERLAPPED* overlapped);
-
-    const HANDLE& GetIocp() const { return mIocp; }
+    bool AddDeviceRemoteSocket(IocpSession* remoteSession);
+    void GQCSEx(Iocp::IocpEvents& ioEvent, std::uint32_t timeOut);
+    bool PQCS(std::uint32_t byte, ULONG_PTR completeKey, OVERLAPPED* overlapped);
+   
+protected:
+    HANDLE GetIocpHandle() const noexcept { return mIocp.get(); }
 
 private:
-    HANDLE mIocp{ INVALID_HANDLE_VALUE };
+    struct HandleDeleter {
+        void operator()(HANDLE handle) const {
+            if (handle && handle != INVALID_HANDLE_VALUE)
+                CloseHandle(handle);
+        }
+    };
+
+    using UniqueHandle = std::unique_ptr<std::remove_pointer_t<HANDLE>, HandleDeleter>;
+    UniqueHandle mIocp{ nullptr };
 };

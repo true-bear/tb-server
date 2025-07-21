@@ -98,7 +98,7 @@ void IocpCore::Stop()
 
     for (size_t i = 0; i < threadCount; ++i)
     {
-        PostQueuedCompletionStatus(GetIocp(), 0, 0, nullptr);
+        PostQueuedCompletionStatus(GetIocpHandle(), 0, 0, nullptr);
     }
 
     mThreadManager->Stop();

@@ -1,71 +1,57 @@
 #include "pch.h"
 #include "iocp.h"
 
-Iocp::~Iocp()
+bool Iocp::CreateNewIocp(std::uint32_t threadCnt)
 {
-    CloseHandle(mIocp);
-}
-
-bool Iocp::CreateNewIocp(unsigned long threadCnt)
-{
-    mIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, threadCnt);
-
-    if (!mIocp)
-        return false;
-
-    return true;
+    mIocp.reset(CreateIoCompletionPort(INVALID_HANDLE_VALUE, nullptr, 0, threadCnt));
+    return mIocp != nullptr;
 }
 
 bool Iocp::AddDeviceListenSocket(SOCKET listenSock)
 {
-    auto ret = CreateIoCompletionPort(
-        (HANDLE)listenSock,
-        mIocp,
-        (ULONG_PTR)nullptr,
+    HANDLE result = CreateIoCompletionPort(
+        reinterpret_cast<HANDLE>(listenSock),
+        mIocp.get(),
+        reinterpret_cast<ULONG_PTR>(nullptr),
         0
     );
 
-    if (ret != mIocp)
-        return false;
-
-    return true;
+    return result == mIocp.get();
 }
 
-bool Iocp::AddDeviceRemoteSocket(IocpSession* RemoteSession)
+bool Iocp::AddDeviceRemoteSocket(IocpSession* remoteSession)
 {
-    HANDLE ret = CreateIoCompletionPort(
-        (HANDLE)RemoteSession->GetRemoteSocket(),
-        mIocp,
-        (ULONG_PTR)&RemoteSession,
+    HANDLE result = CreateIoCompletionPort(
+        reinterpret_cast<HANDLE>(remoteSession->GetRemoteSocket()),
+        mIocp.get(),
+        reinterpret_cast<ULONG_PTR>(remoteSession),
         0
     );
 
-    if (ret != mIocp)
-        return false;
-
-    return true;
+    return result == mIocp.get();
 }
 
-void Iocp::GQCSEx(Iocp::IocpEvents& IoEvent, unsigned long timeOut)
+void Iocp::GQCSEx(Iocp::IocpEvents& ioEvent, std::uint32_t timeOut)
 {
-    bool ret = GetQueuedCompletionStatusEx(
-        mIocp,
-        IoEvent.m_IoArray,
+    BOOL result = GetQueuedCompletionStatusEx(
+        mIocp.get(),
+        ioEvent.m_IoArray,
         IOCP_EVENT_COUNT,
-        (ULONG*)&IoEvent.m_eventCount,
+        reinterpret_cast<ULONG*>(&ioEvent.m_eventCount),
         timeOut,
         FALSE
     );
 
-    if (!ret)
-        IoEvent.m_eventCount = 0;
+    if (!result)
+        ioEvent.m_eventCount = 0;
 }
 
-bool Iocp::PQCS(unsigned long byte, ULONG_PTR completeKey, OVERLAPPED* overlapped)
+bool Iocp::PQCS(std::uint32_t byte, ULONG_PTR completeKey, OVERLAPPED* overlapped)
 {
     return PostQueuedCompletionStatus(
-        mIocp,
+        mIocp.get(),
         byte,
         completeKey,
-        overlapped);
+        overlapped
+    );
 }
