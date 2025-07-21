@@ -67,6 +67,9 @@
     <ClCompile Include="util\packetEx.h">
       <Filter>src\util</Filter>
     </ClCompile>
+    <ClInclude Include="task.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
