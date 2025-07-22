@@ -45,7 +45,6 @@ void DBThread::Stop()
 }
 
 
-//MEMO : 이거 스레드 유저 나눠서 처리해야 되지 않을까? 소수로 mod연산
 void DBThread::RunThread()
 {
     while (mRunning)

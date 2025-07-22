@@ -125,11 +125,12 @@ bool IocpSession::AcceptFinish(const SOCKET& listenSocket)
 
 bool IocpSession::RecvReady()
 {
-	char* buf = mRecvBuffer->GetWritePtr();
-	unsigned long len = static_cast<unsigned long>(mRecvBuffer->GetContinuousWriteSize());
+	std::byte* buf = mRecvBuffer->GetWritePtr();
+	unsigned long len = static_cast<unsigned long>(mRecvBuffer->WritableSize());
+
 
 	mRecvOverEx.mUID = mUID;
-	mRecvOverEx.mWsaBuf = { len, buf };
+	mRecvOverEx.mWsaBuf = { len, reinterpret_cast<char*>(buf) };
 
 	unsigned long recvBytes = 0;
 	unsigned long flags = 0;
@@ -161,7 +162,7 @@ bool IocpSession::RecvPacket(unsigned long ioSize)
 		return false;
 	}
 
-	mRecvBuffer->MoveWritePos(ioSize);
+	mRecvBuffer->CommitWrite(ioSize);
 	return true;
 }
 
@@ -175,8 +176,17 @@ bool IocpSession::SendPacket(const char* data, unsigned long long packetSize)
 	uint16_t sizeHeader = static_cast<uint16_t>(packetSize);
 	uint16_t sizeHeaderBE = htons(sizeHeader);
 
-	if (!mSendBuffer->Write((char*)&sizeHeaderBE, sizeof(sizeHeaderBE)) ||
-		!mSendBuffer->Write(data, packetSize))
+	std::span<const std::byte> headerBytes{
+		reinterpret_cast<const std::byte*>(&sizeHeaderBE),
+		sizeof(sizeHeaderBE)
+	};
+
+	std::span<const std::byte> payloadBytes{
+		reinterpret_cast<const std::byte*>(data),
+		static_cast<size_t>(packetSize)
+	};
+
+	if (!mSendBuffer->Write(headerBytes) || !mSendBuffer->Write(payloadBytes))
 	{
 		LOG_ERR("SendPacket", "send buffer header size:{} id:{}", sizeof(sizeHeaderBE), mUID);
 		return false;
@@ -185,26 +195,29 @@ bool IocpSession::SendPacket(const char* data, unsigned long long packetSize)
 	return SendReady();
 }
 
+
+
 bool IocpSession::SendReady()
 {
 	size_t storedSize = mSendBuffer->GetStoredSize();
-
-	if (storedSize <= 0)
+	if (storedSize == 0)
 		return true;
 
-	std::vector<char> sendData(storedSize);
-	if (!mSendBuffer->Read(sendData.data(), storedSize))
+	std::vector<std::byte> sendData(storedSize);
+	if (!mSendBuffer->Read(sendData))
 	{
-		LOG_ERR("SendReady", "send buffer read size:{} id:{}", storedSize, mUID);
+		LOG_ERR("SendReady", "send buffer read failed id:{}", mUID);
 		return false;
 	}
 
-
 	mSendOverEx.mUID = mUID;
-	mSendOverEx.mWsaBuf = { (ULONG)storedSize , sendData.data() };
+	mSendOverEx.mWsaBuf = {
+		static_cast<ULONG>(storedSize),
+		reinterpret_cast<char*>(sendData.data())
+	};
 
-	unsigned long sendBytes = 0;
-	unsigned long flags = 0;
+	DWORD sendBytes = 0;
+	DWORD flags = 0;
 
 	int ret = WSASend(
 		mRemoteSock.GetSocket(),
@@ -213,20 +226,21 @@ bool IocpSession::SendReady()
 		&sendBytes,
 		flags,
 		reinterpret_cast<LPWSAOVERLAPPED>(&mSendOverEx),
-		NULL
+		nullptr
 	);
 
 	if (ret == SOCKET_ERROR)
 	{
 		if (int error = WSAGetLastError(); error != WSA_IO_PENDING)
 		{
-			LOG_ERR("SendReady", "WSASend err:{} id:{}", error, mUID);
+			LOG_ERR("SendReady", "WSASend error:{} id:{}", error, mUID);
 			return false;
 		}
 	}
 
 	return true;
 }
+
 
 bool IocpSession::IsConnected() const {
 	return mRemoteSock.GetSocket() != INVALID_SOCKET;

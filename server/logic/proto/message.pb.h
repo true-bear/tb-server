@@ -55,9 +55,6 @@ extern const ::google::protobuf::internal::DescriptorTable
 class ChatPacket;
 struct ChatPacketDefaultTypeInternal;
 extern ChatPacketDefaultTypeInternal _ChatPacket_default_instance_;
-class PacketHeader;
-struct PacketHeaderDefaultTypeInternal;
-extern PacketHeaderDefaultTypeInternal _PacketHeader_default_instance_;
 class WaitingPacket;
 struct WaitingPacketDefaultTypeInternal;
 extern WaitingPacketDefaultTypeInternal _WaitingPacket_default_instance_;
@@ -104,220 +101,6 @@ inline bool PacketType_Parse(absl::string_view name, PacketType* value) {
 // ===================================================================
 
 
-// -------------------------------------------------------------------
-
-class PacketHeader final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:PacketHeader) */ {
- public:
-  inline PacketHeader() : PacketHeader(nullptr) {}
-  ~PacketHeader() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(PacketHeader* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(PacketHeader));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR PacketHeader(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline PacketHeader(const PacketHeader& from) : PacketHeader(nullptr, from) {}
-  inline PacketHeader(PacketHeader&& from) noexcept
-      : PacketHeader(nullptr, std::move(from)) {}
-  inline PacketHeader& operator=(const PacketHeader& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline PacketHeader& operator=(PacketHeader&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const PacketHeader& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const PacketHeader* internal_default_instance() {
-    return reinterpret_cast<const PacketHeader*>(
-        &_PacketHeader_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 0;
-  friend void swap(PacketHeader& a, PacketHeader& b) { a.Swap(&b); }
-  inline void Swap(PacketHeader* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(PacketHeader* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  PacketHeader* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<PacketHeader>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const PacketHeader& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const PacketHeader& from) { PacketHeader::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(PacketHeader* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "PacketHeader"; }
-
- protected:
-  explicit PacketHeader(::google::protobuf::Arena* arena);
-  PacketHeader(::google::protobuf::Arena* arena, const PacketHeader& from);
-  PacketHeader(::google::protobuf::Arena* arena, PacketHeader&& from) noexcept
-      : PacketHeader(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kTypeFieldNumber = 1,
-    kPacketIdFieldNumber = 2,
-    kLengthFieldNumber = 3,
-  };
-  // .PacketType type = 1;
-  void clear_type() ;
-  ::PacketType type() const;
-  void set_type(::PacketType value);
-
-  private:
-  ::PacketType _internal_type() const;
-  void _internal_set_type(::PacketType value);
-
-  public:
-  // uint32 packet_id = 2;
-  void clear_packet_id() ;
-  ::uint32_t packet_id() const;
-  void set_packet_id(::uint32_t value);
-
-  private:
-  ::uint32_t _internal_packet_id() const;
-  void _internal_set_packet_id(::uint32_t value);
-
-  public:
-  // uint32 length = 3;
-  void clear_length() ;
-  ::uint32_t length() const;
-  void set_length(::uint32_t value);
-
-  private:
-  ::uint32_t _internal_length() const;
-  void _internal_set_length(::uint32_t value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:PacketHeader)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 0,
-      0, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const PacketHeader& from_msg);
-    int type_;
-    ::uint32_t packet_id_;
-    ::uint32_t length_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_message_2eproto;
-};
 // -------------------------------------------------------------------
 
 class WaitingPacket final : public ::google::protobuf::Message
@@ -379,7 +162,7 @@ class WaitingPacket final : public ::google::protobuf::Message
     return reinterpret_cast<const WaitingPacket*>(
         &_WaitingPacket_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 2;
+  static constexpr int kIndexInFileMessages = 1;
   friend void swap(WaitingPacket& a, WaitingPacket& b) { a.Swap(&b); }
   inline void Swap(WaitingPacket* other) {
     if (other == this) return;
@@ -466,11 +249,10 @@ class WaitingPacket final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kMessageFieldNumber = 3,
-    kHeaderFieldNumber = 1,
-    kWaitingNumberFieldNumber = 2,
+    kMessageFieldNumber = 2,
+    kWaitingNumberFieldNumber = 1,
   };
-  // string message = 3;
+  // string message = 2;
   void clear_message() ;
   const std::string& message() const;
   template <typename Arg_ = const std::string&, typename... Args_>
@@ -486,22 +268,7 @@ class WaitingPacket final : public ::google::protobuf::Message
   std::string* _internal_mutable_message();
 
   public:
-  // .PacketHeader header = 1;
-  bool has_header() const;
-  void clear_header() ;
-  const ::PacketHeader& header() const;
-  PROTOBUF_NODISCARD ::PacketHeader* release_header();
-  ::PacketHeader* mutable_header();
-  void set_allocated_header(::PacketHeader* value);
-  void unsafe_arena_set_allocated_header(::PacketHeader* value);
-  ::PacketHeader* unsafe_arena_release_header();
-
-  private:
-  const ::PacketHeader& _internal_header() const;
-  ::PacketHeader* _internal_mutable_header();
-
-  public:
-  // int32 waiting_number = 2;
+  // int32 waiting_number = 1;
   void clear_waiting_number() ;
   ::int32_t waiting_number() const;
   void set_waiting_number(::int32_t value);
@@ -516,7 +283,7 @@ class WaitingPacket final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 1,
+      1, 2, 0,
       29, 2>
       _table_;
 
@@ -534,11 +301,9 @@ class WaitingPacket final : public ::google::protobuf::Message
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
                           const WaitingPacket& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr message_;
-    ::PacketHeader* header_;
     ::int32_t waiting_number_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -605,7 +370,7 @@ class ChatPacket final : public ::google::protobuf::Message
     return reinterpret_cast<const ChatPacket*>(
         &_ChatPacket_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 1;
+  static constexpr int kIndexInFileMessages = 0;
   friend void swap(ChatPacket& a, ChatPacket& b) { a.Swap(&b); }
   inline void Swap(ChatPacket* other) {
     if (other == this) return;
@@ -692,11 +457,10 @@ class ChatPacket final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kMessageFieldNumber = 3,
-    kHeaderFieldNumber = 1,
-    kSessionIdFieldNumber = 2,
+    kMessageFieldNumber = 2,
+    kSessionIdFieldNumber = 1,
   };
-  // string message = 3;
+  // string message = 2;
   void clear_message() ;
   const std::string& message() const;
   template <typename Arg_ = const std::string&, typename... Args_>
@@ -712,22 +476,7 @@ class ChatPacket final : public ::google::protobuf::Message
   std::string* _internal_mutable_message();
 
   public:
-  // .PacketHeader header = 1;
-  bool has_header() const;
-  void clear_header() ;
-  const ::PacketHeader& header() const;
-  PROTOBUF_NODISCARD ::PacketHeader* release_header();
-  ::PacketHeader* mutable_header();
-  void set_allocated_header(::PacketHeader* value);
-  void unsafe_arena_set_allocated_header(::PacketHeader* value);
-  ::PacketHeader* unsafe_arena_release_header();
-
-  private:
-  const ::PacketHeader& _internal_header() const;
-  ::PacketHeader* _internal_mutable_header();
-
-  public:
-  // int32 sessionId = 2;
+  // int32 sessionId = 1;
   void clear_sessionid() ;
   ::int32_t sessionid() const;
   void set_sessionid(::int32_t value);
@@ -742,7 +491,7 @@ class ChatPacket final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 1,
+      1, 2, 0,
       26, 2>
       _table_;
 
@@ -760,11 +509,9 @@ class ChatPacket final : public ::google::protobuf::Message
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
                           const ChatPacket& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr message_;
-    ::PacketHeader* header_;
     ::int32_t sessionid_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -785,175 +532,9 @@ class ChatPacket final : public ::google::protobuf::Message
 #endif  // __GNUC__
 // -------------------------------------------------------------------
 
-// PacketHeader
-
-// .PacketType type = 1;
-inline void PacketHeader::clear_type() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.type_ = 0;
-}
-inline ::PacketType PacketHeader::type() const {
-  // @@protoc_insertion_point(field_get:PacketHeader.type)
-  return _internal_type();
-}
-inline void PacketHeader::set_type(::PacketType value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:PacketHeader.type)
-}
-inline ::PacketType PacketHeader::_internal_type() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::PacketType>(_impl_.type_);
-}
-inline void PacketHeader::_internal_set_type(::PacketType value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.type_ = value;
-}
-
-// uint32 packet_id = 2;
-inline void PacketHeader::clear_packet_id() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.packet_id_ = 0u;
-}
-inline ::uint32_t PacketHeader::packet_id() const {
-  // @@protoc_insertion_point(field_get:PacketHeader.packet_id)
-  return _internal_packet_id();
-}
-inline void PacketHeader::set_packet_id(::uint32_t value) {
-  _internal_set_packet_id(value);
-  // @@protoc_insertion_point(field_set:PacketHeader.packet_id)
-}
-inline ::uint32_t PacketHeader::_internal_packet_id() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.packet_id_;
-}
-inline void PacketHeader::_internal_set_packet_id(::uint32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.packet_id_ = value;
-}
-
-// uint32 length = 3;
-inline void PacketHeader::clear_length() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.length_ = 0u;
-}
-inline ::uint32_t PacketHeader::length() const {
-  // @@protoc_insertion_point(field_get:PacketHeader.length)
-  return _internal_length();
-}
-inline void PacketHeader::set_length(::uint32_t value) {
-  _internal_set_length(value);
-  // @@protoc_insertion_point(field_set:PacketHeader.length)
-}
-inline ::uint32_t PacketHeader::_internal_length() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.length_;
-}
-inline void PacketHeader::_internal_set_length(::uint32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.length_ = value;
-}
-
-// -------------------------------------------------------------------
-
 // ChatPacket
 
-// .PacketHeader header = 1;
-inline bool ChatPacket::has_header() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.header_ != nullptr);
-  return value;
-}
-inline void ChatPacket::clear_header() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.header_ != nullptr) _impl_.header_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline const ::PacketHeader& ChatPacket::_internal_header() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::PacketHeader* p = _impl_.header_;
-  return p != nullptr ? *p : reinterpret_cast<const ::PacketHeader&>(::_PacketHeader_default_instance_);
-}
-inline const ::PacketHeader& ChatPacket::header() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:ChatPacket.header)
-  return _internal_header();
-}
-inline void ChatPacket::unsafe_arena_set_allocated_header(::PacketHeader* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.header_);
-  }
-  _impl_.header_ = reinterpret_cast<::PacketHeader*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ChatPacket.header)
-}
-inline ::PacketHeader* ChatPacket::release_header() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::PacketHeader* released = _impl_.header_;
-  _impl_.header_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::PacketHeader* ChatPacket::unsafe_arena_release_header() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:ChatPacket.header)
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::PacketHeader* temp = _impl_.header_;
-  _impl_.header_ = nullptr;
-  return temp;
-}
-inline ::PacketHeader* ChatPacket::_internal_mutable_header() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.header_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::PacketHeader>(GetArena());
-    _impl_.header_ = reinterpret_cast<::PacketHeader*>(p);
-  }
-  return _impl_.header_;
-}
-inline ::PacketHeader* ChatPacket::mutable_header() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  ::PacketHeader* _msg = _internal_mutable_header();
-  // @@protoc_insertion_point(field_mutable:ChatPacket.header)
-  return _msg;
-}
-inline void ChatPacket::set_allocated_header(::PacketHeader* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.header_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-
-  _impl_.header_ = reinterpret_cast<::PacketHeader*>(value);
-  // @@protoc_insertion_point(field_set_allocated:ChatPacket.header)
-}
-
-// int32 sessionId = 2;
+// int32 sessionId = 1;
 inline void ChatPacket::clear_sessionid() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.sessionid_ = 0;
@@ -975,7 +556,7 @@ inline void ChatPacket::_internal_set_sessionid(::int32_t value) {
   _impl_.sessionid_ = value;
 }
 
-// string message = 3;
+// string message = 2;
 inline void ChatPacket::clear_message() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.message_.ClearToEmpty();
@@ -1027,103 +608,7 @@ inline void ChatPacket::set_allocated_message(std::string* value) {
 
 // WaitingPacket
 
-// .PacketHeader header = 1;
-inline bool WaitingPacket::has_header() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.header_ != nullptr);
-  return value;
-}
-inline void WaitingPacket::clear_header() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.header_ != nullptr) _impl_.header_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline const ::PacketHeader& WaitingPacket::_internal_header() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::PacketHeader* p = _impl_.header_;
-  return p != nullptr ? *p : reinterpret_cast<const ::PacketHeader&>(::_PacketHeader_default_instance_);
-}
-inline const ::PacketHeader& WaitingPacket::header() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:WaitingPacket.header)
-  return _internal_header();
-}
-inline void WaitingPacket::unsafe_arena_set_allocated_header(::PacketHeader* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.header_);
-  }
-  _impl_.header_ = reinterpret_cast<::PacketHeader*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:WaitingPacket.header)
-}
-inline ::PacketHeader* WaitingPacket::release_header() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::PacketHeader* released = _impl_.header_;
-  _impl_.header_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::PacketHeader* WaitingPacket::unsafe_arena_release_header() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:WaitingPacket.header)
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::PacketHeader* temp = _impl_.header_;
-  _impl_.header_ = nullptr;
-  return temp;
-}
-inline ::PacketHeader* WaitingPacket::_internal_mutable_header() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.header_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::PacketHeader>(GetArena());
-    _impl_.header_ = reinterpret_cast<::PacketHeader*>(p);
-  }
-  return _impl_.header_;
-}
-inline ::PacketHeader* WaitingPacket::mutable_header() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  ::PacketHeader* _msg = _internal_mutable_header();
-  // @@protoc_insertion_point(field_mutable:WaitingPacket.header)
-  return _msg;
-}
-inline void WaitingPacket::set_allocated_header(::PacketHeader* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.header_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-
-  _impl_.header_ = reinterpret_cast<::PacketHeader*>(value);
-  // @@protoc_insertion_point(field_set_allocated:WaitingPacket.header)
-}
-
-// int32 waiting_number = 2;
+// int32 waiting_number = 1;
 inline void WaitingPacket::clear_waiting_number() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.waiting_number_ = 0;
@@ -1145,7 +630,7 @@ inline void WaitingPacket::_internal_set_waiting_number(::int32_t value) {
   _impl_.waiting_number_ = value;
 }
 
-// string message = 3;
+// string message = 2;
 inline void WaitingPacket::clear_message() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.message_.ClearToEmpty();

@@ -42,14 +42,14 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
     auto session = GetSession(uID);
     if (!session)
     {
-        LOG_ERR("OnRecv", "session nulltpr id:{}", uID);
+        LOG_ERR("OnRecv", "session nullptr id:{}", uID);
         return;
     }
 
     auto recvBuffer = session->GetRecvBuffer();
     if (!recvBuffer)
     {
-        LOG_ERR("OnRecv", "recv buffer nulltpr id:{}", uID);
+        LOG_ERR("OnRecv", "recv buffer nullptr id:{}", uID);
         return;
     }
 
@@ -57,38 +57,55 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
 
     while (true)
     {
-        const size_t storedSize = recvBuffer->GetStoredSize();
-        if (storedSize < sizeof(uint16_t))
+        constexpr size_t HEADER_SIZE = sizeof(PacketHead);
+        if (recvBuffer->GetStoredSize() < HEADER_SIZE)
             break;
 
-        uint16_t packetSize = 0;
-        if (!recvBuffer->Read(reinterpret_cast<char*>(&packetSize), sizeof(uint16_t)))
-            return;
-
-        packetSize = ntohs(packetSize);
-        if (packetSize == 0)
-            return;
-
-        if (storedSize < packetSize)
+        std::array<std::byte, HEADER_SIZE> headerBytes;
+        if (!recvBuffer->Peek(headerBytes))
         {
-            recvBuffer->MoveReadPos(-static_cast<int>(sizeof(uint16_t)));
+            LOG_ERR("OnRecv", "peek failed. storedSize:{} id:{}", recvBuffer->GetStoredSize(), uID);
             break;
         }
 
-        char* packetData = recvBuffer->GetReadPtr();
-        LogicThread::Get().DisPatchPacket(session->GetUniqueId(), packetData, packetSize);
-       
-        recvBuffer->MoveReadPos(packetSize);
+        PacketHead header;
+        std::memcpy(&header, headerBytes.data(), HEADER_SIZE);
+
+        header.length = ntohs(header.length);
+        header.type = ntohs(header.type);
+        header.packet_id = ntohl(header.packet_id);
+
+        if (header.length == 0 || header.length > 0x1000)
+        {
+            LOG_ERR("OnRecv", "invalid header.length:{} storedSize:{} id:{}", header.length, recvBuffer->GetStoredSize(), uID);
+            recvBuffer->CommitRead(HEADER_SIZE);
+            continue;
+        }
+
+        const size_t totalPacketSize = HEADER_SIZE + header.length;
+        if (recvBuffer->GetStoredSize() < totalPacketSize)
+            break;
+
+        std::vector<std::byte> fullPacket(totalPacketSize);
+        if (!recvBuffer->Read(fullPacket))
+        {
+            LOG_ERR("OnRecv", "read fail. totalSize:{} id:{}", totalPacketSize, uID);
+            return;
+        }
+
+        const char* payloadPtr = reinterpret_cast<const char*>(fullPacket.data() + HEADER_SIZE);
+        const size_t payloadSize = header.length;
+
+        LogicThread::Get().DisPatchPacket(session->GetUniqueId(), header.type, header.packet_id, payloadPtr, payloadSize);
     }
 
     if (!session->RecvReady())
     {
         LOG_WARN("OnRecv", "recv ready failed id:{}", uID);
         OnClose(uID);
-        return;
     }
-
 }
+
 
 void LogicServer::Run()
 {
@@ -196,23 +213,28 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
         else
         {
             WaitingPacket packet;
-            auto* header = new PacketHeader();
-            header->set_type(PacketType::WAITING);
-            header->set_length(packet.ByteSizeLong());
-            
-            packet.set_allocated_header(header);
             packet.set_message("waiting...");
             packet.set_waiting_number(WaitingThread::Get().Size());
 
-            int size = packet.ByteSizeLong();
-            std::vector<char> buf(size);
-            if (!packet.SerializeToArray(buf.data(), size))
+            const size_t payloadSize = packet.ByteSizeLong();
+            std::vector<char> payload(payloadSize);
+
+            if (!packet.SerializeToArray(payload.data(), static_cast<int>(payloadSize)))
             {
                 LOG_ERR("WaitingPacket", "Serialize ½ÇÆÐ");
                 return;
             }
 
-            session->SendPacket(buf.data(), size);
+            PacketHead header;
+            header.length = htons(static_cast<uint16_t>(payloadSize));       
+            header.type = htons(static_cast<uint16_t>(PacketType::WAITING));
+            header.packet_id = htonl(0);
+
+            std::vector<char> finalBuf(sizeof(PacketHead) + payloadSize);
+            std::memcpy(finalBuf.data(), &header, sizeof(PacketHead));
+            std::memcpy(finalBuf.data() + sizeof(PacketHead), payload.data(), payloadSize);
+
+            session->SendPacket(finalBuf.data(), static_cast<uint32_t>(finalBuf.size()));
 
             WaitingThread::Get().Enqueue(session);
             LOG_INFO("Waiting Enqueue", "Session {} pushed to waiting queue", uID);
@@ -221,19 +243,22 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
 }
 
 
-
 void LogicServer::OnSend(unsigned int uID, unsigned long ioSize)
 {
     auto session = GetSession(uID);
     if (!session)
         return;
 
-    IocpBuffer* sendBuffer = session->GetSendBuffer();
+    auto* sendBuffer = session->GetSendBuffer();
     if (sendBuffer)
     {
-        sendBuffer->Read(ioSize);
+        if (!sendBuffer->CommitRead(ioSize))
+        {
+            LOG_WARN("OnSend", "Consume overflow, id:{}, size:{}", uID, ioSize);
+        }
     }
 }
+
 
 bool LogicServer::HasFreeSlot()
 {

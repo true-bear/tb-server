@@ -1,6 +1,6 @@
 #include "pch.h"
-
-void ProcessChat(IocpSession* session, const char* data, uint16_t size)
+#include "logic_chat.h"
+void ProcessChat(IocpSession* session, const char* data, uint16_t size, uint32_t packetId)
 {
     if (!session)
     {
@@ -15,17 +15,32 @@ void ProcessChat(IocpSession* session, const char* data, uint16_t size)
         return;
     }
 
-    std::vector<char> serializedData(chatPacket.ByteSizeLong());
-    if (!chatPacket.SerializeToArray(serializedData.data(), static_cast<int>(serializedData.size())))
+    LOG_INFO("Chat", "Recv uid:{} msg:'{}'", session->GetUniqueId(), chatPacket.message());
+
+    const int payloadSize = chatPacket.ByteSizeLong();
+    std::vector<char> payload(payloadSize);
+
+    if (!chatPacket.SerializeToArray(payload.data(), payloadSize))
     {
         LOG_ERR("ProcessChat", "Serialize failed for uid:{}", session->GetUniqueId());
         return;
     }
 
-    if (!session->SendPacket(serializedData.data(), static_cast<uint16_t>(serializedData.size())))
+    PacketHead header;
+    header.length = htonl(static_cast<uint32_t>(payloadSize));
+    header.type = htonl(static_cast<uint32_t>(PacketType::CHAT));
+    header.packet_id = htonl(packetId);
+
+    std::vector<char> sendBuf(sizeof(PacketHead) + payloadSize);
+    std::memcpy(sendBuf.data(), &header, sizeof(PacketHead));
+    std::memcpy(sendBuf.data() + sizeof(PacketHead), payload.data(), payloadSize);
+
+    if (!session->SendPacket(sendBuf.data(), static_cast<uint16_t>(sendBuf.size())))
     {
-        LOG_ERR("ProcessChat", "SendPacket failed uid:{} size:{}", session->GetUniqueId(), serializedData.size());
+        LOG_ERR("ProcessChat", "SendPacket failed uid:{} size:{}", session->GetUniqueId(), sendBuf.size());
+        return;
     }
 
-    LOG_INFO("Chat", "Send uid:{} msg:'{}'", session->GetUniqueId(), chatPacket.message());
+    LOG_INFO("Chat", "Echoed back to uid:{} size:{}", session->GetUniqueId(), sendBuf.size());
 }
+

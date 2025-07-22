@@ -1,39 +1,30 @@
 #pragma once
 #include "pch.h"
 
-class IocpBuffer
-{
+class RoundBuffer {
 public:
-    explicit IocpBuffer(size_t capacity);
-    virtual ~IocpBuffer() {};
+    explicit RoundBuffer(const size_t capacity);
 
-    bool Write(const char* data, size_t size);
+    bool Write(std::span<const std::byte> data);
+    bool Read(std::span<std::byte> dest);
+    bool Peek(std::span<std::byte> dest) const;
 
-    bool Read(char* dest, size_t size);
-    void Read(size_t size);
+    bool CommitRead(const size_t size);
+	bool CommitWrite(const size_t size);
 
     void Clear();
 
-    char* GetWritePtr();
-    char* GetReadPtr();
-
-    size_t GetContinuousWriteSize() const;
     size_t GetStoredSize() const;
-    size_t GetRemainSize() const;
+    size_t GetFreeSize() const;
+    size_t WritableSize() const;
 
-    void MoveWritePos(size_t size);
-    void MoveReadPos(size_t size);
 
-    size_t GetReadPos() const;
-    size_t GetWritePos() const;
+    std::byte* GetWritePtr();
+
 
 private:
-    size_t GetReadPosWithoutMod() const;
-
-    size_t GetWritePosWithoutMod() const;
-private:
-    std::unique_ptr<char[]> mBuffer;
+    std::vector<std::byte> mBuffer;
     size_t mCapacity;
-    size_t mReadPos;
-    size_t mWritePos;
+    size_t mReadPos = 0;
+    size_t mWritePos = 0;
 };

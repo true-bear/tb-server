@@ -43,8 +43,8 @@ public:
 
 	unsigned int	GetUniqueId() const { return mUID; }
 	const SOCKET&	GetRemoteSocket() const { return mRemoteSock.GetSocket(); }
-	IocpBuffer*		GetRecvBuffer() const { return mRecvBuffer.get(); }
-	IocpBuffer*		GetSendBuffer() const { return mSendBuffer.get(); }
+	RoundBuffer*		GetRecvBuffer() const { return mRecvBuffer.get(); }
+	RoundBuffer*		GetSendBuffer() const { return mSendBuffer.get(); }
 	char*			GetRecvOverlappedBuffer() const;
 
 	bool			InitRemoteSocket() { mRemoteSock.Init(); }
@@ -59,6 +59,6 @@ private:
 	char						mAcceptBuf[64]{};
 
 private:
-	std::unique_ptr<IocpBuffer> mRecvBuffer{ std::make_unique<IocpBuffer>(RECV_BUFFER_MAX_SIZE) };
-	std::unique_ptr<IocpBuffer> mSendBuffer{ std::make_unique<IocpBuffer>(SEND_BUFFER_MAX_SIZE) };
+	std::unique_ptr<RoundBuffer> mRecvBuffer{ std::make_unique<RoundBuffer>(RECV_BUFFER_MAX_SIZE) };
+	std::unique_ptr<RoundBuffer> mSendBuffer{ std::make_unique<RoundBuffer>(SEND_BUFFER_MAX_SIZE) };
 };

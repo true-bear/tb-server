@@ -121,7 +121,6 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="task.h" />
     <ClInclude Include="util\config.h" />
     <ClInclude Include="iocp\iocpCore.h" />
     <ClInclude Include="util\define.h" />

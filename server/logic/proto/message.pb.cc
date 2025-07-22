@@ -25,41 +25,13 @@ namespace _pb = ::google::protobuf;
 namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 
-inline constexpr PacketHeader::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : type_{static_cast< ::PacketType >(0)},
-        packet_id_{0u},
-        length_{0u},
-        _cached_size_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR PacketHeader::PacketHeader(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct PacketHeaderDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR PacketHeaderDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~PacketHeaderDefaultTypeInternal() {}
-  union {
-    PacketHeader _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PacketHeaderDefaultTypeInternal _PacketHeader_default_instance_;
-
 inline constexpr WaitingPacket::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        message_(
+      : message_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
-        header_{nullptr},
-        waiting_number_{0} {}
+        waiting_number_{0},
+        _cached_size_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR WaitingPacket::WaitingPacket(::_pbi::ConstantInitialized)
@@ -83,12 +55,11 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 
 inline constexpr ChatPacket::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        message_(
+      : message_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
-        header_{nullptr},
-        sessionid_{0} {}
+        sessionid_{0},
+        _cached_size_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR ChatPacket::ChatPacket(::_pbi::ConstantInitialized)
@@ -116,17 +87,6 @@ const ::uint32_t
     TableStruct_message_2eproto::offsets[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
         protodesc_cold) = {
         ~0u,  // no _has_bits_
-        PROTOBUF_FIELD_OFFSET(::PacketHeader, _internal_metadata_),
-        ~0u,  // no _extensions_
-        ~0u,  // no _oneof_case_
-        ~0u,  // no _weak_field_map_
-        ~0u,  // no _inlined_string_donated_
-        ~0u,  // no _split_
-        ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::PacketHeader, _impl_.type_),
-        PROTOBUF_FIELD_OFFSET(::PacketHeader, _impl_.packet_id_),
-        PROTOBUF_FIELD_OFFSET(::PacketHeader, _impl_.length_),
-        PROTOBUF_FIELD_OFFSET(::ChatPacket, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::ChatPacket, _internal_metadata_),
         ~0u,  // no _extensions_
         ~0u,  // no _oneof_case_
@@ -134,13 +94,9 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::ChatPacket, _impl_.header_),
         PROTOBUF_FIELD_OFFSET(::ChatPacket, _impl_.sessionid_),
         PROTOBUF_FIELD_OFFSET(::ChatPacket, _impl_.message_),
-        0,
-        ~0u,
-        ~0u,
-        PROTOBUF_FIELD_OFFSET(::WaitingPacket, _impl_._has_bits_),
+        ~0u,  // no _has_bits_
         PROTOBUF_FIELD_OFFSET(::WaitingPacket, _internal_metadata_),
         ~0u,  // no _extensions_
         ~0u,  // no _oneof_case_
@@ -148,47 +104,38 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::WaitingPacket, _impl_.header_),
         PROTOBUF_FIELD_OFFSET(::WaitingPacket, _impl_.waiting_number_),
         PROTOBUF_FIELD_OFFSET(::WaitingPacket, _impl_.message_),
-        0,
-        ~0u,
-        ~0u,
 };
 
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-        {0, -1, -1, sizeof(::PacketHeader)},
-        {11, 22, -1, sizeof(::ChatPacket)},
-        {25, 36, -1, sizeof(::WaitingPacket)},
+        {0, -1, -1, sizeof(::ChatPacket)},
+        {10, -1, -1, sizeof(::WaitingPacket)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
-    &::_PacketHeader_default_instance_._instance,
     &::_ChatPacket_default_instance_._instance,
     &::_WaitingPacket_default_instance_._instance,
 };
 const char descriptor_table_protodef_message_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\rmessage.proto\"L\n\014PacketHeader\022\031\n\004type\030"
-    "\001 \001(\0162\013.PacketType\022\021\n\tpacket_id\030\002 \001(\r\022\016\n"
-    "\006length\030\003 \001(\r\"O\n\nChatPacket\022\035\n\006header\030\001 "
-    "\001(\0132\r.PacketHeader\022\021\n\tsessionId\030\002 \001(\005\022\017\n"
-    "\007message\030\003 \001(\t\"W\n\rWaitingPacket\022\035\n\006heade"
-    "r\030\001 \001(\0132\r.PacketHeader\022\026\n\016waiting_number"
-    "\030\002 \001(\005\022\017\n\007message\030\003 \001(\t*-\n\nPacketType\022\010\n"
-    "\004NONE\020\000\022\010\n\004CHAT\020\001\022\013\n\007WAITING\020\002b\006proto3"
+    "\n\rmessage.proto\"0\n\nChatPacket\022\021\n\tsession"
+    "Id\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\"8\n\rWaitingPack"
+    "et\022\026\n\016waiting_number\030\001 \001(\005\022\017\n\007message\030\002 "
+    "\001(\t*-\n\nPacketType\022\010\n\004NONE\020\000\022\010\n\004CHAT\020\001\022\013\n"
+    "\007WAITING\020\002b\006proto3"
 };
 static ::absl::once_flag descriptor_table_message_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_message_2eproto = {
     false,
     false,
-    318,
+    178,
     descriptor_table_protodef_message_2eproto,
     "message.proto",
     &descriptor_table_message_2eproto_once,
     nullptr,
     0,
-    3,
+    2,
     schemas,
     file_default_instances,
     TableStruct_message_2eproto::offsets,
@@ -206,275 +153,8 @@ bool PacketType_IsValid(int value) {
 }
 // ===================================================================
 
-class PacketHeader::_Internal {
- public:
-};
-
-PacketHeader::PacketHeader(::google::protobuf::Arena* arena)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, _class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:PacketHeader)
-}
-PacketHeader::PacketHeader(
-    ::google::protobuf::Arena* arena, const PacketHeader& from)
-    : PacketHeader(arena) {
-  MergeFrom(from);
-}
-inline PROTOBUF_NDEBUG_INLINE PacketHeader::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility,
-    ::google::protobuf::Arena* arena)
-      : _cached_size_{0} {}
-
-inline void PacketHeader::SharedCtor(::_pb::Arena* arena) {
-  new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, type_),
-           0,
-           offsetof(Impl_, length_) -
-               offsetof(Impl_, type_) +
-               sizeof(Impl_::length_));
-}
-PacketHeader::~PacketHeader() {
-  // @@protoc_insertion_point(destructor:PacketHeader)
-  SharedDtor(*this);
-}
-inline void PacketHeader::SharedDtor(MessageLite& self) {
-  PacketHeader& this_ = static_cast<PacketHeader&>(self);
-  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
-  ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.~Impl_();
-}
-
-inline void* PacketHeader::PlacementNew_(const void*, void* mem,
-                                        ::google::protobuf::Arena* arena) {
-  return ::new (mem) PacketHeader(arena);
-}
-constexpr auto PacketHeader::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(PacketHeader),
-                                            alignof(PacketHeader));
-}
-PROTOBUF_CONSTINIT
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::google::protobuf::internal::ClassDataFull PacketHeader::_class_data_ = {
-    ::google::protobuf::internal::ClassData{
-        &_PacketHeader_default_instance_._instance,
-        &_table_.header,
-        nullptr,  // OnDemandRegisterArenaDtor
-        nullptr,  // IsInitialized
-        &PacketHeader::MergeImpl,
-        ::google::protobuf::Message::GetNewImpl<PacketHeader>(),
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        &PacketHeader::SharedDtor,
-        ::google::protobuf::Message::GetClearImpl<PacketHeader>(), &PacketHeader::ByteSizeLong,
-            &PacketHeader::_InternalSerialize,
-#endif  // PROTOBUF_CUSTOM_VTABLE
-        PROTOBUF_FIELD_OFFSET(PacketHeader, _impl_._cached_size_),
-        false,
-    },
-    &PacketHeader::kDescriptorMethods,
-    &descriptor_table_message_2eproto,
-    nullptr,  // tracker
-};
-const ::google::protobuf::internal::ClassData* PacketHeader::GetClassData() const {
-  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
-  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
-  return _class_data_.base();
-}
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 0, 0, 2> PacketHeader::_table_ = {
-  {
-    0,  // no _has_bits_
-    0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
-    offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
-    offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    0,  // num_aux_entries
-    offsetof(decltype(_table_), field_names),  // no aux_entries
-    _class_data_.base(),
-    nullptr,  // post_loop_handler
-    ::_pbi::TcParser::GenericFallback,  // fallback
-    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::PacketHeader>(),  // to_prefetch
-    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
-  }, {{
-    {::_pbi::TcParser::MiniParse, {}},
-    // .PacketType type = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(PacketHeader, _impl_.type_), 63>(),
-     {8, 63, 0, PROTOBUF_FIELD_OFFSET(PacketHeader, _impl_.type_)}},
-    // uint32 packet_id = 2;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(PacketHeader, _impl_.packet_id_), 63>(),
-     {16, 63, 0, PROTOBUF_FIELD_OFFSET(PacketHeader, _impl_.packet_id_)}},
-    // uint32 length = 3;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(PacketHeader, _impl_.length_), 63>(),
-     {24, 63, 0, PROTOBUF_FIELD_OFFSET(PacketHeader, _impl_.length_)}},
-  }}, {{
-    65535, 65535
-  }}, {{
-    // .PacketType type = 1;
-    {PROTOBUF_FIELD_OFFSET(PacketHeader, _impl_.type_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
-    // uint32 packet_id = 2;
-    {PROTOBUF_FIELD_OFFSET(PacketHeader, _impl_.packet_id_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
-    // uint32 length = 3;
-    {PROTOBUF_FIELD_OFFSET(PacketHeader, _impl_.length_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
-  }},
-  // no aux_entries
-  {{
-  }},
-};
-
-PROTOBUF_NOINLINE void PacketHeader::Clear() {
-// @@protoc_insertion_point(message_clear_start:PacketHeader)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  ::memset(&_impl_.type_, 0, static_cast<::size_t>(
-      reinterpret_cast<char*>(&_impl_.length_) -
-      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.length_));
-  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
-}
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::uint8_t* PacketHeader::_InternalSerialize(
-            const MessageLite& base, ::uint8_t* target,
-            ::google::protobuf::io::EpsCopyOutputStream* stream) {
-          const PacketHeader& this_ = static_cast<const PacketHeader&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-        ::uint8_t* PacketHeader::_InternalSerialize(
-            ::uint8_t* target,
-            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-          const PacketHeader& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(serialize_to_array_start:PacketHeader)
-          ::uint32_t cached_has_bits = 0;
-          (void)cached_has_bits;
-
-          // .PacketType type = 1;
-          if (this_._internal_type() != 0) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteEnumToArray(
-                1, this_._internal_type(), target);
-          }
-
-          // uint32 packet_id = 2;
-          if (this_._internal_packet_id() != 0) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteUInt32ToArray(
-                2, this_._internal_packet_id(), target);
-          }
-
-          // uint32 length = 3;
-          if (this_._internal_length() != 0) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteUInt32ToArray(
-                3, this_._internal_length(), target);
-          }
-
-          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
-            target =
-                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
-          }
-          // @@protoc_insertion_point(serialize_to_array_end:PacketHeader)
-          return target;
-        }
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::size_t PacketHeader::ByteSizeLong(const MessageLite& base) {
-          const PacketHeader& this_ = static_cast<const PacketHeader&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-        ::size_t PacketHeader::ByteSizeLong() const {
-          const PacketHeader& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(message_byte_size_start:PacketHeader)
-          ::size_t total_size = 0;
-
-          ::uint32_t cached_has_bits = 0;
-          // Prevent compiler warnings about cached_has_bits being unused
-          (void)cached_has_bits;
-
-          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-           {
-            // .PacketType type = 1;
-            if (this_._internal_type() != 0) {
-              total_size += 1 +
-                            ::_pbi::WireFormatLite::EnumSize(this_._internal_type());
-            }
-            // uint32 packet_id = 2;
-            if (this_._internal_packet_id() != 0) {
-              total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(
-                  this_._internal_packet_id());
-            }
-            // uint32 length = 3;
-            if (this_._internal_length() != 0) {
-              total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(
-                  this_._internal_length());
-            }
-          }
-          return this_.MaybeComputeUnknownFieldsSize(total_size,
-                                                     &this_._impl_._cached_size_);
-        }
-
-void PacketHeader::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
-  auto* const _this = static_cast<PacketHeader*>(&to_msg);
-  auto& from = static_cast<const PacketHeader&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:PacketHeader)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (from._internal_type() != 0) {
-    _this->_impl_.type_ = from._impl_.type_;
-  }
-  if (from._internal_packet_id() != 0) {
-    _this->_impl_.packet_id_ = from._impl_.packet_id_;
-  }
-  if (from._internal_length() != 0) {
-    _this->_impl_.length_ = from._impl_.length_;
-  }
-  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void PacketHeader::CopyFrom(const PacketHeader& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:PacketHeader)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-
-void PacketHeader::InternalSwap(PacketHeader* PROTOBUF_RESTRICT other) {
-  using std::swap;
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(PacketHeader, _impl_.length_)
-      + sizeof(PacketHeader::_impl_.length_)
-      - PROTOBUF_FIELD_OFFSET(PacketHeader, _impl_.type_)>(
-          reinterpret_cast<char*>(&_impl_.type_),
-          reinterpret_cast<char*>(&other->_impl_.type_));
-}
-
-::google::protobuf::Metadata PacketHeader::GetMetadata() const {
-  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
-}
-// ===================================================================
-
 class ChatPacket::_Internal {
  public:
-  using HasBits =
-      decltype(std::declval<ChatPacket>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_._has_bits_);
 };
 
 ChatPacket::ChatPacket(::google::protobuf::Arena* arena)
@@ -489,9 +169,8 @@ ChatPacket::ChatPacket(::google::protobuf::Arena* arena)
 inline PROTOBUF_NDEBUG_INLINE ChatPacket::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from, const ::ChatPacket& from_msg)
-      : _has_bits_{from._has_bits_},
-        _cached_size_{0},
-        message_(arena, from.message_) {}
+      : message_(arena, from.message_),
+        _cached_size_{0} {}
 
 ChatPacket::ChatPacket(
     ::google::protobuf::Arena* arena,
@@ -506,10 +185,6 @@ ChatPacket::ChatPacket(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.header_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::PacketHeader>(
-                              arena, *from._impl_.header_)
-                        : nullptr;
   _impl_.sessionid_ = from._impl_.sessionid_;
 
   // @@protoc_insertion_point(copy_constructor:ChatPacket)
@@ -517,17 +192,12 @@ ChatPacket::ChatPacket(
 inline PROTOBUF_NDEBUG_INLINE ChatPacket::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : _cached_size_{0},
-        message_(arena) {}
+      : message_(arena),
+        _cached_size_{0} {}
 
 inline void ChatPacket::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, header_),
-           0,
-           offsetof(Impl_, sessionid_) -
-               offsetof(Impl_, header_) +
-               sizeof(Impl_::sessionid_));
+  _impl_.sessionid_ = {};
 }
 ChatPacket::~ChatPacket() {
   // @@protoc_insertion_point(destructor:ChatPacket)
@@ -538,7 +208,6 @@ inline void ChatPacket::SharedDtor(MessageLite& self) {
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   this_._impl_.message_.Destroy();
-  delete this_._impl_.header_;
   this_._impl_.~Impl_();
 }
 
@@ -578,17 +247,17 @@ const ::google::protobuf::internal::ClassData* ChatPacket::GetClassData() const 
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 1, 26, 2> ChatPacket::_table_ = {
+const ::_pbi::TcParseTable<1, 2, 0, 26, 2> ChatPacket::_table_ = {
   {
-    PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_._has_bits_),
+    0,  // no _has_bits_
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    2, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967292,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    1,  // num_aux_entries
-    offsetof(decltype(_table_), aux_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
@@ -596,32 +265,25 @@ const ::_pbi::TcParseTable<2, 3, 1, 26, 2> ChatPacket::_table_ = {
     ::_pbi::TcParser::GetTable<::ChatPacket>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
-    // .PacketHeader header = 1;
-    {::_pbi::TcParser::FastMtS1,
-     {10, 0, 0, PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.header_)}},
-    // int32 sessionId = 2;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ChatPacket, _impl_.sessionid_), 63>(),
-     {16, 63, 0, PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.sessionid_)}},
-    // string message = 3;
+    // string message = 2;
     {::_pbi::TcParser::FastUS1,
-     {26, 63, 0, PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.message_)}},
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.message_)}},
+    // int32 sessionId = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ChatPacket, _impl_.sessionid_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.sessionid_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // .PacketHeader header = 1;
-    {PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.header_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // int32 sessionId = 2;
-    {PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.sessionid_), -1, 0,
+    // int32 sessionId = 1;
+    {PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.sessionid_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
-    // string message = 3;
-    {PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.message_), -1, 0,
+    // string message = 2;
+    {PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.message_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-  }}, {{
-    {::_pbi::TcParser::GetTable<::PacketHeader>()},
-  }}, {{
-    "\12\0\0\7\0\0\0\0"
+  }},
+  // no aux_entries
+  {{
+    "\12\0\7\0\0\0\0\0"
     "ChatPacket"
     "message"
   }},
@@ -635,13 +297,7 @@ PROTOBUF_NOINLINE void ChatPacket::Clear() {
   (void) cached_has_bits;
 
   _impl_.message_.ClearToEmpty();
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.header_ != nullptr);
-    _impl_.header_->Clear();
-  }
   _impl_.sessionid_ = 0;
-  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -660,27 +316,19 @@ PROTOBUF_NOINLINE void ChatPacket::Clear() {
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
-          cached_has_bits = this_._impl_._has_bits_[0];
-          // .PacketHeader header = 1;
-          if (cached_has_bits & 0x00000001u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                1, *this_._impl_.header_, this_._impl_.header_->GetCachedSize(), target,
-                stream);
-          }
-
-          // int32 sessionId = 2;
+          // int32 sessionId = 1;
           if (this_._internal_sessionid() != 0) {
             target = ::google::protobuf::internal::WireFormatLite::
-                WriteInt32ToArrayWithField<2>(
+                WriteInt32ToArrayWithField<1>(
                     stream, this_._internal_sessionid(), target);
           }
 
-          // string message = 3;
+          // string message = 2;
           if (!this_._internal_message().empty()) {
             const std::string& _s = this_._internal_message();
             ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
                 _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "ChatPacket.message");
-            target = stream->WriteStringMaybeAliased(3, _s, target);
+            target = stream->WriteStringMaybeAliased(2, _s, target);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -708,22 +356,12 @@ PROTOBUF_NOINLINE void ChatPacket::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
            {
-            // string message = 3;
+            // string message = 2;
             if (!this_._internal_message().empty()) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_message());
             }
-          }
-           {
-            // .PacketHeader header = 1;
-            cached_has_bits = this_._impl_._has_bits_[0];
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.header_);
-            }
-          }
-           {
-            // int32 sessionId = 2;
+            // int32 sessionId = 1;
             if (this_._internal_sessionid() != 0) {
               total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
                   this_._internal_sessionid());
@@ -736,7 +374,6 @@ PROTOBUF_NOINLINE void ChatPacket::Clear() {
 void ChatPacket::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
   auto* const _this = static_cast<ChatPacket*>(&to_msg);
   auto& from = static_cast<const ChatPacket&>(from_msg);
-  ::google::protobuf::Arena* arena = _this->GetArena();
   // @@protoc_insertion_point(class_specific_merge_from_start:ChatPacket)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
@@ -745,20 +382,9 @@ void ChatPacket::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goog
   if (!from._internal_message().empty()) {
     _this->_internal_set_message(from._internal_message());
   }
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(from._impl_.header_ != nullptr);
-    if (_this->_impl_.header_ == nullptr) {
-      _this->_impl_.header_ =
-          ::google::protobuf::Message::CopyConstruct<::PacketHeader>(arena, *from._impl_.header_);
-    } else {
-      _this->_impl_.header_->MergeFrom(*from._impl_.header_);
-    }
-  }
   if (from._internal_sessionid() != 0) {
     _this->_impl_.sessionid_ = from._impl_.sessionid_;
   }
-  _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -775,14 +401,8 @@ void ChatPacket::InternalSwap(ChatPacket* PROTOBUF_RESTRICT other) {
   auto* arena = GetArena();
   ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.message_, &other->_impl_.message_, arena);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.sessionid_)
-      + sizeof(ChatPacket::_impl_.sessionid_)
-      - PROTOBUF_FIELD_OFFSET(ChatPacket, _impl_.header_)>(
-          reinterpret_cast<char*>(&_impl_.header_),
-          reinterpret_cast<char*>(&other->_impl_.header_));
+        swap(_impl_.sessionid_, other->_impl_.sessionid_);
 }
 
 ::google::protobuf::Metadata ChatPacket::GetMetadata() const {
@@ -792,10 +412,6 @@ void ChatPacket::InternalSwap(ChatPacket* PROTOBUF_RESTRICT other) {
 
 class WaitingPacket::_Internal {
  public:
-  using HasBits =
-      decltype(std::declval<WaitingPacket>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_._has_bits_);
 };
 
 WaitingPacket::WaitingPacket(::google::protobuf::Arena* arena)
@@ -810,9 +426,8 @@ WaitingPacket::WaitingPacket(::google::protobuf::Arena* arena)
 inline PROTOBUF_NDEBUG_INLINE WaitingPacket::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from, const ::WaitingPacket& from_msg)
-      : _has_bits_{from._has_bits_},
-        _cached_size_{0},
-        message_(arena, from.message_) {}
+      : message_(arena, from.message_),
+        _cached_size_{0} {}
 
 WaitingPacket::WaitingPacket(
     ::google::protobuf::Arena* arena,
@@ -827,10 +442,6 @@ WaitingPacket::WaitingPacket(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.header_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::PacketHeader>(
-                              arena, *from._impl_.header_)
-                        : nullptr;
   _impl_.waiting_number_ = from._impl_.waiting_number_;
 
   // @@protoc_insertion_point(copy_constructor:WaitingPacket)
@@ -838,17 +449,12 @@ WaitingPacket::WaitingPacket(
 inline PROTOBUF_NDEBUG_INLINE WaitingPacket::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : _cached_size_{0},
-        message_(arena) {}
+      : message_(arena),
+        _cached_size_{0} {}
 
 inline void WaitingPacket::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, header_),
-           0,
-           offsetof(Impl_, waiting_number_) -
-               offsetof(Impl_, header_) +
-               sizeof(Impl_::waiting_number_));
+  _impl_.waiting_number_ = {};
 }
 WaitingPacket::~WaitingPacket() {
   // @@protoc_insertion_point(destructor:WaitingPacket)
@@ -859,7 +465,6 @@ inline void WaitingPacket::SharedDtor(MessageLite& self) {
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   this_._impl_.message_.Destroy();
-  delete this_._impl_.header_;
   this_._impl_.~Impl_();
 }
 
@@ -899,17 +504,17 @@ const ::google::protobuf::internal::ClassData* WaitingPacket::GetClassData() con
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 1, 29, 2> WaitingPacket::_table_ = {
+const ::_pbi::TcParseTable<1, 2, 0, 29, 2> WaitingPacket::_table_ = {
   {
-    PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_._has_bits_),
+    0,  // no _has_bits_
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    2, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967292,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    1,  // num_aux_entries
-    offsetof(decltype(_table_), aux_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
@@ -917,32 +522,25 @@ const ::_pbi::TcParseTable<2, 3, 1, 29, 2> WaitingPacket::_table_ = {
     ::_pbi::TcParser::GetTable<::WaitingPacket>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
-    // .PacketHeader header = 1;
-    {::_pbi::TcParser::FastMtS1,
-     {10, 0, 0, PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.header_)}},
-    // int32 waiting_number = 2;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(WaitingPacket, _impl_.waiting_number_), 63>(),
-     {16, 63, 0, PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.waiting_number_)}},
-    // string message = 3;
+    // string message = 2;
     {::_pbi::TcParser::FastUS1,
-     {26, 63, 0, PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.message_)}},
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.message_)}},
+    // int32 waiting_number = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(WaitingPacket, _impl_.waiting_number_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.waiting_number_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // .PacketHeader header = 1;
-    {PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.header_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // int32 waiting_number = 2;
-    {PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.waiting_number_), -1, 0,
+    // int32 waiting_number = 1;
+    {PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.waiting_number_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
-    // string message = 3;
-    {PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.message_), -1, 0,
+    // string message = 2;
+    {PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.message_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-  }}, {{
-    {::_pbi::TcParser::GetTable<::PacketHeader>()},
-  }}, {{
-    "\15\0\0\7\0\0\0\0"
+  }},
+  // no aux_entries
+  {{
+    "\15\0\7\0\0\0\0\0"
     "WaitingPacket"
     "message"
   }},
@@ -956,13 +554,7 @@ PROTOBUF_NOINLINE void WaitingPacket::Clear() {
   (void) cached_has_bits;
 
   _impl_.message_.ClearToEmpty();
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.header_ != nullptr);
-    _impl_.header_->Clear();
-  }
   _impl_.waiting_number_ = 0;
-  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -981,27 +573,19 @@ PROTOBUF_NOINLINE void WaitingPacket::Clear() {
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
-          cached_has_bits = this_._impl_._has_bits_[0];
-          // .PacketHeader header = 1;
-          if (cached_has_bits & 0x00000001u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                1, *this_._impl_.header_, this_._impl_.header_->GetCachedSize(), target,
-                stream);
-          }
-
-          // int32 waiting_number = 2;
+          // int32 waiting_number = 1;
           if (this_._internal_waiting_number() != 0) {
             target = ::google::protobuf::internal::WireFormatLite::
-                WriteInt32ToArrayWithField<2>(
+                WriteInt32ToArrayWithField<1>(
                     stream, this_._internal_waiting_number(), target);
           }
 
-          // string message = 3;
+          // string message = 2;
           if (!this_._internal_message().empty()) {
             const std::string& _s = this_._internal_message();
             ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
                 _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "WaitingPacket.message");
-            target = stream->WriteStringMaybeAliased(3, _s, target);
+            target = stream->WriteStringMaybeAliased(2, _s, target);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -1029,22 +613,12 @@ PROTOBUF_NOINLINE void WaitingPacket::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
            {
-            // string message = 3;
+            // string message = 2;
             if (!this_._internal_message().empty()) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_message());
             }
-          }
-           {
-            // .PacketHeader header = 1;
-            cached_has_bits = this_._impl_._has_bits_[0];
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.header_);
-            }
-          }
-           {
-            // int32 waiting_number = 2;
+            // int32 waiting_number = 1;
             if (this_._internal_waiting_number() != 0) {
               total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
                   this_._internal_waiting_number());
@@ -1057,7 +631,6 @@ PROTOBUF_NOINLINE void WaitingPacket::Clear() {
 void WaitingPacket::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
   auto* const _this = static_cast<WaitingPacket*>(&to_msg);
   auto& from = static_cast<const WaitingPacket&>(from_msg);
-  ::google::protobuf::Arena* arena = _this->GetArena();
   // @@protoc_insertion_point(class_specific_merge_from_start:WaitingPacket)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
@@ -1066,20 +639,9 @@ void WaitingPacket::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
   if (!from._internal_message().empty()) {
     _this->_internal_set_message(from._internal_message());
   }
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(from._impl_.header_ != nullptr);
-    if (_this->_impl_.header_ == nullptr) {
-      _this->_impl_.header_ =
-          ::google::protobuf::Message::CopyConstruct<::PacketHeader>(arena, *from._impl_.header_);
-    } else {
-      _this->_impl_.header_->MergeFrom(*from._impl_.header_);
-    }
-  }
   if (from._internal_waiting_number() != 0) {
     _this->_impl_.waiting_number_ = from._impl_.waiting_number_;
   }
-  _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -1096,14 +658,8 @@ void WaitingPacket::InternalSwap(WaitingPacket* PROTOBUF_RESTRICT other) {
   auto* arena = GetArena();
   ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.message_, &other->_impl_.message_, arena);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.waiting_number_)
-      + sizeof(WaitingPacket::_impl_.waiting_number_)
-      - PROTOBUF_FIELD_OFFSET(WaitingPacket, _impl_.header_)>(
-          reinterpret_cast<char*>(&_impl_.header_),
-          reinterpret_cast<char*>(&other->_impl_.header_));
+        swap(_impl_.waiting_number_, other->_impl_.waiting_number_);
 }
 
 ::google::protobuf::Metadata WaitingPacket::GetMetadata() const {

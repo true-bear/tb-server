@@ -14,7 +14,7 @@ public:
     bool Init(SessionGetFunc sessionObj);
     void Start();
     void Stop();
-    void DisPatchPacket(const int sessionId, const char* data, uint16_t packetSize);
+    void DisPatchPacket(int sessionId, uint16_t packetType, uint32_t packetId, const char* payload, uint16_t payloadSize);
     void RunThread();
 
 private:

@@ -1,21 +1,26 @@
 #pragma once
 #include "pch.h"
 
-struct PacketEx {
-    int mUID{ 0 };
-    uint16_t mSize{ 0 };
-    std::vector<char> mData;
 
-    PacketEx() = default;
+#pragma pack(push, 1)
+struct PacketHead
+{
+    uint32_t length;
+    uint32_t type;
+    uint32_t packet_id;
+};
+#pragma pack(pop)
 
-    PacketEx(const int uid, uint16_t size, const char* buf)
-        : mUID(uid), mSize(size), mData(buf, buf + size) {
+struct PacketEx
+{
+    int sessionId;
+    uint16_t type;
+    uint32_t packetId;
+    std::vector<char> payload;
+
+    PacketEx(int sid, uint16_t t, uint32_t pid, const char* data, uint16_t len)
+        : sessionId(sid), type(t), packetId(pid), payload(data, data + len)
+    {
     }
-
-    PacketEx(const PacketEx&) = delete;
-    PacketEx& operator=(const PacketEx&) = delete;
-
-    PacketEx(PacketEx&&) = default;
-    PacketEx& operator=(PacketEx&&) = default;
 };
 

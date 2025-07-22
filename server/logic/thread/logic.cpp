@@ -39,29 +39,33 @@ void LogicThread::RunThread()
 {
     while (mRunning.load()) {
         PacketEx* packet = nullptr;
+
         if (mPacketQueue.pop(packet))
         {
-            auto session = mGetSessioObject(packet->mUID);
-            if (session)
-            {
-                const char* packetStart = packet->mData.data();
-                const char* protoStart = packetStart + sizeof(uint16_t);
-
-                PacketHeader header;
-                if (!header.ParseFromArray(protoStart, packet->mSize - sizeof(uint16_t)))
-                {
-                    LOG_ERR("Logic", "PacketHeader ÆÄ½Ì ½ÇÆÐ");
-                    continue;
-                }
-
-                PacketType type = header.type();
-                mDispatcher.Dispatch(static_cast<size_t>(type), session, packet->mData.data(), packet->mSize);
-
-            }
-            else
+            auto session = mGetSessioObject(packet->sessionId);
+            if (!session)
             {
                 LOG_ERR("Logic", "session nullptr");
+                delete packet;
+                continue;
             }
+
+            if (packet->payload.empty())
+            {
+                LOG_ERR("Logic", "ºó payload ¼ö½ÅµÊ. sessionId: {}", packet->sessionId);
+                delete packet;
+                continue;
+            }
+
+            mDispatcher.Dispatch(
+                static_cast<size_t>(packet->type),
+                session,
+                packet->payload.data(),
+                packet->payload.size(),
+                packet->packetId
+            );
+
+            delete packet;
         }
         else
         {
@@ -72,14 +76,18 @@ void LogicThread::RunThread()
     LOG_INFO("Logic", "LogicThread Á¾·á");
 }
 
-void LogicThread::DisPatchPacket(const int sessionId, const char* data, uint16_t packetSize)
+
+void LogicThread::DisPatchPacket(int sessionId, uint16_t packetType, uint32_t packetId, const char* payload, uint16_t payloadSize)
 {
-    PacketEx* pkt = new PacketEx(sessionId, packetSize, data);
+    PacketEx* pkt = new PacketEx(sessionId, packetType, packetId, payload, payloadSize);
+
     if (!mPacketQueue.push(pkt))
     {
-        delete pkt; 
+        delete pkt;
         LOG_ERR("Logic", "packet push failed");
+        return;
     }
 
-    LOG_INFO("OnRecv", "Recv packet - uID:{} : {}", sessionId, packetSize);
+    LOG_INFO("OnRecv", "Recv packet - uID:{} type:{} size:{}", sessionId, packetType, payloadSize);
 }
+
