@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "server.h"
-#include "thread/db.h" // 임시
 
 int main()
 {

@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "server.h"
-#include "thread\waiting.h"
-#include "thread\logic.h"
-#include "thread\db.h"
-
+#include "waiting.h"
+#include "logic.h"
 LogicServer::LogicServer()
 {
     mThread = std::make_unique<ThreadManager>();
@@ -21,13 +19,14 @@ bool LogicServer::Init(int maxSession,int maxWaiting)
     mMaxSession = maxSession;
     LOG_INFO("LogicServer::Init", "mMaxSession 초기화됨: {}", mMaxSession);
 
-    if (!IocpCore::Init(maxSession, maxWaiting))
+    if (!Core::Init(maxSession, maxWaiting))
     {
-        LOG_ERR("IocpCore Init", "** failed **");
+        LOG_ERR("Core Init", "** failed **");
         return false;
     }
 
-    if (!LogicThread::Get().Init(
+    
+    if (!LogicManager::Get().Init(
         [this](int sessionId) { return this->GetSession(sessionId); }))
     {
         LOG_ERR("logic Init", "** failed **");
@@ -42,14 +41,14 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
     auto session = GetSession(uID);
     if (!session)
     {
-        LOG_ERR("OnRecv", "session nullptr id:{}", uID);
+        LOG_ERR("OnRecv", "session null id:{}", uID);
         return;
     }
 
     auto recvBuffer = session->GetRecvBuffer();
     if (!recvBuffer)
     {
-        LOG_ERR("OnRecv", "recv buffer nullptr id:{}", uID);
+        LOG_ERR("OnRecv", "recv buffer null id:{}", uID);
         return;
     }
 
@@ -57,46 +56,30 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
 
     while (true)
     {
-        constexpr size_t HEADER_SIZE = sizeof(PacketHead);
-        if (recvBuffer->GetStoredSize() < HEADER_SIZE)
+        const size_t storedSize = recvBuffer->ReadableSize();
+        if (storedSize < sizeof(uint16_t))
             break;
 
-        std::array<std::byte, HEADER_SIZE> headerBytes;
-        if (!recvBuffer->Peek(headerBytes))
-        {
-            LOG_ERR("OnRecv", "peek failed. storedSize:{} id:{}", recvBuffer->GetStoredSize(), uID);
-            break;
-        }
-
-        PacketHead header;
-        std::memcpy(&header, headerBytes.data(), HEADER_SIZE);
-
-        header.length = ntohs(header.length);
-        header.type = ntohs(header.type);
-        header.packet_id = ntohl(header.packet_id);
-
-        if (header.length == 0 || header.length > 0x1000)
-        {
-            LOG_ERR("OnRecv", "invalid header.length:{} storedSize:{} id:{}", header.length, recvBuffer->GetStoredSize(), uID);
-            recvBuffer->CommitRead(HEADER_SIZE);
-            continue;
-        }
-
-        const size_t totalPacketSize = HEADER_SIZE + header.length;
-        if (recvBuffer->GetStoredSize() < totalPacketSize)
-            break;
-
-        std::vector<std::byte> fullPacket(totalPacketSize);
-        if (!recvBuffer->Read(fullPacket))
-        {
-            LOG_ERR("OnRecv", "read fail. totalSize:{} id:{}", totalPacketSize, uID);
+        uint16_t packetSize = 0;
+        std::span<std::byte> headerView(reinterpret_cast<std::byte*>(&packetSize), sizeof(packetSize));
+        if (!recvBuffer->Read(headerView, sizeof(packetSize)))
             return;
-        }
 
-        const char* payloadPtr = reinterpret_cast<const char*>(fullPacket.data() + HEADER_SIZE);
-        const size_t payloadSize = header.length;
+        packetSize = ntohs(packetSize);
 
-        LogicThread::Get().DisPatchPacket(session->GetUniqueId(), header.type, header.packet_id, payloadPtr, payloadSize);
+        if (packetSize == 0)
+            return;
+
+        if (storedSize < packetSize)
+            continue;
+        else 
+            recvBuffer->MoveReadPos(static_cast<size_t>(sizeof(packetSize)));
+
+        std::span<const std::byte> packetData{ recvBuffer->ReadPtr(), packetSize };
+
+        LogicManager::Get().DisPatchPacket(uID, packetData);
+
+        recvBuffer->MoveReadPos(packetSize);
     }
 
     if (!session->RecvReady())
@@ -109,41 +92,31 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
 
 void LogicServer::Run()
 {
-    WaitingThread::Get().Start();
+    WaitingManager::Get().Start();
 
     mThread->Run([]()
     {
-            WaitingThread::Get().RunThread();
+            WaitingManager::Get().RunThread();
     });
 
-    LogicThread::Get().Start();
+    LogicManager::Get().Start();
     mThread->Run([]()
     {
-            LogicThread::Get().RunThread();
+            LogicManager::Get().RunThread();
     });
-
-	DBThread::Get().Start();
-
-	mThread->Run([]()
-	{
-            DBThread::Get().RunThread();
-	});
-
 }
 
 void LogicServer::Stop()
 {
-    WaitingThread::Get().Stop();
-    LogicThread::Get().Stop();
-	DBThread::Get().Stop();
+    WaitingManager::Get().Stop();
+    LogicManager::Get().Stop();
 
     mThread->Join();
-
-    IocpCore::Stop();
+    Core::Stop();
 }
 bool LogicServer::OnClose(unsigned int uID)
 {
-    IocpSession* session{ nullptr };
+    ClientSession* session{ nullptr };
     bool wasActiveSession{ false };
 
     {
@@ -183,10 +156,7 @@ bool LogicServer::OnClose(unsigned int uID)
 void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
 {
     auto session = GetSession(uID);
-    if (!session)
-        return;
-
-    if (completekey != 0)
+    if (!session || completekey != 0)
         return;
 
     if (!AddDeviceRemoteSocket(session))
@@ -205,6 +175,7 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
 
     {
         std::lock_guard<std::mutex> lock(mActiveSessionLock);
+
         if ((int)mActiveSessionMap.size() < mMaxSession)
         {
             mActiveSessionMap[uID] = session;
@@ -213,30 +184,25 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
         else
         {
             WaitingPacket packet;
+            auto* header = new PacketHeader();
+            header->set_type(PacketType::WAITING);
+            header->set_length(packet.ByteSizeLong());
+            packet.set_allocated_header(header);
             packet.set_message("waiting...");
-            packet.set_waiting_number(WaitingThread::Get().Size());
+            packet.set_waiting_number(WaitingManager::Get().Size());
 
-            const size_t payloadSize = packet.ByteSizeLong();
-            std::vector<char> payload(payloadSize);
-
-            if (!packet.SerializeToArray(payload.data(), static_cast<int>(payloadSize)))
+            const int size = packet.ByteSizeLong();
+            std::vector<std::byte> buf(size);
+            if (!packet.SerializeToArray(reinterpret_cast<void*>(buf.data()), size))
             {
                 LOG_ERR("WaitingPacket", "Serialize 실패");
                 return;
             }
 
-            PacketHead header;
-            header.length = htons(static_cast<uint16_t>(payloadSize));       
-            header.type = htons(static_cast<uint16_t>(PacketType::WAITING));
-            header.packet_id = htonl(0);
+            const std::span<const std::byte> spanData{ buf.data(), buf.size() };
+            session->SendPacket(spanData);
 
-            std::vector<char> finalBuf(sizeof(PacketHead) + payloadSize);
-            std::memcpy(finalBuf.data(), &header, sizeof(PacketHead));
-            std::memcpy(finalBuf.data() + sizeof(PacketHead), payload.data(), payloadSize);
-
-            session->SendPacket(finalBuf.data(), static_cast<uint32_t>(finalBuf.size()));
-
-            WaitingThread::Get().Enqueue(session);
+            WaitingManager::Get().Enqueue(session);
             LOG_INFO("Waiting Enqueue", "Session {} pushed to waiting queue", uID);
         }
     }
@@ -252,13 +218,9 @@ void LogicServer::OnSend(unsigned int uID, unsigned long ioSize)
     auto* sendBuffer = session->GetSendBuffer();
     if (sendBuffer)
     {
-        if (!sendBuffer->CommitRead(ioSize))
-        {
-            LOG_WARN("OnSend", "Consume overflow, id:{}, size:{}", uID, ioSize);
-        }
+        sendBuffer->MoveReadPos(static_cast<size_t>(ioSize));
     }
 }
-
 
 bool LogicServer::HasFreeSlot()
 {
@@ -266,7 +228,7 @@ bool LogicServer::HasFreeSlot()
     return static_cast<int>(mActiveSessionMap.size()) < mMaxSession;
 }
 
-void LogicServer::BindSession(IocpSession* session)
+void LogicServer::BindSession(ClientSession* session)
 {
     std::lock_guard<std::mutex> lock(mActiveSessionLock);
     mActiveSessionMap.emplace(session->GetUniqueId(), session);

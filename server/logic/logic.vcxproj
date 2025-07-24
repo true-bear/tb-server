@@ -110,15 +110,12 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)proto\;$(SolutionDir)core\;$(SolutionDir)core\rio\;$(ProjectDir)logic\;$(VcpkgRoot)installed\x64-windows\include;$(ProjectDir)client\;$(ProjectDir)thread\;$(ProjectDir)db\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)generated\;$(SolutionDir)core\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,10 +128,6 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)generated\;$(SolutionDir)core\;$(SolutionDir)core\rio\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SupportJustMyCode>false</SupportJustMyCode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,10 +137,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="db\connector.cpp" />
-    <ClCompile Include="db\dbJob.cpp" />
-    <ClCompile Include="logic\logic_chat.cpp" />
-    <ClCompile Include="logic\logic_dispatch.cpp" />
+    <ClCompile Include="generated\message.pb.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="logic.cpp" />
+    <ClCompile Include="logic_dispatch.cpp" />
+    <ClCompile Include="logic_chat.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -155,25 +150,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="proto\message.pb.cc">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="server.cpp" />
-    <ClCompile Include="thread\db.cpp" />
-    <ClCompile Include="thread\logic.cpp" />
-    <ClCompile Include="thread\waiting.cpp" />
+    <ClCompile Include="waiting.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="db\connector.h" />
-    <ClInclude Include="db\dbJob.h" />
-    <ClInclude Include="logic\logic_chat.h" />
-    <ClInclude Include="logic\logic_dispatch.h" />
+    <ClInclude Include="logic.h" />
+    <ClInclude Include="logic_dispatch.h" />
+    <ClInclude Include="logic_chat.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="proto\message.pb.h" />
     <ClInclude Include="server.h" />
-    <ClInclude Include="thread\db.h" />
-    <ClInclude Include="thread\logic.h" />
-    <ClInclude Include="thread\waiting.h" />
+    <ClInclude Include="waiting.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">

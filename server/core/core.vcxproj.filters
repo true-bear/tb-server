@@ -5,102 +5,72 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="src\rio">
-      <UniqueIdentifier>{4641ce32-528c-4c07-a6f7-7861b09e4e5f}</UniqueIdentifier>
+    <Filter Include="src\network">
+      <UniqueIdentifier>{1b078476-1cdd-47f7-9fbc-d2dcad4438e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\iocp">
-      <UniqueIdentifier>{3d236bba-ab30-488d-a759-8d9838ab74c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\util">
+    <Filter Include="src\common">
       <UniqueIdentifier>{06ffb2bc-fde3-4b25-9618-40ac0519be9e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="util\config.h">
-      <Filter>src\util</Filter>
+    <ClInclude Include="socket.h">
+      <Filter>src\network</Filter>
     </ClInclude>
-    <ClInclude Include="util\logger.h">
-      <Filter>src\util</Filter>
+    <ClInclude Include="iocp.h">
+      <Filter>src\network</Filter>
     </ClInclude>
-    <ClInclude Include="util\threadManager.h">
-      <Filter>src\util</Filter>
+    <ClInclude Include="clientSession.h">
+      <Filter>src\network</Filter>
     </ClInclude>
-    <ClInclude Include="util\define.h">
-      <Filter>src\util</Filter>
+    <ClInclude Include="roundBuffer.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="threadManager.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="core.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>src\common</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="util\singleton.h">
-      <Filter>src\util</Filter>
+    <ClInclude Include="singleton.h">
+      <Filter>src\common</Filter>
     </ClInclude>
-    <ClInclude Include="rio\rio.h">
-      <Filter>src\rio</Filter>
-    </ClInclude>
-    <ClInclude Include="iocp\iocp.h">
-      <Filter>src\iocp</Filter>
-    </ClInclude>
-    <ClInclude Include="rio\rioBuffer.h">
-      <Filter>src\rio</Filter>
-    </ClInclude>
-    <ClInclude Include="rio\rioSession.h">
-      <Filter>src\rio</Filter>
-    </ClInclude>
-    <ClInclude Include="rio\rioCore.h">
-      <Filter>src\rio</Filter>
-    </ClInclude>
-    <ClInclude Include="iocp\iocpBuffer.h">
-      <Filter>src\iocp</Filter>
-    </ClInclude>
-    <ClInclude Include="iocp\iocpSession.h">
-      <Filter>src\iocp</Filter>
-    </ClInclude>
-    <ClInclude Include="iocp\iocpSocket.h">
-      <Filter>src\iocp</Filter>
-    </ClInclude>
-    <ClInclude Include="rio\rioSocket.h">
-      <Filter>src\rio</Filter>
-    </ClInclude>
-    <ClInclude Include="iocp\iocpCore.h">
-      <Filter>src\iocp</Filter>
-    </ClInclude>
-    <ClCompile Include="util\packetEx.h">
-      <Filter>src\util</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="core.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="rio\rio.cpp">
-      <Filter>src\rio</Filter>
+    <ClCompile Include="packetEx.h">
+      <Filter>src\network</Filter>
     </ClCompile>
-    <ClCompile Include="iocp\iocp.cpp">
-      <Filter>src\iocp</Filter>
+    <ClCompile Include="clientSession.cpp">
+      <Filter>src\network</Filter>
     </ClCompile>
-    <ClCompile Include="rio\rioSession.cpp">
-      <Filter>src\rio</Filter>
+    <ClCompile Include="iocp.cpp">
+      <Filter>src\network</Filter>
     </ClCompile>
-    <ClCompile Include="rio\rioCore.cpp">
-      <Filter>src\rio</Filter>
+    <ClCompile Include="socket.cpp">
+      <Filter>src\network</Filter>
     </ClCompile>
-    <ClCompile Include="rio\rioBuffer.cpp">
-      <Filter>src\rio</Filter>
+    <ClCompile Include="roundBuffer.cpp">
+      <Filter>src\common</Filter>
     </ClCompile>
-    <ClCompile Include="iocp\iocpBuffer.cpp">
-      <Filter>src\iocp</Filter>
+    <ClCompile Include="packetEx.cpp">
+      <Filter>src\network</Filter>
     </ClCompile>
-    <ClCompile Include="iocp\iocpSession.cpp">
-      <Filter>src\iocp</Filter>
-    </ClCompile>
-    <ClCompile Include="iocp\iocpSocket.cpp">
-      <Filter>src\iocp</Filter>
-    </ClCompile>
-    <ClCompile Include="rio\rioSocket.cpp">
-      <Filter>src\rio</Filter>
-    </ClCompile>
-    <ClCompile Include="iocp\iocpCore.cpp">
-      <Filter>src\iocp</Filter>
+    <ClCompile Include="pch.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
