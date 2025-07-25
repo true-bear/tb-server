@@ -15,7 +15,7 @@ public:
     bool Init(int maxSession, int maxWaiting);
     void Stop();
 
-    void WorkerThread();
+    void WorkerThread(std::stop_token st);
 
     bool CreateSessionPool();
 

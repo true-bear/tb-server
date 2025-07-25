@@ -22,7 +22,7 @@
 #include <span>
 
 #include <functional>
-
+#include <stop_token>
 #include <format>
 #include <string_view>
 #include <chrono>

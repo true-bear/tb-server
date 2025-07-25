@@ -4,46 +4,28 @@
 class ThreadManager
 {
 public:
-	void Run(std::function<void(void)> callback)
+	void Run(std::function<void(std::stop_token)> callback)
 	{
-		std::lock_guard guard(mLock);
-		mThreads.emplace_back([=]() {
-			try {
-				callback();
-			}
-			catch (const std::exception& ex) {
-				std::cerr << "[ThreadManager] 예외: " << ex.what() << std::endl;
-			}
-			catch (...) {
-				std::cerr << "[ThreadManager] 알 수 없는 예외 발생" << std::endl;
-			}
-			});
-	}
-
-	void Stop()
-	{
-		mIsRunning = false;
-	}
-
-	void Join()
-	{
-		std::lock_guard guard(mLock);
-		for (std::thread& t : mThreads)
+		std::lock_guard lock(mLock);
+		mThreads.emplace_back(std::jthread([callback](std::stop_token st)
 		{
-			if (t.joinable())
-			{
-				try {
-					t.join();
-				}
-				catch (...) {
-					std::cerr << "[ThreadManager] join 중 예외 발생" << std::endl;
-				}
-			}
+			callback(st);
+		}));
+	}
+
+	void Stop() 
+	{
+		std::lock_guard lock(mLock);
+		for (auto& jt : mThreads) {
+			jt.request_stop();
 		}
+	}
+
+	void Clear()
+	{
+		std::lock_guard guard(mLock);
 		mThreads.clear();
 	}
-
-	bool IsRunning() const { return mIsRunning; }
 
 	size_t GetThreadCount() const
 	{
@@ -53,6 +35,5 @@ public:
 
 private:
 	mutable std::mutex mLock;
-	std::vector<std::thread> mThreads;
-	std::atomic<bool> mIsRunning{ true };
+	std::vector<std::jthread> mThreads;
 };

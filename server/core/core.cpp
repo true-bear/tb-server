@@ -79,7 +79,10 @@ bool Core::Init(int maxSession, int maxWaiting)
 	mIsRunThread = true;
 	for (auto i = 0; i < workerCount; ++i)
 	{
-		mThreadManager->Run([this]() { this->WorkerThread(); });
+		mThreadManager->Run([this](std::stop_token st) 
+		{
+			this->WorkerThread(st);
+		});
 	}
 
 	LOG_INFO("Core", "서버 시작. core:{}, worker thread: {} session pool: {}",
@@ -103,15 +106,13 @@ void Core::Stop()
     }
 
     mThreadManager->Stop();
-    mThreadManager->Join();
-
 	mSessionPool.clear();
 }
 
 
-void Core::WorkerThread()
+void Core::WorkerThread(std::stop_token st)
 {
-	while (mIsRunThread)
+	while (mIsRunThread && !st.stop_requested())
 	{
 		Iocp::IocpEvents events;
 		GQCSEx(events, 5);
