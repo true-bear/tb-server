@@ -1,7 +1,8 @@
-﻿#ifndef PCH_H
-#define PCH_H
+﻿#pragma once
 
 #include "define.h"
+#include "logger.h"
+
 #include <vector>
 #include <thread>
 #include <iostream>
@@ -30,6 +31,6 @@
 
 #include <atlstr.h>
 
+
 #include <boost/lockfree/queue.hpp>
 
-#endif //PCH_H

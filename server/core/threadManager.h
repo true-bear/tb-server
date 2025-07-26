@@ -16,7 +16,8 @@ public:
 	void Stop() 
 	{
 		std::lock_guard lock(mLock);
-		for (auto& jt : mThreads) {
+		for (auto& jt : mThreads) 
+		{
 			jt.request_stop();
 		}
 	}

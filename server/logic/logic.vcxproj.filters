@@ -1,62 +1,71 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="proto">
-      <UniqueIdentifier>{9a3da0cb-6b3c-46fb-8752-aab38debfcb5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="logic">
-      <UniqueIdentifier>{57255599-9ca7-4cfc-bfd6-4688f058ca9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="thread">
-      <UniqueIdentifier>{791553a5-86fc-48e1-baf0-20fa85e91029}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="generated\message.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
-    <ClCompile Include="logic_chat.cpp">
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="server.cpp" />
+    <ClCompile Include="logic\logic.cpp">
       <Filter>logic</Filter>
     </ClCompile>
-    <ClCompile Include="server.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="logic\logic_chat.cpp">
+      <Filter>logic</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="logic_dispatch.cpp">
       <Filter>logic</Filter>
     </ClCompile>
-    <ClCompile Include="waiting.cpp">
-      <Filter>thread</Filter>
+    <ClCompile Include="generated\message.pb.cc">
+      <Filter>generated</Filter>
     </ClCompile>
-    <ClCompile Include="logic.cpp">
-      <Filter>thread</Filter>
+    <ClCompile Include="logic\ECS\entity\entityRegister.cpp">
+      <Filter>logic\ECS\entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>src</Filter>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="server.h" />
+    <ClInclude Include="logic\logic.h">
+      <Filter>logic</Filter>
     </ClInclude>
-    <ClInclude Include="server.h">
-      <Filter>src</Filter>
+    <ClInclude Include="logic\logic_chat.h">
+      <Filter>logic</Filter>
     </ClInclude>
     <ClInclude Include="logic_dispatch.h">
       <Filter>logic</Filter>
     </ClInclude>
-    <ClInclude Include="logic_chat.h">
-      <Filter>logic</Filter>
+    <ClInclude Include="generated\message.pb.h">
+      <Filter>generated</Filter>
     </ClInclude>
-    <ClInclude Include="waiting.h">
-      <Filter>thread</Filter>
+    <ClInclude Include="logic\ECS\entity\entityID.h">
+      <Filter>logic\ECS\entity</Filter>
     </ClInclude>
-    <ClInclude Include="logic.h">
-      <Filter>thread</Filter>
+    <ClInclude Include="logic\ECS\entity\entityRegister.h">
+      <Filter>logic\ECS\entity</Filter>
     </ClInclude>
+    <ClInclude Include="logic\ECS\component\ComponentPool.h">
+      <Filter>logic\ECS\component</Filter>
+    </ClInclude>
+    <ClInclude Include="logic\ECS\component\IComponent.h">
+      <Filter>logic\ECS\component</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="logic">
+      <UniqueIdentifier>{f6f34883-543c-4055-9410-3717796533c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated">
+      <UniqueIdentifier>{4810329b-c552-4a1f-8a00-9e6971b1535a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logic\ECS">
+      <UniqueIdentifier>{f559b926-0360-4f01-af31-c83dd76c93c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logic\ECS\entity">
+      <UniqueIdentifier>{3dcc7b98-4569-459d-a72b-cb589b6e8c51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logic\ECS\component">
+      <UniqueIdentifier>{69ff308d-fe48-4af6-8c0f-9366dfe95abf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logic\ECS\system">
+      <UniqueIdentifier>{5801bcaf-6e81-4c5f-aeee-c259a7168ebc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

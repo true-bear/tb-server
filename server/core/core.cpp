@@ -1,12 +1,10 @@
-﻿#pragma once
-#include "pch.h"
+﻿#include "pch.h"
 #include "core.h"
 #include "iocp.h"
 #include "socket.h"
 #include "threadManager.h"
 #include "config.h"
 #include "clientSession.h"
-#include "logger.h"
 
 Core::Core()
 {
@@ -18,7 +16,7 @@ Core::~Core()
 	mSessionPool.clear();
 }
 
-bool Core::Init(int maxSession, int maxWaiting)
+bool Core::Init(int maxSession)
 {
 	if (maxSession <= 0)
 	{
@@ -27,7 +25,6 @@ bool Core::Init(int maxSession, int maxWaiting)
 	}
 
 	mMaxSession = maxSession;
-	mMaxWaiting = maxWaiting;
 
 	if (mThreadManager == nullptr)
 	{
@@ -173,7 +170,7 @@ void Core::WorkerThread(std::stop_token st)
 
 bool Core::CreateSessionPool()
 {
-	int total = mMaxSession + mMaxWaiting;
+	int total = mMaxSession;
 
 	for (auto i = 0; i < total; ++i)
 	{
@@ -192,7 +189,7 @@ bool Core::CreateSessionPool()
 	return true;
 }
 
-ClientSession* Core::GetSession(unsigned int uID) const 
+ClientSession* Core::GetSession(const unsigned int uID) const 
 {
 	auto it = mSessionPool.find(uID);
 	return (it != mSessionPool.end()) ? it->second.get() : nullptr;

@@ -4,7 +4,6 @@
 
 class Logic;
 class ClientSession;
-class WaitingManager;
 
 using RecvPakcetType = std::function<void(ClientSession*, const char*, uint16_t)>;
 
@@ -24,7 +23,7 @@ public:
 
 public:
 	ClientSession* GetSession(int sessionId){return Core::GetSession(sessionId);}
-	bool Init(int maxSessionCount, int maxWaitingCount);
+	bool Init(int maxSessionCount);
 	bool HasFreeSlot();
 	void BindSession(ClientSession* session);
 

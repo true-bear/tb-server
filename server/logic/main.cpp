@@ -4,11 +4,10 @@
 int main()
 {
     const int maxSession = Config::Load(CATEGORY_NET, MAX_SESSION_COUNT);
-	const int maxWaiting = Config::Load(CATEGORY_NET, MAX_WAITING_COUNT);
 	const int threadCount = Config::Load(CATEGORY_NET, MAX_WORK_THEAD_CNT);
     const int port = Config::Load(CATEGORY_NET, PORT);
 
-    if (!LogicServer::Get().Init(maxSession, maxWaiting))
+    if (!LogicServer::Get().Init(maxSession))
     {
         LOG_ERR("main()", "server init");
         return -1;

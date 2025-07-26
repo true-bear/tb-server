@@ -110,7 +110,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)generated\;$(SolutionDir)core\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)generated\;$(SolutionDir)core\;$(ProjectDir)logic\;$(SolutionDir);$(ProjectDir)logic\ECS\;$(ProjectDir)logic\ECS\entity\;$(ProjectDir)logic\ECS\component\;$(ProjectDir)logic\ECS\system\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -140,9 +140,10 @@
     <ClCompile Include="generated\message.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="logic.cpp" />
+    <ClCompile Include="logic\ECS\entity\entityRegister.cpp" />
+    <ClCompile Include="logic\logic.cpp" />
+    <ClCompile Include="logic\logic_chat.cpp" />
     <ClCompile Include="logic_dispatch.cpp" />
-    <ClCompile Include="logic_chat.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -151,15 +152,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="server.cpp" />
-    <ClCompile Include="waiting.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="logic.h" />
+    <ClInclude Include="generated\message.pb.h" />
+    <ClInclude Include="logic\ECS\component\ComponentPool.h" />
+    <ClInclude Include="logic\ECS\component\IComponent.h" />
+    <ClInclude Include="logic\ECS\entity\entityID.h" />
+    <ClInclude Include="logic\ECS\entity\entityRegister.h" />
+    <ClInclude Include="logic\logic.h" />
+    <ClInclude Include="logic\logic_chat.h" />
     <ClInclude Include="logic_dispatch.h" />
-    <ClInclude Include="logic_chat.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="server.h" />
-    <ClInclude Include="waiting.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">

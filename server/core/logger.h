@@ -1,4 +1,11 @@
-#include "pch.h"
+#pragma once
+#include <string>
+#include <string_view>
+#include <format>
+#include <iostream>
+#include <chrono>
+#include <filesystem>
+#include <Windows.h>
 
 enum class LogLevel : uint8_t
 {

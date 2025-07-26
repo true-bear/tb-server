@@ -1,6 +1,4 @@
-﻿#ifndef PCH_H
-#define PCH_H
-
+﻿#pragma once
 #include <iostream>
 
 #include <vector>
@@ -20,6 +18,7 @@
 #include <queue>
 #include <mutex>
 #include <array>
+#include <typeindex>
 
 #include <functional>
 
@@ -34,17 +33,16 @@
 
 #include "generated/message.pb.h"
 #include "define.h"
+#include "core.h"
 #include "packetEx.h"
 #include "threadManager.h"
-#include "logger.h"
 #include "clientSession.h"
 #include "roundBuffer.h"
 #include "socket.h"
 #include "iocp.h"
-#include "core.h"
-#include "logic.h"
+#include "singleton.h"
+#include "logger.h"
+#include <typeindex>
+
 #include "config.h"
 
-static std::atomic<int> gWaitCount = 0;
-
-#endif //PCH_H

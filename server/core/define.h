@@ -21,7 +21,6 @@ const wchar_t PORT[] = L"port";
 const wchar_t BACKLOG[] = L"backlog";
 const wchar_t MAX_WORK_THEAD_CNT[] = L"workerCount";
 const wchar_t MAX_SESSION_COUNT[] = L"maxSessionCount";
-const wchar_t MAX_WAITING_COUNT[] = L"maxWaitingCount";
 const wchar_t MAX_IOCP_EVENT_COUNT[] = L"maxIocpEventCount";
 
 

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "server.h"
-#include "waiting.h"
 #include "logic.h"
 LogicServer::LogicServer()
 {
@@ -14,12 +13,12 @@ LogicServer::~LogicServer()
     mActiveSessionMap.clear();
 }
 
-bool LogicServer::Init(int maxSession,int maxWaiting)
+bool LogicServer::Init(int maxSession)
 {
     mMaxSession = maxSession;
     LOG_INFO("LogicServer::Init", "mMaxSession 초기화됨: {}", mMaxSession);
 
-    if (!Core::Init(maxSession, maxWaiting))
+    if (!Core::Init(maxSession))
     {
         LOG_ERR("Core Init", "** failed **");
         return false;
@@ -92,26 +91,17 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
 
 void LogicServer::Run()
 {
-    WaitingManager::Get().Start();
-
-    mThread->Run([]()
-    {
-            WaitingManager::Get().RunThread();
-    });
-
     LogicManager::Get().Start();
-    mThread->Run([]()
-    {
-            LogicManager::Get().RunThread();
+    mThread->Run([this](std::stop_token st)
+        {
+            LogicManager::Get().RunThread(st);
     });
 }
 
 void LogicServer::Stop()
 {
-    WaitingManager::Get().Stop();
     LogicManager::Get().Stop();
 
-    mThread->Join();
     Core::Stop();
 }
 bool LogicServer::OnClose(unsigned int uID)
@@ -173,39 +163,15 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
         return;
     }
 
+    
+    std::lock_guard<std::mutex> lock(mActiveSessionLock);
+
+    if ((int)mActiveSessionMap.size() < mMaxSession)
     {
-        std::lock_guard<std::mutex> lock(mActiveSessionLock);
-
-        if ((int)mActiveSessionMap.size() < mMaxSession)
-        {
-            mActiveSessionMap[uID] = session;
-            session->RecvReady();
-        }
-        else
-        {
-            WaitingPacket packet;
-            auto* header = new PacketHeader();
-            header->set_type(PacketType::WAITING);
-            header->set_length(packet.ByteSizeLong());
-            packet.set_allocated_header(header);
-            packet.set_message("waiting...");
-            packet.set_waiting_number(WaitingManager::Get().Size());
-
-            const int size = packet.ByteSizeLong();
-            std::vector<std::byte> buf(size);
-            if (!packet.SerializeToArray(reinterpret_cast<void*>(buf.data()), size))
-            {
-                LOG_ERR("WaitingPacket", "Serialize 실패");
-                return;
-            }
-
-            const std::span<const std::byte> spanData{ buf.data(), buf.size() };
-            session->SendPacket(spanData);
-
-            WaitingManager::Get().Enqueue(session);
-            LOG_INFO("Waiting Enqueue", "Session {} pushed to waiting queue", uID);
-        }
+        mActiveSessionMap[uID] = session;
+        session->RecvReady();
     }
+    
 }
 
 
@@ -233,6 +199,4 @@ void LogicServer::BindSession(ClientSession* session)
     std::lock_guard<std::mutex> lock(mActiveSessionLock);
     mActiveSessionMap.emplace(session->GetUniqueId(), session);
     session->RecvReady();
-
-    LOG_INFO("Waiting Release", "uid:{} ", session->GetUniqueId() );
 }
