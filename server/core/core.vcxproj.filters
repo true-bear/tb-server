@@ -5,35 +5,23 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="src\network">
-      <UniqueIdentifier>{1b078476-1cdd-47f7-9fbc-d2dcad4438e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\common">
       <UniqueIdentifier>{06ffb2bc-fde3-4b25-9618-40ac0519be9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\interface">
+      <UniqueIdentifier>{f42c8cfb-6a9a-48dc-a4db-cd4fc05bd04b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\iocp">
+      <UniqueIdentifier>{d4ae8336-1d3c-4b9b-8601-14883f7b749b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{10611022-9248-43fa-935b-ffabe5489fb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thread">
+      <UniqueIdentifier>{8f6aaacb-124c-4135-aba5-d71e177f31c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="socket.h">
-      <Filter>src\network</Filter>
-    </ClInclude>
-    <ClInclude Include="iocp.h">
-      <Filter>src\network</Filter>
-    </ClInclude>
-    <ClInclude Include="clientSession.h">
-      <Filter>src\network</Filter>
-    </ClInclude>
-    <ClInclude Include="roundBuffer.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
-    <ClInclude Include="logger.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
-    <ClInclude Include="threadManager.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
     <ClInclude Include="core.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -43,7 +31,40 @@
     <ClInclude Include="pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="singleton.h">
+    <ClInclude Include="iocp\iocp.h">
+      <Filter>src\iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="iocp\session.h">
+      <Filter>src\iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="iocp\socket.h">
+      <Filter>src\iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="iocp\packetEx.h">
+      <Filter>src\iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="util\config.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\logger.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\roundBuffer.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\singleton.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\IThread.h">
+      <Filter>src\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="thread\threadImpl.h">
+      <Filter>src\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="thread\worker.h">
+      <Filter>src\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="threadManager.h">
       <Filter>src\common</Filter>
     </ClInclude>
   </ItemGroup>
@@ -51,26 +72,26 @@
     <ClCompile Include="core.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="packetEx.h">
-      <Filter>src\network</Filter>
-    </ClCompile>
-    <ClCompile Include="clientSession.cpp">
-      <Filter>src\network</Filter>
-    </ClCompile>
-    <ClCompile Include="iocp.cpp">
-      <Filter>src\network</Filter>
-    </ClCompile>
-    <ClCompile Include="socket.cpp">
-      <Filter>src\network</Filter>
-    </ClCompile>
-    <ClCompile Include="roundBuffer.cpp">
-      <Filter>src\common</Filter>
-    </ClCompile>
-    <ClCompile Include="packetEx.cpp">
-      <Filter>src\network</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp\iocp.cpp">
+      <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp\session.cpp">
+      <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp\socket.cpp">
+      <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="util\roundBuffer.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\threadImpl.cpp">
+      <Filter>src\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\worker.cpp">
+      <Filter>src\thread</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

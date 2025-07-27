@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "define.h"
-#include "logger.h"
+#include "util/logger.h"
 
 #include <vector>
 #include <thread>
@@ -17,6 +17,10 @@
 #include <Windows.h>
 #include <mswsock.h>
 
+#include <string_view>
+#include <format>
+#include <filesystem>
+
 #include <queue>
 #include <mutex>
 #include <array>
@@ -24,10 +28,7 @@
 
 #include <functional>
 #include <stop_token>
-#include <format>
-#include <string_view>
 #include <chrono>
-#include <filesystem>
 
 #include <atlstr.h>
 

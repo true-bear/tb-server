@@ -1,9 +1,8 @@
-#pragma once
 #include "pch.h"
-#include "clientSession.h"
+#include "session.h"
 
 
-ClientSession::ClientSession()
+Session::Session()
 {
 	ZeroMemory(&mRecvOverEx, sizeof(OverlappedIoEx));
 	ZeroMemory(&mSendOverEx, sizeof(OverlappedIoEx));
@@ -14,9 +13,9 @@ ClientSession::ClientSession()
 	mAcceptOverEx.mIOType = IO_TYPE::ACCEPT;
 }
 
-ClientSession::~ClientSession() = default;
+Session::~Session() = default;
 
-void ClientSession::Init()
+void Session::Init()
 {
 	ZeroMemory(&mRecvOverEx, sizeof(OverlappedIoEx));
 	ZeroMemory(&mSendOverEx, sizeof(OverlappedIoEx));
@@ -33,7 +32,7 @@ void ClientSession::Init()
 }
 
 
-void ClientSession::DisconnectFinish()
+void Session::DisconnectFinish()
 {
 	if (auto socket = mRemoteSock.GetSocket(); socket != INVALID_SOCKET)
 	{
@@ -42,7 +41,7 @@ void ClientSession::DisconnectFinish()
 	}
 }
 
-bool ClientSession::AcceptReady(const SOCKET& listenSock, const int uID)
+bool Session::AcceptReady(const SOCKET& listenSock, const int uID)
 {
 	SOCKET socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_IP,
 		NULL, 0, WSA_FLAG_OVERLAPPED);
@@ -73,7 +72,7 @@ bool ClientSession::AcceptReady(const SOCKET& listenSock, const int uID)
 	return mRemoteSock.SetSocket(socket);
 }
 
-bool ClientSession::AcceptFinish(const SOCKET& listenSocket)
+bool Session::AcceptFinish(const SOCKET& listenSocket)
 {
 	auto remoteSocket = mRemoteSock.GetSocket();
 
@@ -123,7 +122,7 @@ bool ClientSession::AcceptFinish(const SOCKET& listenSocket)
 	return true;
 }
 
-bool ClientSession::RecvReady()
+bool Session::RecvReady()
 {
 	std::byte* writePtr = mRecvBuffer->WritePtr();
 	size_t writeSize = mRecvBuffer->WritableSize();
@@ -157,7 +156,7 @@ bool ClientSession::RecvReady()
 }
 
 
-bool ClientSession::RecvPacket(unsigned long ioSize)
+bool Session::RecvPacket(unsigned long ioSize)
 {
 	if (ioSize == 0 || ioSize > RECV_BUFFER_MAX_SIZE)
 	{
@@ -169,12 +168,12 @@ bool ClientSession::RecvPacket(unsigned long ioSize)
 	return true;
 }
 
-char* ClientSession::GetRecvOverlappedBuffer() const
+char* Session::GetRecvOverlappedBuffer() const
 {
 	return mRecvOverEx.mWsaBuf.buf;
 }
 
-bool ClientSession::SendPacket(std::span<const std::byte> data)
+bool Session::SendPacket(std::span<const std::byte> data)
 {
 	const uint16_t sizeHeader = static_cast<uint16_t>(data.size());
 	const uint16_t sizeHeaderBE = htons(sizeHeader);
@@ -192,7 +191,7 @@ bool ClientSession::SendPacket(std::span<const std::byte> data)
 	return SendReady();
 }
 
-bool ClientSession::SendReady()
+bool Session::SendReady()
 {
 	const size_t storedSize = mSendBuffer->ReadableSize();
 	if (storedSize == 0)
@@ -237,6 +236,6 @@ bool ClientSession::SendReady()
 	return true;
 }
 
-bool ClientSession::IsConnected() const {
+bool Session::IsConnected() const {
 	return mRemoteSock.GetSocket() != INVALID_SOCKET;
 }

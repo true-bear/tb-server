@@ -1,7 +1,7 @@
 #pragma once
-#include "pch.h"
-#include "config.h"
-#include "clientSession.h"
+#include "../pch.h"
+#include "../util/config.h"
+#include "session.h"
 
 class Iocp
 {
@@ -16,7 +16,7 @@ public:
 
     bool CreateNewIocp(unsigned long threadCnt);
     bool AddDeviceListenSocket(SOCKET listenSock);
-    bool AddDeviceRemoteSocket(ClientSession* RemoteSession);
+    bool AddDeviceRemoteSocket(Session* RemoteSession);
     void GQCSEx(Iocp::IocpEvents& IoEvent, unsigned long timeOut);
     bool PQCS(unsigned long byte, ULONG_PTR completeKey, OVERLAPPED* overlapped);
 

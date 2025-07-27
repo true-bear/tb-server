@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Socket.h"
-#include "config.h"
+#include "../util/config.h"
 
 bool SocketEx::Init()
 {

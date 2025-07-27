@@ -1,8 +1,8 @@
 #pragma once
-#include "pch.h"
-#include "Config.h"
+#include "../pch.h"
+#include "../util/Config.h"
 #include "socket.h"
-#include "roundBuffer.h"
+#include "../util/roundBuffer.h"
 
 enum class IO_TYPE
 {
@@ -21,11 +21,11 @@ struct OverlappedIoEx : public OVERLAPPED
 	OverlappedIoEx(IO_TYPE type = IO_TYPE::NONE) :OVERLAPPED{}, mWsaBuf{}, mUID(-1), mIOType(type) {}
 };
 
-class ClientSession
+class Session
 {
 public:
-	ClientSession();
-	~ClientSession();
+	Session();
+	~Session();
 
 	void			Init();
 	void			DisconnectFinish();

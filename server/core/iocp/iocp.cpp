@@ -1,4 +1,3 @@
-#pragma once
 #include "pch.h"
 #include "iocp.h"
 
@@ -32,7 +31,7 @@ bool Iocp::AddDeviceListenSocket(SOCKET listenSock)
     return true;
 }
 
-bool Iocp::AddDeviceRemoteSocket(ClientSession* RemoteSession)
+bool Iocp::AddDeviceRemoteSocket(Session* RemoteSession)
 {
     HANDLE ret = CreateIoCompletionPort(
         (HANDLE)RemoteSession->GetRemoteSocket(),
