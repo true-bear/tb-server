@@ -34,15 +34,17 @@
 #include "generated/message.pb.h"
 #include "define.h"
 #include "core.h"
-#include "packetEx.h"
 #include "threadManager.h"
-#include "clientSession.h"
-#include "roundBuffer.h"
-#include "socket.h"
-#include "iocp.h"
-#include "singleton.h"
-#include "logger.h"
-#include <typeindex>
 
-#include "config.h"
+#include "iocp/session.h"
+#include "iocp/packetEx.h"
+#include "iocp/socket.h"
+#include "iocp/iocp.h"
+
+#include "util/roundBuffer.h"
+#include "util/config.h"
+#include "util/logger.h"
+#include "util/singleton.h"
+
+#include "thread/threadImpl.h"
 

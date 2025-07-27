@@ -1,4 +1,5 @@
 #pragma once
-#include "clientSession.h";
+#include "pch.h"
+class Session;
 
-void ProcessChat(ClientSession* session, std::span<const std::byte> data);
+void ProcessChat(Session* session, std::span<const std::byte> data);

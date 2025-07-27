@@ -3,35 +3,33 @@
 #include "logic.h"
 
 class Logic;
-class ClientSession;
+class Session;
 
-using RecvPakcetType = std::function<void(ClientSession*, const char*, uint16_t)>;
+using RecvPakcetType = std::function<void(Session*, const char*, uint16_t)>;
 
 class LogicServer : public Core, public Singleton<LogicServer>
 {
 public:
-	LogicServer();
-	virtual ~LogicServer();
+    LogicServer();
+    virtual ~LogicServer();
 
-public:
-	virtual void Run();
-	virtual void Stop();
-	virtual void OnRecv(unsigned int uID, unsigned long ioSize);
-	virtual void OnAccept(unsigned int uID, unsigned long long completekey);
-	virtual bool OnClose(unsigned int uID);
-	virtual void OnSend(unsigned int uID, unsigned long ioSize);
+    bool Init(int maxSessionCount);
+    virtual void Run();
+    virtual void Stop();
 
-public:
-	ClientSession* GetSession(int sessionId){return Core::GetSession(sessionId);}
-	bool Init(int maxSessionCount);
-	bool HasFreeSlot();
-	void BindSession(ClientSession* session);
+    virtual void OnRecv(unsigned int uID, unsigned long ioSize);
+    virtual void OnAccept(unsigned int uID, unsigned long long completekey);
+    virtual bool OnClose(unsigned int uID);
+    virtual void OnSend(unsigned int uID, unsigned long ioSize);
+
+    Session* GetSession(int sessionId) { return Core::GetSession(sessionId); }
+    bool HasFreeSlot();
+    void BindSession(Session* session);
 
 private:
-	std::unordered_map<size_t, RecvPakcetType> mRecvFuncMap;
-	std::atomic<bool> mIsRunning;
-	std::unordered_map<int, ClientSession*> mActiveSessionMap;
-	std::mutex mActiveSessionLock;
-	std::unique_ptr<ThreadManager> mThread;
-	int mMaxSession{ 0 };
+    int mMaxSession = 0;
+    std::unordered_map<int, Session*> mActiveSessionMap;
+    std::mutex mActiveSessionLock;
+
+    LogicManager mLogicManager;
 };

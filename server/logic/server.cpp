@@ -1,15 +1,14 @@
 #include "pch.h"
 #include "server.h"
-#include "logic.h"
+#include "logic/logic.h"
+
 LogicServer::LogicServer()
 {
-    mThread = std::make_unique<ThreadManager>();
 }
 
 LogicServer::~LogicServer()
 {
     Stop();
-    mRecvFuncMap.clear();
     mActiveSessionMap.clear();
 }
 
@@ -24,15 +23,26 @@ bool LogicServer::Init(int maxSession)
         return false;
     }
 
-    
-    if (!LogicManager::Get().Init(
-        [this](int sessionId) { return this->GetSession(sessionId); }))
+    if (!mLogicManager.Init([this](int sessionId) {
+        return this->GetSession(sessionId);
+        }))
     {
-        LOG_ERR("logic Init", "** failed **");
+        LOG_ERR("LogicManager Init", "** failed **");
         return false;
     }
 
     return true;
+}
+
+void LogicServer::Run()
+{
+    mLogicManager.Start();
+}
+
+void LogicServer::Stop()
+{
+    mLogicManager.Stop();
+    Core::Stop();
 }
 
 void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
@@ -88,25 +98,43 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
     }
 }
 
-
-void LogicServer::Run()
+void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
 {
-    LogicManager::Get().Start();
-    mThread->Run([this](std::stop_token st)
+    auto session = GetSession(uID);
+    if (!session || completekey != 0)
+    {
+        LOG_ERR("OnAccept", "invalid session or completeKey:{}", uID);
+        return;
+    }
+
+    if (!AddDeviceRemoteSocket(session))
+    {
+        OnClose(uID);
+        return;
+    }
+
+    auto listenSocket = GetListenSocket();
+
+    if (!session->AcceptFinish(listenSocket))
+    {
+        OnClose(uID);
+        return;
+    }
+
+    {
+        std::lock_guard<std::mutex> lock(mActiveSessionLock);
+
+        if ((int)mActiveSessionMap.size() < mMaxSession)
         {
-            LogicManager::Get().RunThread(st);
-    });
+            mActiveSessionMap[uID] = session;
+            session->RecvReady();
+        }
+    }
 }
 
-void LogicServer::Stop()
-{
-    LogicManager::Get().Stop();
-
-    Core::Stop();
-}
 bool LogicServer::OnClose(unsigned int uID)
 {
-    ClientSession* session{ nullptr };
+    Session* session{ nullptr };
     bool wasActiveSession{ false };
 
     {
@@ -143,38 +171,6 @@ bool LogicServer::OnClose(unsigned int uID)
     return true;
 }
 
-void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
-{
-    auto session = GetSession(uID);
-    if (!session || completekey != 0)
-        return;
-
-    if (!AddDeviceRemoteSocket(session))
-    {
-        OnClose(uID);
-        return;
-    }
-
-    auto listenSocket = GetListenSocket();
-
-    if (!session->AcceptFinish(listenSocket))
-    {
-        OnClose(uID);
-        return;
-    }
-
-    
-    std::lock_guard<std::mutex> lock(mActiveSessionLock);
-
-    if ((int)mActiveSessionMap.size() < mMaxSession)
-    {
-        mActiveSessionMap[uID] = session;
-        session->RecvReady();
-    }
-    
-}
-
-
 void LogicServer::OnSend(unsigned int uID, unsigned long ioSize)
 {
     auto session = GetSession(uID);
@@ -194,7 +190,7 @@ bool LogicServer::HasFreeSlot()
     return static_cast<int>(mActiveSessionMap.size()) < mMaxSession;
 }
 
-void LogicServer::BindSession(ClientSession* session)
+void LogicServer::BindSession(Session* session)
 {
     std::lock_guard<std::mutex> lock(mActiveSessionLock);
     mActiveSessionMap.emplace(session->GetUniqueId(), session);

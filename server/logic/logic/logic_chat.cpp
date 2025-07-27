@@ -1,8 +1,9 @@
+#pragma once
 #include "pch.h"
+#include "../pch.h"
 #include "message.pb.h"
-#include "logic_chat.h"
 
-void ProcessChat(ClientSession* session, std::span<const std::byte> data)
+void ProcessChat(Session* session, std::span<const std::byte> data)
 {
     if (!session)
     {
