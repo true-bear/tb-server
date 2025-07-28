@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "session.h"
 
-
 Session::Session()
 {
 	ZeroMemory(&mRecvOverEx, sizeof(OverlappedIoEx));
@@ -117,7 +116,6 @@ bool Session::AcceptFinish(const SOCKET& listenSocket)
 
 	char clientIP[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &(clientAddr.sin_addr), clientIP, INET_ADDRSTRLEN);
-	//LOG_INFO("AcceptFinish", "Client connected from: {}:{}", clientIP, ntohs(clientAddr.sin_port));
 
 	return true;
 }

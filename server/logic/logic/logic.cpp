@@ -1,7 +1,6 @@
 #include "pch.h"
-#include "logic.h"
+#include "../logic.h"
 #include "logic_chat.h"
-#include "logic_dispatch.h"
 
 boost::lockfree::queue<PacketEx*> LogicManager::mPacketQueue{ PACKET_QUEUE_SIZE };
 
@@ -22,10 +21,10 @@ LogicManager::~LogicManager()
 
 bool LogicManager::Init(SessionGetFunc getSession)
 {
-    mDispatcher.Register(static_cast<size_t>(PacketType::CHAT), ProcessChat);
+    mDispatcher.Register(static_cast<size_t>(PacketType::CHAT),ProcessChat);
 
-    mLogicWorker = std::make_unique<LogicWorker>(
-        "LogicWorker",
+    mLogicThread = std::make_unique<LogicThread>(
+        "LogicThread",
         std::move(getSession),
         mDispatcher, 
 		mPacketQueue
@@ -36,14 +35,14 @@ bool LogicManager::Init(SessionGetFunc getSession)
 
 void LogicManager::Start()
 {
-    if (mLogicWorker)
-        mLogicWorker->Start();
+    if (mLogicThread)
+        mLogicThread->Start();
 }
 
 void LogicManager::Stop()
 {
-    if (mLogicWorker)
-        mLogicWorker->Stop();
+    if (mLogicThread)
+        mLogicThread->Stop();
 }
 
 void LogicManager::DisPatchPacket(int sessionId, std::span<const std::byte> data)

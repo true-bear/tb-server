@@ -2,7 +2,6 @@
 #include "pch.h"
 #include "logic.h"
 
-class Logic;
 class Session;
 
 using RecvPakcetType = std::function<void(Session*, const char*, uint16_t)>;

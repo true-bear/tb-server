@@ -24,11 +24,7 @@ void ThreadImpl::Start()
 
 void ThreadImpl::Stop()
 {
-    if (mThread.joinable())
-    {
-        mThread.request_stop();
-        mThread.join();
-    }
+    mThread.request_stop();
     mRunning = false;
 }
 

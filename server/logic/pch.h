@@ -34,7 +34,6 @@
 #include "generated/message.pb.h"
 #include "define.h"
 #include "core.h"
-#include "threadManager.h"
 
 #include "iocp/session.h"
 #include "iocp/packetEx.h"

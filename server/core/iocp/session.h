@@ -4,6 +4,7 @@
 #include "socket.h"
 #include "../util/roundBuffer.h"
 
+
 enum class IO_TYPE
 {
 	NONE,
@@ -43,13 +44,13 @@ public:
 	void			SetUniqueId(int id) { mUID = id; }
 
 	unsigned int	GetUniqueId() const { return mUID; }
-	const SOCKET& GetRemoteSocket() const { return mRemoteSock.GetSocket(); }
-	RoundBuffer* GetRecvBuffer() const { return mRecvBuffer.get(); }
-	RoundBuffer* GetSendBuffer() const { return mSendBuffer.get(); }
-	char* GetRecvOverlappedBuffer() const;
+	const SOCKET&	GetRemoteSocket() const { return mRemoteSock.GetSocket(); }
+	RoundBuffer*	GetRecvBuffer() const { return mRecvBuffer.get(); }
+	RoundBuffer*	GetSendBuffer() const { return mSendBuffer.get(); }
+	char*			GetRecvOverlappedBuffer() const;
 
 	bool			InitRemoteSocket() { mRemoteSock.Init(); }
-	bool IsConnected() const;
+	bool			IsConnected() const;
 private:
 	SocketEx					mRemoteSock;
 	OverlappedIoEx				mRecvOverEx;

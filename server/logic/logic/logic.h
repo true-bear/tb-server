@@ -1,8 +1,14 @@
 #pragma once
+//#include "../pch.h"
 #include "pch.h"
-#include "util/Singleton.h"
-#include "logic_dispatch.h" 
-#include "../logic/thread/logicWorker.h"
+
+//#include "util/Singleton.h"
+#include "../thread/logicThread.h"
+
+class LogicDispatch;
+class PacketEx;
+class Session;
+class LogicDispatch;
 
 using SessionGetFunc = std::function<Session* (int)>;
 
@@ -19,7 +25,7 @@ public:
     void DisPatchPacket(int sessionId, std::span<const std::byte> data);
 
 private:
-    std::unique_ptr<LogicWorker> mLogicWorker;
+    std::unique_ptr<LogicThread> mLogicThread;
     LogicDispatch mDispatcher;
     static boost::lockfree::queue<PacketEx*> mPacketQueue;
     SessionGetFunc mGetSessionFunc;

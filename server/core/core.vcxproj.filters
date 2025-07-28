@@ -64,9 +64,6 @@
     <ClInclude Include="thread\worker.h">
       <Filter>src\thread</Filter>
     </ClInclude>
-    <ClInclude Include="threadManager.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core.cpp">
@@ -92,6 +89,12 @@
     </ClCompile>
     <ClCompile Include="thread\worker.cpp">
       <Filter>src\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="singleton.ixx">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="roundBuffer.ixx">
+      <Filter>src\util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

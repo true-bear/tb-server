@@ -1,5 +1,9 @@
 #pragma once
-#include "pch.h"
+#include <unordered_map>
+#include <functional>
+#include <span>
+
+class Session;
 
 using RecvFunc = std::function<void(Session*, std::span<const std::byte>)>;
 

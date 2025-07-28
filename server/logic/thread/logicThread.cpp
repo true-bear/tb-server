@@ -1,8 +1,8 @@
-#include  "pch.h"
-#include "logicWorker.h"
+#include "pch.h"
+#include "logicThread.h"
 #include "../logic_dispatch.h"
 
-LogicWorker::LogicWorker(
+LogicThread::LogicThread(
     std::string_view name,
     std::function<Session* (int)> getSessionFunc,
     LogicDispatch& dispatcher,
@@ -14,7 +14,7 @@ LogicWorker::LogicWorker(
 {
 }
 
-void LogicWorker::Run(std::stop_token st)
+void LogicThread::Run(std::stop_token st)
 {
 
     while (!st.stop_requested())

@@ -2,10 +2,10 @@
 #include "../pch.h"
 #include "../logic_dispatch.h"
 
-class LogicWorker : public ThreadImpl
+class LogicThread : public ThreadImpl
 {
 public:
-    LogicWorker(std::string_view name,
+    LogicThread(std::string_view name,
         std::function<Session* (int)> getSessionFunc,
         LogicDispatch& dispatcher,
         boost::lockfree::queue<PacketEx*>& packetQueue);

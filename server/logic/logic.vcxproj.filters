@@ -13,13 +13,10 @@
     <ClCompile Include="thread\zoneThread.cpp">
       <Filter>thread</Filter>
     </ClCompile>
-    <ClCompile Include="thread\logicWorker.cpp">
+    <ClCompile Include="thread\logicThread.cpp">
       <Filter>thread</Filter>
     </ClCompile>
     <ClCompile Include="logic\logic.cpp">
-      <Filter>logic</Filter>
-    </ClCompile>
-    <ClCompile Include="logic\logic_chat.cpp">
       <Filter>logic</Filter>
     </ClCompile>
     <ClCompile Include="logic\logic_dispatch.cpp">
@@ -47,7 +44,7 @@
     <ClInclude Include="thread\zoneThread.h">
       <Filter>thread</Filter>
     </ClInclude>
-    <ClInclude Include="thread\logicWorker.h">
+    <ClInclude Include="thread\logicThread.h">
       <Filter>thread</Filter>
     </ClInclude>
     <ClInclude Include="logic\logic.h">

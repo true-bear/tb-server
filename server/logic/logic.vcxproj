@@ -142,7 +142,6 @@
     </ClCompile>
     <ClCompile Include="logic\ECS\entity\entityRegister.cpp" />
     <ClCompile Include="logic\logic.cpp" />
-    <ClCompile Include="logic\logic_chat.cpp" />
     <ClCompile Include="logic\logic_dispatch.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
@@ -152,7 +151,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="server.cpp" />
-    <ClCompile Include="thread\logicWorker.cpp" />
+    <ClCompile Include="thread\logicThread.cpp" />
     <ClCompile Include="thread\zoneThread.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -166,7 +165,7 @@
     <ClInclude Include="logic\logic_dispatch.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="server.h" />
-    <ClInclude Include="thread\logicWorker.h" />
+    <ClInclude Include="thread\logicThread.h" />
     <ClInclude Include="thread\zoneThread.h" />
   </ItemGroup>
   <ItemGroup>

@@ -115,6 +115,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:preprocessor %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)iocp\;$(ProjectDir)interface\;ProjectDir)util\;ProjectDir)worker;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -150,7 +151,6 @@
     <ClInclude Include="core.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="threadManager.h" />
     <ClInclude Include="thread\threadImpl.h" />
     <ClInclude Include="thread\worker.h" />
     <ClInclude Include="util\config.h" />
@@ -168,6 +168,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="roundBuffer.ixx">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TranslateIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</TranslateIncludes>
+    </ClCompile>
+    <ClCompile Include="singleton.ixx">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="thread\threadImpl.cpp" />
     <ClCompile Include="thread\worker.cpp" />
