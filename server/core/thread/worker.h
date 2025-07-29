@@ -1,7 +1,6 @@
 #pragma once
 #include "threadImpl.h"
 #include "../iocp/session.h"
-#include "../util/logger.h"
 #include "../iocp/iocp.h"
 
 class Core;

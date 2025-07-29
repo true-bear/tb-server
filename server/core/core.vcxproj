@@ -153,9 +153,6 @@
     <ClInclude Include="thread\threadImpl.h" />
     <ClInclude Include="thread\worker.h" />
     <ClInclude Include="util\config.h" />
-    <ClInclude Include="util\logger.h" />
-    <ClInclude Include="util\roundBuffer.h" />
-    <ClInclude Include="util\singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="iocp\session.cpp" />
@@ -182,7 +179,6 @@
     </ClCompile>
     <ClCompile Include="thread\threadImpl.cpp" />
     <ClCompile Include="thread\worker.cpp" />
-    <ClCompile Include="util\roundBuffer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

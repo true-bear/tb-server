@@ -9,7 +9,7 @@
 #include <iomanip>  
 #include <algorithm>
 #include <string>
-
+#include <format>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <Windows.h>
@@ -22,7 +22,6 @@
 
 #include <functional>
 
-#include <format>
 #include <string_view>
 #include <chrono>
 #include <filesystem>
@@ -38,13 +37,9 @@
 #include "iocp/session.h"
 #include "iocp/packetEx.h"
 import iocp.socket;
-//#include "iocp/socket.h"
 #include "iocp/iocp.h"
 
-#include "util/roundBuffer.h"
 #include "util/config.h"
-#include "util/logger.h"
-#include "util/singleton.h"
 
 #include "thread/threadImpl.h"
 

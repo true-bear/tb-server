@@ -1,4 +1,4 @@
-export module core.singleton;
+export module util.singleton;
 
 export template<typename T>
 class Singleton

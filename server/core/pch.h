@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "define.h"
-#include "util/logger.h"
 
 #include <vector>
 #include <thread>

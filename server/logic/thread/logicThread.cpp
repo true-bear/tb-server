@@ -25,14 +25,14 @@ void LogicThread::Run(std::stop_token st)
             auto session = mGetSession(packet->GetSessionId());
             if (!session)
             {
-                LOG_ERR("Logic", "session nullptr");
+				std::cout << std::format("[{}] LogicThread: session not found for id: {}\n", GetName(), packet->GetSessionId());
                 continue;
             }
 
             const std::span<const std::byte> data = packet->GetData();
             if (data.size() <= sizeof(uint16_t))
             {
-                LOG_ERR("Logic", "invalid packet size");
+				std::cout << std::format("[{}] LogicThread: invalid packet size: {}\n", GetName(), data.size());
                 continue;
             }
 
@@ -42,7 +42,7 @@ void LogicThread::Run(std::stop_token st)
             PacketHeader header;
             if (!header.ParseFromArray(protoStart, protoSize))
             {
-                LOG_ERR("Logic", "PacketHeader 파싱 실패");
+				std::cout << std::format("[{}] PacketHeader 파싱 실패\n", GetName());
                 continue;
             }
 
@@ -55,5 +55,5 @@ void LogicThread::Run(std::stop_token st)
         }
     }
 
-    LOG_INFO("Logic", "LogicThread 종료");
+	std::cout << std::format("[{}] LogicThread 종료\n", GetName());
 }

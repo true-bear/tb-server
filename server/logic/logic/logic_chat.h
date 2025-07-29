@@ -7,14 +7,14 @@ void ProcessChat(Session* session, std::span<const std::byte> data)
 {
     if (!session)
     {
-        LOG_ERR("ProcessChat", "session nullptr");
+		std::cout << std::format("ProcessChat: session is nullptr\n");
         return;
     }
 
     ChatPacket chatPacket;
     if (!chatPacket.ParseFromArray(data.data(), static_cast<int>(data.size())))
     {
-        LOG_ERR("ProcessChat", "uid:{} size:{} parse failed", session->GetUniqueId(), data.size());
+		std::cout << std::format("ProcessChat: ParseFromArray failed uid:{} size:{}\n", session->GetUniqueId(), data.size());
         return;
     }
 
@@ -22,15 +22,16 @@ void ProcessChat(Session* session, std::span<const std::byte> data)
     std::vector<std::byte> serializedData(serializedSize);
     if (!chatPacket.SerializeToArray(reinterpret_cast<void*>(serializedData.data()), serializedSize))
     {
-        LOG_ERR("ProcessChat", "Serialize failed for uid:{}", session->GetUniqueId());
+		std::cout << std::format("ProcessChat: SerializeToArray failed uid:{} size:{}\n", session->GetUniqueId(), serializedSize);
         return;
     }
 
     const std::span<const std::byte> serializedSpan = serializedData;
     if (!session->SendPacket(serializedSpan))
     {
-        LOG_ERR("ProcessChat", "SendPacket failed uid:{} size:{}", session->GetUniqueId(), serializedData.size());
+		std::cout << std::format("ProcessChat: SendPacket failed uid:{} size:{}\n", session->GetUniqueId(), serializedData.size());
+		return;
     }
 
-    LOG_INFO("Chat", "Send uid:{} msg:'{}'", session->GetUniqueId(), chatPacket.message());
+	std::cout << std::format("Chat: uid:{} msg:'{}'\n", session->GetUniqueId(), chatPacket.message());
 }

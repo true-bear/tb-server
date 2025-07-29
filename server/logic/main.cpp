@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "server.h"
+import util.singleton;
 
 int main()
 {
@@ -9,14 +10,14 @@ int main()
 
     if (!LogicServer::Get().Init(maxSession))
     {
-        LOG_ERR("main()", "server init");
+		std::cout << "LogicServer initialization failed\n";
         return -1;
     }
 
-    LOG_INFO("SERVER INIT","");
-    LOG_INFO("Worker Thread Count: {}","", threadCount);
-    LOG_INFO("Session Pool Size: {}","", maxSession);
-    LOG_INFO("IOCP Listen Port: {}","", port);
+	std::cout << std::format("Server initialized with max sessions: {}, thread count: {}, port: {}\n", maxSession, threadCount, port);
+	std::cout << std::format("Worker Thread Count: {}\n", threadCount);
+	std::cout << std::format("Session Pool Size: {}\n", maxSession);
+	std::cout << "IOCP Listen Port: " << port << std::endl;
 
     LogicServer::Get().Run();
 

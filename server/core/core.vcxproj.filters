@@ -40,15 +40,6 @@
     <ClInclude Include="util\config.h">
       <Filter>src\util</Filter>
     </ClInclude>
-    <ClInclude Include="util\logger.h">
-      <Filter>src\util</Filter>
-    </ClInclude>
-    <ClInclude Include="util\roundBuffer.h">
-      <Filter>src\util</Filter>
-    </ClInclude>
-    <ClInclude Include="util\singleton.h">
-      <Filter>src\util</Filter>
-    </ClInclude>
     <ClInclude Include="interface\IThread.h">
       <Filter>src\interface</Filter>
     </ClInclude>
@@ -77,9 +68,6 @@
     </ClCompile>
     <ClCompile Include="iocp\socket.cpp">
       <Filter>src\iocp</Filter>
-    </ClCompile>
-    <ClCompile Include="util\roundBuffer.cpp">
-      <Filter>src\util</Filter>
     </ClCompile>
     <ClCompile Include="thread\threadImpl.cpp">
       <Filter>src\thread</Filter>

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "server.h"
 #include "logic/logic.h"
+import util.singleton;
 
 LogicServer::LogicServer()
 {
@@ -15,11 +16,12 @@ LogicServer::~LogicServer()
 bool LogicServer::Init(int maxSession)
 {
     mMaxSession = maxSession;
-    LOG_INFO("LogicServer::Init", "mMaxSession √ ±‚»≠µ : {}", mMaxSession);
+
+	std::cout << std::format("LogicServer::Init: mMaxSession = {}\n", mMaxSession);
 
     if (!Core::Init(maxSession))
     {
-        LOG_ERR("Core Init", "** failed **");
+		std::cout << "Core Init failed\n";
         return false;
     }
 
@@ -27,7 +29,7 @@ bool LogicServer::Init(int maxSession)
         return this->GetSession(sessionId);
         }))
     {
-        LOG_ERR("LogicManager Init", "** failed **");
+		std::cout << "LogicManager Init failed\n";
         return false;
     }
 
@@ -50,14 +52,14 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
     auto session = GetSession(uID);
     if (!session)
     {
-        LOG_ERR("OnRecv", "session null id:{}", uID);
+		std::cout << std::format("OnRecv: session not found for id: {}\n", uID);
         return;
     }
 
     auto recvBuffer = session->GetRecvBuffer();
     if (!recvBuffer)
     {
-        LOG_ERR("OnRecv", "recv buffer null id:{}", uID);
+		std::cout << "OnRecv: recvBuffer null id:" << uID << std::endl;
         return;
     }
 
@@ -95,7 +97,7 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
 
     if (!session->RecvReady())
     {
-        LOG_WARN("OnRecv", "recv ready failed id:{}", uID);
+		std::cout << std::format("OnRecv: RecvReady failed for session {}\n", uID);
         OnClose(uID);
     }
 }
@@ -105,7 +107,7 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
     auto session = GetSession(uID);
     if (!session || completekey != 0)
     {
-        LOG_ERR("OnAccept", "invalid session or completeKey:{}", uID);
+		std::cout << std::format("OnAccept: invalid session or completeKey: {}\n", uID);
         return;
     }
 
@@ -155,7 +157,7 @@ bool LogicServer::OnClose(unsigned int uID)
         session = GetSession(uID);
         if (!session)
         {
-            LOG_ERR("OnClose", "Session not found: {}", uID);
+			std::cout << std::format("OnClose: session not found for uID: {}\n", uID);
             return false;
         }
     }
@@ -165,11 +167,11 @@ bool LogicServer::OnClose(unsigned int uID)
 
     if (!session->AcceptReady(GetListenSocket(), uID))
     {
-        LOG_ERR("OnClose", "AcceptReady failed: {}", uID);
+		std::cout << std::format("OnClose: AcceptReady failed for session {}\n", uID);
         return false;
     }
 
-    LOG_INFO("Session", "disconnect id:{}", uID);
+	std::cout << std::format("OnClose: session {} disconnected\n", uID);
     return true;
 }
 

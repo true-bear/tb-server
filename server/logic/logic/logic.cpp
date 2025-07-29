@@ -51,9 +51,8 @@ void LogicManager::DisPatchPacket(int sessionId, std::span<const std::byte> data
     if (!mPacketQueue.push(pkt))
     {
         delete pkt;
-        LOG_ERR("LogicManager", "packet push failed - queue full?");
+		std::cout << std::format("DisPatchPacket: packet push failed - queue full? sessionId: {}, data size: {}\n", sessionId, data.size());
     }
 
-
-    LOG_INFO("DisPatchPacket", "Recv packet - uID:{} : {}", sessionId, data.size());
+	std::cout << std::format("DisPatchPacket: Recv packet - uID:{} : {}\n", sessionId, data.size());
 }

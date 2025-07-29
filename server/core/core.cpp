@@ -17,11 +17,8 @@ Core::~Core()
 bool Core::Init(int maxSession)
 {
     if (maxSession <= 0)
-    {
-        LOG_ERR("Core", "invalid maxSession {}", maxSession);
         return false;
-    }
-
+    
     mMaxSession = maxSession;
 
     if (!mListenSocket.Init() || !mListenSocket.BindAndListen())
@@ -49,8 +46,7 @@ bool Core::Init(int maxSession)
         mWorkers.emplace_back(std::move(worker));
     }
 
-    LOG_INFO("Core", "서버 시작. core:{}, worker thread: {} session pool: {}",
-        sysInfo.dwNumberOfProcessors, workerCount, mMaxSession);
+	std::cout << std::format("Core::Start: mMaxSession = {}\n", mMaxSession);
 
     return true;
 }

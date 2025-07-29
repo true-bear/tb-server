@@ -7,7 +7,6 @@ module iocp.socket;
 #include <WS2tcpip.h>
 #include <Windows.h>
 #include <mswsock.h>
-#include "../util/logger.h"
 #include "../util/config.h"
 
 bool SocketEx::Init()
@@ -15,17 +14,12 @@ bool SocketEx::Init()
 	WSADATA wsaData;
 	int ret = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (ret != 0)
-	{
-		LOG_ERR("WSAStartup", "ret:{}", ret);
 		return false;
-	}
-
+	
 	mSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, NULL, WSA_FLAG_OVERLAPPED);
 	if (mSocket == INVALID_SOCKET)
-	{
-		LOG_ERR("WSASocket", "");
 		return false;
-	}
+	
 
 	return true;
 }
@@ -42,14 +36,14 @@ bool SocketEx::BindAndListen()
 	int ret = ::bind(mSocket, (SOCKADDR*)&stServerAddr, sizeof(SOCKADDR_IN));
 	if (ret != 0)
 	{
-		LOG_ERR("::bind", "ret:{}", ret);
+		std::cout << "bind failed: Error=" << ret << std::endl;
 		return false;
 	}
 
 	ret = ::listen(mSocket, SOMAXCONN);
 	if (ret != 0)
 	{
-		LOG_ERR("::listen", "ret:{}", ret);
+		std::cout << "listen failed: Error=" << ret << std::endl;
 		return false;
 	}
 
@@ -60,7 +54,7 @@ bool SocketEx::Close()
 {
 	if (closesocket(mSocket) == SOCKET_ERROR)
 	{
-		LOG_ERR("closesocket", "");
+		std::cout << "closesocket failed" << std::endl;
 		return false;
 	}
 
@@ -70,7 +64,7 @@ bool SocketEx::Close()
 bool SocketEx::GetPeerName(sockaddr_in& addr) const {
 	int addrlen = sizeof(addr);
 	if (getpeername(mSocket, reinterpret_cast<sockaddr*>(&addr), &addrlen) == SOCKET_ERROR) {
-		LOG_ERR("getpeername", "Error: {}", WSAGetLastError());
+		std::cout << "getpeername failed: Error=" << WSAGetLastError() << std::endl;
 		return false;
 	}
 
@@ -80,7 +74,7 @@ bool SocketEx::GetPeerName(sockaddr_in& addr) const {
 bool SocketEx::GetSocketInfo(WSAPROTOCOL_INFO& info) const {
 	int len = sizeof(WSAPROTOCOL_INFO);
 	if (getsockopt(mSocket, SOL_SOCKET, SO_PROTOCOL_INFO, reinterpret_cast<char*>(&info), &len) == SOCKET_ERROR) {
-		LOG_ERR("getsockopt", "Error getting socket info: {}", WSAGetLastError());
+		std::cout << "getsockopt failed: Error=" << WSAGetLastError() << std::endl;
 		return false;
 	}
 
@@ -89,7 +83,7 @@ bool SocketEx::GetSocketInfo(WSAPROTOCOL_INFO& info) const {
 
 bool SocketEx::SetOption(int level, int optname, const void* optval, int optlen) {
 	if (setsockopt(mSocket, level, optname, static_cast<const char*>(optval), optlen) == SOCKET_ERROR) {
-		LOG_ERR("setsockopt", "Error: {}", WSAGetLastError());
+		std::cout << std::format("setsockopt failed: Error={}\n", WSAGetLastError());
 		return false;
 	}
 

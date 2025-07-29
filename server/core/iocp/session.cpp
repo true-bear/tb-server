@@ -81,21 +81,18 @@ bool Session::AcceptFinish(const SOCKET& listenSocket)
 		(char*)&listenSocket,
 		sizeof(listenSocket)) == SOCKET_ERROR)
 	{
-		LOG_ERR("AcceptFinish", "err:{} \n", WSAGetLastError());
+		std::cout << std::format("AcceptFinish: setsockopt failed : {}\n", WSAGetLastError());
 		return false;
 	}
 
 	sockaddr_in clientAddr;
 	if (!mRemoteSock.GetPeerName(clientAddr))
-	{
-		LOG_ERR("AcceptFinish", "Failed to get peer name");
 		return false;
-	}
 
 	int flag = 1;
 	if (!mRemoteSock.SetOption(IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag)))
 	{
-		LOG_WARN("AcceptFinish", "Failed to set TCP_NODELAY option");
+		std::cout << std::format("AcceptFinish: Failed to set TCP_NODELAY option\n");
 	}
 
 
@@ -158,7 +155,7 @@ bool Session::RecvPacket(unsigned long ioSize)
 {
 	if (ioSize == 0 || ioSize > RECV_BUFFER_MAX_SIZE)
 	{
-		LOG_ERR("RecvPacket", "iosize :{} id:{}", ioSize, mUID);
+		std::cout << std::format("RecvPacket: Invalid ioSize: {} for id: {}\n", ioSize, mUID);
 		return false;
 	}
 
@@ -182,7 +179,7 @@ bool Session::SendPacket(std::span<const std::byte> data)
 	if (!mSendBuffer->Write(headerSpan) ||
 		!mSendBuffer->Write(data))
 	{
-		LOG_ERR("SendPacket", "send buffer write failed: size = {}, uid = {}", sizeHeader, mUID);
+		std::cout << std::format("SendPacket: Write failed for uid: {} size: {}\n", mUID, data.size());
 		return false;
 	}
 
@@ -217,7 +214,7 @@ bool Session::SendReady()
 		const int error = WSAGetLastError();
 		if (error != WSA_IO_PENDING)
 		{
-			LOG_ERR("SendReady", "WSASend err:{} id:{}", error, mUID);
+			std::cout << std::format("SendReady: WSASend failed with error: {} id: {}\n", error, mUID);
 			return false;
 		}
 	}

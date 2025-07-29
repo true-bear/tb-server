@@ -1,9 +1,9 @@
 #pragma once
-//#include "../pch.h"
 #include "pch.h"
 
-//#include "util/Singleton.h"
 #include "../thread/logicThread.h"
+
+import util.singleton;
 
 class LogicDispatch;
 class PacketEx;

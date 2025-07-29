@@ -2,7 +2,6 @@
 #include "worker.h"
 #include "../core.h"
 #include "../iocp/iocp.h"
-#include "../util/logger.h"
 
 Worker::Worker(Core* core, std::string_view name, int index)
 	: ThreadImpl(name)
@@ -24,7 +23,7 @@ void Worker::Run(std::stop_token st)
 
 			if (ioEvent.lpOverlapped == nullptr)
 			{
-				LOG_INFO("Worker", "[{}] shutdown signal", mIndex);
+				std::cout << std::format("[{}] IOCP event without overlapped structure\n", mIndex);
 				return;
 			}
 
