@@ -195,18 +195,9 @@ bool Session::SendReady()
 	if (storedSize == 0)
 		return true;
 
-	std::vector<std::byte> sendData(storedSize);
-	std::span<std::byte> sendSpan(sendData);
-
-	if (!mSendBuffer->Read(sendSpan, storedSize))
-	{
-		LOG_ERR("SendReady", "send buffer read size:{} id:{}", storedSize, mUID);
-		return false;
-	}
-
 	mSendOverEx.mUID = mUID;
 	mSendOverEx.mWsaBuf.len = static_cast<ULONG>(storedSize);
-	mSendOverEx.mWsaBuf.buf = reinterpret_cast<char*>(sendData.data());
+	mSendOverEx.mWsaBuf.buf = reinterpret_cast<char*>(mSendBuffer->ReadPtr());
 
 	DWORD sendBytes = 0;
 	DWORD flags = 0;
@@ -233,6 +224,7 @@ bool Session::SendReady()
 
 	return true;
 }
+
 
 bool Session::IsConnected() const {
 	return mRemoteSock.GetSocket() != INVALID_SOCKET;

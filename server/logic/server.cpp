@@ -69,27 +69,29 @@ void LogicServer::OnRecv(unsigned int uID, unsigned long ioSize)
         if (storedSize < sizeof(uint16_t))
             break;
 
+        // 1단계: 패킷 헤더만 Peek (MoveReadPos 하지 않음)
         uint16_t packetSize = 0;
         std::span<std::byte> headerView(reinterpret_cast<std::byte*>(&packetSize), sizeof(packetSize));
-        if (!recvBuffer->Read(headerView, sizeof(packetSize)))
+        if (!recvBuffer->Peek(headerView.data(), sizeof(packetSize)))
             return;
 
         packetSize = ntohs(packetSize);
+        if (packetSize == 0) return;
 
-        if (packetSize == 0)
-            return;
+        if (storedSize < sizeof(uint16_t) + packetSize)
+            break;
 
-        if (storedSize < packetSize)
-            continue;
-        else 
-            recvBuffer->MoveReadPos(static_cast<size_t>(sizeof(packetSize)));
+        // 2단계: 헤더 스킵
+        recvBuffer->MoveReadPos(sizeof(packetSize));
 
+        // 3단계: 본문 파싱
         std::span<const std::byte> packetData{ recvBuffer->ReadPtr(), packetSize };
 
         LogicManager::Get().DisPatchPacket(uID, packetData);
 
         recvBuffer->MoveReadPos(packetSize);
     }
+
 
     if (!session->RecvReady())
     {

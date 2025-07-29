@@ -1,7 +1,9 @@
 ﻿#include "pch.h"
 #include "core.h"
 #include "iocp/iocp.h"
-#include "iocp/socket.h"
+//#include "iocp/socket.h"
+import iocp.socket;
+
 #include "../util/config.h"
 #include "iocp/session.h"
 

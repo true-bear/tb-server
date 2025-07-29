@@ -34,12 +34,6 @@
     <ClInclude Include="iocp\iocp.h">
       <Filter>src\iocp</Filter>
     </ClInclude>
-    <ClInclude Include="iocp\session.h">
-      <Filter>src\iocp</Filter>
-    </ClInclude>
-    <ClInclude Include="iocp\socket.h">
-      <Filter>src\iocp</Filter>
-    </ClInclude>
     <ClInclude Include="iocp\packetEx.h">
       <Filter>src\iocp</Filter>
     </ClInclude>
@@ -63,6 +57,9 @@
     </ClInclude>
     <ClInclude Include="thread\worker.h">
       <Filter>src\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="iocp\session.h">
+      <Filter>src\iocp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="roundBuffer.ixx">
       <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="socket.ixx">
+      <Filter>src\iocp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

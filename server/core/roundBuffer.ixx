@@ -4,7 +4,7 @@ import <memory>;
 import <cstddef>;
 import <span>;
 import <stdexcept>;
-import <cstring>; // std::memcpy
+import <cstring>;
 
 export class RoundBuffer {
 public:
@@ -33,12 +33,13 @@ public:
         return mBuffer.get() + mWritePos;
     }
 
-    void MoveReadPos(size_t size) {
+    void MoveReadPos(size_t size) 
+    {
         if (size > ReadableSize())
             throw std::out_of_range("MoveReadPos overflow");
-
+        
         mReadPos += size;
-        if (mReadPos == mWritePos)
+        if (mReadPos == mWritePos) 
             mReadPos = mWritePos = 0;
     }
 

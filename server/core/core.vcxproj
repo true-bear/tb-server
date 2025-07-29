@@ -144,10 +144,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="interface\IThread.h" />
-    <ClInclude Include="iocp\session.h" />
     <ClInclude Include="iocp\iocp.h" />
     <ClInclude Include="iocp\packetEx.h" />
-    <ClInclude Include="iocp\socket.h" />
+    <ClInclude Include="iocp\session.h" />
     <ClInclude Include="core.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="pch.h" />
@@ -161,7 +160,9 @@
   <ItemGroup>
     <ClCompile Include="iocp\session.cpp" />
     <ClCompile Include="iocp\iocp.cpp" />
-    <ClCompile Include="iocp\socket.cpp" />
+    <ClCompile Include="iocp\socket.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="core.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -174,6 +175,9 @@
       <TranslateIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</TranslateIncludes>
     </ClCompile>
     <ClCompile Include="singleton.ixx">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="socket.ixx">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="thread\threadImpl.cpp" />

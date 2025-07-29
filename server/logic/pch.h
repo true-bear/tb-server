@@ -37,7 +37,8 @@
 
 #include "iocp/session.h"
 #include "iocp/packetEx.h"
-#include "iocp/socket.h"
+import iocp.socket;
+//#include "iocp/socket.h"
 #include "iocp/iocp.h"
 
 #include "util/roundBuffer.h"

@@ -1,6 +1,13 @@
-#pragma once
 #include "pch.h"
-#include "Socket.h"
+
+module;
+module iocp.socket;
+
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#include <Windows.h>
+#include <mswsock.h>
+#include "../util/logger.h"
 #include "../util/config.h"
 
 bool SocketEx::Init()

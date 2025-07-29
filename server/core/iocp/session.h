@@ -1,9 +1,11 @@
 #pragma once
 #include "../pch.h"
 #include "../util/Config.h"
-#include "socket.h"
-#include "../util/roundBuffer.h"
+//#include "socket.h"
+//#include "../util/roundBuffer.h"
 
+import iocp.socket;
+import util.roundbuffer;
 
 enum class IO_TYPE
 {
@@ -59,8 +61,6 @@ private:
 
 	unsigned int				mUID = -1;
 	char						mAcceptBuf[64]{};
-
-	//volatile long m_pendingRecvFlag = 0;
 
 private:
 	std::unique_ptr<RoundBuffer> mRecvBuffer{ std::make_unique<RoundBuffer>(RECV_BUFFER_MAX_SIZE) };
