@@ -2,18 +2,6 @@
 #pragma comment(lib, "ws2_32")
 #pragma comment(lib,"mswsock.lib")
 
-#define WIN32_LEAN_AND_MEAN             // 거의 사용되지 않는 내용을 Windows 헤더에서 제외합니다.
-#define NOMINMAX
-
-#define LOG_INFO(who, format, ...)  Logger::Log(LogLevel::INFO, who, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#define LOG_WARN(who, format, ...)  Logger::Log(LogLevel::WARN, who, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#define LOG_ERR(who, format, ...) Logger::Log(LogLevel::ERR, who, __FILE__, __LINE__, format, ##__VA_ARGS__)
-
-#define LOG_INFOW(who, format, ...)  Logger::LogW(LogLevel::INFO, who, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#define LOG_WARNW(who, format, ...)  Logger::LogW(LogLevel::WARN, who, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#define LOG_ERRW(who, format, ...) Logger::LogW(LogLevel::ERR, who, __FILE__, __LINE__, format, ##__VA_ARGS__)
-
-
 
 const wchar_t CATEGORY_NET[] = L"NETWORK";
 

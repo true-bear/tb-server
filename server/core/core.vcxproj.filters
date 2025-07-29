@@ -37,9 +37,6 @@
     <ClInclude Include="iocp\packetEx.h">
       <Filter>src\iocp</Filter>
     </ClInclude>
-    <ClInclude Include="util\config.h">
-      <Filter>src\util</Filter>
-    </ClInclude>
     <ClInclude Include="interface\IThread.h">
       <Filter>src\interface</Filter>
     </ClInclude>
@@ -83,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="socket.ixx">
       <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="conf.ixx">
+      <Filter>src\util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,10 +1,10 @@
 ﻿#include "pch.h"
 #include "core.h"
 #include "iocp/iocp.h"
-//#include "iocp/socket.h"
-import iocp.socket;
 
-#include "../util/config.h"
+import iocp.socket;
+import util.conf;
+
 #include "iocp/session.h"
 
 Core::Core() = default;

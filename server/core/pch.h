@@ -1,6 +1,10 @@
 ﻿#pragma once
 
-#include "define.h"
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#include <mswsock.h>
 
 #include <vector>
 #include <thread>
@@ -11,11 +15,6 @@
 #include <iomanip>  
 #include <algorithm>
 #include <string>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <Windows.h>
-#include <mswsock.h>
-
 #include <string_view>
 #include <format>
 #include <filesystem>
@@ -24,13 +23,11 @@
 #include <mutex>
 #include <array>
 #include <span>
-
 #include <functional>
 #include <stop_token>
 #include <chrono>
 
 #include <atlstr.h>
-
-
 #include <boost/lockfree/queue.hpp>
 
+#include "define.h"

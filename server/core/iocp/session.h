@@ -1,8 +1,11 @@
 #pragma once
-#include "../pch.h"
-#include "../util/Config.h"
-//#include "socket.h"
-//#include "../util/roundBuffer.h"
+
+#include <WinSock2.h>
+#include <MSWSock.h>
+#include <WS2tcpip.h>
+
+#include <memory>
+#include <span>
 
 import iocp.socket;
 import util.roundbuffer;
@@ -63,6 +66,6 @@ private:
 	char						mAcceptBuf[64]{};
 
 private:
-	std::unique_ptr<RoundBuffer> mRecvBuffer{ std::make_unique<RoundBuffer>(RECV_BUFFER_MAX_SIZE) };
-	std::unique_ptr<RoundBuffer> mSendBuffer{ std::make_unique<RoundBuffer>(SEND_BUFFER_MAX_SIZE) };
+	std::unique_ptr<RoundBuffer> mRecvBuffer{ std::make_unique<RoundBuffer>(4096) }; //memo : 하드코딩 고칠것
+	std::unique_ptr<RoundBuffer> mSendBuffer{ std::make_unique<RoundBuffer>(4096) };
 };

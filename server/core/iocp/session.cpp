@@ -1,5 +1,8 @@
-#include "pch.h"
+//#include "pch.h"
 #include "session.h"
+#include "../pch.h"
+
+import util.roundbuffer;
 
 Session::Session()
 {
@@ -153,7 +156,7 @@ bool Session::RecvReady()
 
 bool Session::RecvPacket(unsigned long ioSize)
 {
-	if (ioSize == 0 || ioSize > RECV_BUFFER_MAX_SIZE)
+	if (ioSize == 0 || ioSize > 4096) //todo : 하드 코딩 제거
 	{
 		std::cout << std::format("RecvPacket: Invalid ioSize: {} for id: {}\n", ioSize, mUID);
 		return false;

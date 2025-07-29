@@ -152,13 +152,17 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="thread\threadImpl.h" />
     <ClInclude Include="thread\worker.h" />
-    <ClInclude Include="util\config.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="iocp\session.cpp" />
+    <ClCompile Include="conf.ixx">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="iocp\session.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="iocp\iocp.cpp" />
     <ClCompile Include="iocp\socket.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="core.cpp" />
     <ClCompile Include="pch.cpp">

@@ -10,10 +10,10 @@
 #include <algorithm>
 #include <string>
 #include <format>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <Windows.h>
-#include <mswsock.h>
+//#include <WinSock2.h>
+//#include <WS2tcpip.h>
+//#include <Windows.h>
+//#include <mswsock.h>
 
 #include <queue>
 #include <mutex>
@@ -39,7 +39,8 @@
 import iocp.socket;
 #include "iocp/iocp.h"
 
-#include "util/config.h"
+//#include "util/config.h"
+import util.conf;
 
 #include "thread/threadImpl.h"
 
