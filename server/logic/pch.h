@@ -25,6 +25,8 @@
 #include <string_view>
 #include <chrono>
 #include <filesystem>
+#pragma once
+
 #include <atlstr.h>
 #include <unordered_map>
 

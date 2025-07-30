@@ -6,12 +6,14 @@ enum PacketType {
     WAITING = 2;
 }
 
-message ChatPacket {
-    int32 sessionId = 1;
-    string message = 2;
+message PacketHeader {
+  PacketType type = 1;
+  uint32 packet_id = 2;
+  uint32 length = 3;
 }
 
-message WaitingPacket {
-    int32 waiting_number = 1;
-    string message = 2;
+message ChatPacket {
+    PacketHeader header = 1;
+    int32 sessionId = 2;
+    string message = 3;
 }

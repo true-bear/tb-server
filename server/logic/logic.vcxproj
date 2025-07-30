@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{6b44ad51-d6b2-4ef6-95df-b111009bac9c}</ProjectGuid>
     <RootNamespace>logic</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -110,12 +110,15 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)generated\;$(SolutionDir)core\;$(ProjectDir)logic\;$(SolutionDir);$(ProjectDir)logic\ECS\;$(ProjectDir)logic\ECS\entity\;$(ProjectDir)logic\ECS\component\;$(ProjectDir)logic\ECS\system\;$(ProjectDir)logic\thread\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)generated\;$(SolutionDir)core\;$(ProjectDir)logic\;$(SolutionDir);$(ProjectDir)logic\ECS\;$(ProjectDir)logic\ECS\entity\;$(ProjectDir)logic\ECS\component\;$(ProjectDir)logic\ECS\system\;$(ProjectDir)logic\thread\;$(SolutionDir)..\proto-build\install\include;$(SolutionDir)logic\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/D_ITERATOR_DEBUG_LEVEL=2 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\proto-build\install\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libprotobufd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

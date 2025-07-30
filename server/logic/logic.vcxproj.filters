@@ -4,9 +4,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="server.cpp" />
-    <ClCompile Include="generated\message.pb.cc">
-      <Filter>generated</Filter>
-    </ClCompile>
     <ClCompile Include="logic\ECS\entity\entityRegister.cpp">
       <Filter>logic\ECS\entity</Filter>
     </ClCompile>
@@ -22,13 +19,13 @@
     <ClCompile Include="logic\logic_dispatch.cpp">
       <Filter>logic</Filter>
     </ClCompile>
+    <ClCompile Include="generated\message.pb.cc">
+      <Filter>generated</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="server.h" />
-    <ClInclude Include="generated\message.pb.h">
-      <Filter>generated</Filter>
-    </ClInclude>
     <ClInclude Include="logic\ECS\entity\entityID.h">
       <Filter>logic\ECS\entity</Filter>
     </ClInclude>
@@ -55,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="logic\logic_dispatch.h">
       <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\message.pb.h">
+      <Filter>generated</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
