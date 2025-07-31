@@ -4,7 +4,7 @@
 #include "iocp/iocp.h"
 import iocp.socket;
 //#include "iocp/socket.h"
-#include "iocp/session.h"
+import iocp.session;
 #include "thread/Worker.h"
 
 using SessionPool = std::unordered_map<unsigned int, std::unique_ptr<Session>>;

@@ -1,6 +1,5 @@
 #pragma once
 #include "threadImpl.h"
-#include "../iocp/session.h"
 #include "../iocp/iocp.h"
 
 class Core;

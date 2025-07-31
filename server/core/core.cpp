@@ -5,7 +5,7 @@
 import iocp.socket;
 import util.conf;
 
-#include "iocp/session.h"
+import iocp.session;
 
 Core::Core() = default;
 

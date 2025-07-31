@@ -146,7 +146,6 @@
     <ClInclude Include="interface\IThread.h" />
     <ClInclude Include="iocp\iocp.h" />
     <ClInclude Include="iocp\packetEx.h" />
-    <ClInclude Include="iocp\session.h" />
     <ClInclude Include="core.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="pch.h" />
@@ -174,6 +173,9 @@
     <ClCompile Include="roundBuffer.ixx">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <TranslateIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</TranslateIncludes>
+    </ClCompile>
+    <ClCompile Include="session.ixx">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="singleton.ixx">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

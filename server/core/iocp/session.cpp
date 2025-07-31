@@ -1,7 +1,13 @@
-//#include "pch.h"
-#include "session.h"
-#include "../pch.h"
 
+module;
+#include <WinSock2.h>
+#include <MSWSock.h>
+#include <WS2tcpip.h>
+#include <windows.h>
+#include <iostream>
+#include <format>
+module iocp.session;
+import iocp.socket;
 import util.roundbuffer;
 
 Session::Session()

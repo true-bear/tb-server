@@ -1,55 +1,39 @@
-export module session;
-
-#include <vector>
-#include <thread>
-#include <iostream>
-#include <atomic>
-#include <memory>
-#include <cstdint>
-#include <iomanip>  
-#include <algorithm>
-#include <string>
+module;
 #include <WinSock2.h>
 #include <WS2tcpip.h>
-#include <Windows.h>
 #include <mswsock.h>
 
-#include <string_view>
-#include <format>
-#include <filesystem>
-#include <typeindex>
-#include <queue>
-#include <mutex>
-#include <array>
-#include <span>
+export module iocp.session;
 
-#include <functional>
-#include <stop_token>
-#include <chrono>
+import <cstdint>;
+import <span>;
+import <memory>;
 
-#include <atlstr.h>
-
+import iocp.socket;
 import util.roundbuffer;
 
+export enum class IO_TYPE
+{
+    NONE,
+    RECV,
+    SEND,
+    ACCEPT
+};
+
+export struct OverlappedIoEx : public OVERLAPPED
+{
+    WSABUF mWsaBuf;
+    int mUID;
+    IO_TYPE mIOType;
+
+    OverlappedIoEx(IO_TYPE type = IO_TYPE::NONE) :OVERLAPPED{}, mWsaBuf{}, mUID(-1), mIOType(type) {}
+
+
+};
 export class Session
 {
 public:
-    enum class IO_TYPE
-    {
-        NONE,
-        RECV,
-        SEND,
-        ACCEPT
-    };
 
-    struct OverlappedIoEx : public OVERLAPPED
-    {
-        WSABUF mWsaBuf;
-        int mUID;
-        IO_TYPE mIOType;
-
-        OverlappedIoEx(IO_TYPE type = IO_TYPE::NONE) :OVERLAPPED{}, mWsaBuf{}, mUID(-1), mIOType(type) {}
-    };
 
 public:
     Session();
