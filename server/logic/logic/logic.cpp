@@ -21,7 +21,7 @@ LogicManager::~LogicManager()
 
 bool LogicManager::Init(SessionGetFunc getSession)
 {
-    mDispatcher.Register(static_cast<size_t>(PacketType::CHAT),ProcessChat);
+    mDispatcher.Register(static_cast<size_t>(PacketType::CHAT),&ProcessChat);
 
     mLogicThread = std::make_unique<LogicThread>(
         "LogicThread",

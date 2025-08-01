@@ -3,7 +3,7 @@
 
 class Session;
 
-void ProcessChat(Session* session, std::span<const std::byte> data)
+void ProcessChat(Session* session, const std::byte* data, size_t size)
 {
     if (!session)
     {
@@ -12,11 +12,9 @@ void ProcessChat(Session* session, std::span<const std::byte> data)
     }
 
     ChatPacket chatPacket;
-    if (!chatPacket.ParseFromArray(data.data(), static_cast<int>(data.size())))
-    {
-		std::cout << std::format("ProcessChat: ParseFromArray failed uid:{} size:{}\n", session->GetUniqueId(), data.size());
+    if (!chatPacket.ParseFromArray(data, static_cast<int>(size)))
         return;
-    }
+    
 
     const int serializedSize = chatPacket.ByteSizeLong();
     std::vector<std::byte> serializedData(serializedSize);

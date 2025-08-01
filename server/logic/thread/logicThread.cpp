@@ -2,6 +2,8 @@
 #include "logicThread.h"
 #include "../logic_dispatch.h"
 
+import iocp.session;
+
 LogicThread::LogicThread(
     std::string_view name,
     std::function<Session* (int)> getSessionFunc,
@@ -47,7 +49,7 @@ void LogicThread::Run(std::stop_token st)
             }
 
             PacketType type = header.type();
-            mDispatcher.Dispatch(static_cast<size_t>(type), session, data);
+            mDispatcher.Dispatch(static_cast<size_t>(type), session, data.data(), data.size());
         }
         else
         {

@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "server.h"
 #include "logic/logic.h"
+
 import util.singleton;
+import iocp.session;
 
 LogicServer::LogicServer()
 {
@@ -127,7 +129,7 @@ void LogicServer::OnAccept(unsigned int uID, unsigned long long completekey)
 
         if ((int)mActiveSessionMap.size() < mMaxSession)
         {
-            mActiveSessionMap[uID] = session;
+            mActiveSessionMap.insert_or_assign(uID, session);
             session->RecvReady();
         }
     }

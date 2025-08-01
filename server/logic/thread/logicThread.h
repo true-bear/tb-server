@@ -2,6 +2,9 @@
 #include "../pch.h"
 #include "../logic_dispatch.h"
 
+import iocp.session;
+
+
 class LogicThread : public ThreadImpl
 {
 public:

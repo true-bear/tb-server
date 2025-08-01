@@ -32,7 +32,7 @@
 #include "define.h"
 #include "core.h"
 
-import iocp.session;
+//import iocp.session;
 import util.packet;
 import iocp.socket;
 
