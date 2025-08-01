@@ -33,8 +33,9 @@
 #include "core.h"
 
 import iocp.session;
-#include "iocp/packetEx.h"
+import util.packet;
 import iocp.socket;
+
 #include "iocp/iocp.h"
 
 import util.conf;
