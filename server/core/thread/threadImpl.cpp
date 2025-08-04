@@ -1,5 +1,7 @@
-#include "pch.h"
-#include "threadImpl.h"
+module;
+
+module thread.Impl;
+
 
 ThreadImpl::ThreadImpl(std::string_view name)
     : mName(name)

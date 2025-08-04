@@ -1,8 +1,16 @@
-#pragma once
-#include "../interface/IThread.h"
-#include "../pch.h"
+module;
+export module thread.Impl;
 
-class ThreadImpl : public IThread
+import iface.thread;
+
+import  <string_view>;
+import <stop_token>;
+import <stop_token>;
+import <thread>;
+import <atomic>;
+import <string>;
+
+export class ThreadImpl : public IThread
 {
 public:
     ThreadImpl(std::string_view name);

@@ -1,11 +1,13 @@
 ﻿#include "pch.h"
 #include "core.h"
-#include "iocp/iocp.h"
 
+import iocp;
 import iocp.socket;
 import util.conf;
 
 import iocp.session;
+
+import <memory>;
 
 Core::Core() = default;
 
@@ -37,11 +39,14 @@ bool Core::Init(int maxSession)
     if (!CreateSessionPool())
         return false;
 
+	if (!mIoHandler || !mEventHandler)
+		return false;
+	
     mIsRunThread = true;
 
     for (int i = 0; i < workerCount; ++i)
     {
-        auto worker = std::make_unique<Worker>(this, "worker", i);
+        auto worker = std::make_unique<Worker>(mEventHandler, mIoHandler,"worker", i);
         worker->Start();
         mWorkers.emplace_back(std::move(worker));
     }
@@ -102,7 +107,17 @@ Session* Core::GetSession(unsigned int uID) const
     return nullptr;
 }
 
-void Core::GetIocpEvents(Iocp::IocpEvents& events, unsigned long timeout)
+void Core::GetIocpEvents(IocpEvents& events, unsigned long timeout)
 {
     GQCSEx(events, timeout);
+}
+
+void Core::SetIoContext(IIoHandler* context)
+{ 
+    mIoHandler = context;
+}
+
+void Core::SetEventContext(IEventHandler* context)
+{
+	mEventHandler = context;
 }

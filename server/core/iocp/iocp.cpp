@@ -1,6 +1,12 @@
+module;
 
-#include "pch.h"
-#include "iocp.h"
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#include <mswsock.h>
+
+
+module iocp;
+import iocp.socket;
 
 Iocp::~Iocp()
 {
@@ -47,7 +53,7 @@ bool Iocp::AddDeviceRemoteSocket(Session* RemoteSession)
     return true;
 }
 
-void Iocp::GQCSEx(Iocp::IocpEvents& IoEvent, unsigned long timeOut)
+void Iocp::GQCSEx(IocpEvents& IoEvent, unsigned long timeOut)
 {
     bool ret = GetQueuedCompletionStatusEx(
         mIocp,

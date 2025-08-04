@@ -31,15 +31,6 @@
     <ClInclude Include="pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="iocp\iocp.h">
-      <Filter>src\iocp</Filter>
-    </ClInclude>
-    <ClInclude Include="interface\IThread.h">
-      <Filter>src\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="thread\threadImpl.h">
-      <Filter>src\thread</Filter>
-    </ClInclude>
     <ClInclude Include="thread\worker.h">
       <Filter>src\thread</Filter>
     </ClInclude>
@@ -83,6 +74,21 @@
     </ClCompile>
     <ClCompile Include="packetEx.ixx">
       <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="IThread.ixx">
+      <Filter>src\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="threadImpl.ixx">
+      <Filter>src\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="IIoHandler.ixx">
+      <Filter>src\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="IEventHandler.ixx">
+      <Filter>src\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp.ixx">
+      <Filter>src\iocp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

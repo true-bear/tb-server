@@ -1,21 +1,20 @@
-#include "pch.h"
+#include "../pch.h"
 #include "worker.h"
-#include "../core.h"
-#include "../iocp/iocp.h"
 
-Worker::Worker(Core* core, std::string_view name, int index)
+Worker::Worker(IEventHandler* eventHandler, IIoHandler* ioHandler,std::string_view name, int index)
 	: ThreadImpl(name)
-	, mCore(core)
+	, mEventHandler(eventHandler)
+	, mIoHandler(ioHandler)
 	, mIndex(index)
 {
 }
 
 void Worker::Run(std::stop_token st)
 {
-	while (mCore->IsRunThread() && !st.stop_requested())
+	while (!st.stop_requested())
 	{
-		Iocp::IocpEvents events;
-		mCore->GetIocpEvents(events, 5);
+		IocpEvents events;
+		mEventHandler->GetIocpEvents(events, 5);
 
 		for (int i = 0; i < events.m_eventCount; ++i)
 		{
@@ -33,23 +32,23 @@ void Worker::Run(std::stop_token st)
 				continue;
 
 			int sessionId = over->mUID;
-			auto session = mCore->GetSession(sessionId);
+			auto session = mEventHandler->GetSession(sessionId);
 			if (!session)
 				continue;
 
 			switch (over->mIOType)
 			{
 			case IO_TYPE::ACCEPT:
-				mCore->OnAccept(sessionId, ioEvent.lpCompletionKey);
+				mIoHandler->OnAccept(sessionId, ioEvent.lpCompletionKey);
 				break;
 			case IO_TYPE::RECV:
 				if (ioSize == 0)
-					mCore->OnClose(sessionId);
+					mIoHandler->OnClose(sessionId);
 				else
-					mCore->OnRecv(sessionId, ioSize);
+					mIoHandler->OnRecv(sessionId, ioSize);
 				break;
 			case IO_TYPE::SEND:
-				mCore->OnSend(sessionId, ioSize);
+				mIoHandler->OnSend(sessionId, ioSize);
 				break;
 			default:
 				break;

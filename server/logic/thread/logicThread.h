@@ -3,7 +3,7 @@
 #include "../logic_dispatch.h"
 
 import iocp.session;
-
+import thread.Impl;
 
 class LogicThread : public ThreadImpl
 {

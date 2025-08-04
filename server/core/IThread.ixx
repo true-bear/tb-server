@@ -1,6 +1,8 @@
-#pragma once
-#include "../pch.h"
-class IThread
+export module iface.thread;
+
+import <string_view>;
+
+export class IThread
 {
 public:
     virtual ~IThread() = default;

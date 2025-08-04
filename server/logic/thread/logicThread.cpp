@@ -3,6 +3,7 @@
 #include "../logic_dispatch.h"
 
 import iocp.session;
+import thread.Impl;
 
 LogicThread::LogicThread(
     std::string_view name,

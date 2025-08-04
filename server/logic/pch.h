@@ -40,5 +40,3 @@ import iocp.socket;
 
 import util.conf;
 
-#include "thread/threadImpl.h"
-
