@@ -22,67 +22,67 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="define.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="core.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="iocp\iocp.cpp">
-      <Filter>src\iocp</Filter>
+    <ClCompile Include="core.ixx">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="iocp\session.cpp">
-      <Filter>src\iocp</Filter>
+    <ClCompile Include="util\conf.ixx">
+      <Filter>src\util</Filter>
     </ClCompile>
-    <ClCompile Include="iocp\socket.cpp">
-      <Filter>src\iocp</Filter>
+    <ClCompile Include="util\packetEx.ixx">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\roundBuffer.ixx">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\singleton.ixx">
+      <Filter>src\util</Filter>
     </ClCompile>
     <ClCompile Include="thread\threadImpl.cpp">
+      <Filter>src\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\threadImpl.ixx">
       <Filter>src\thread</Filter>
     </ClCompile>
     <ClCompile Include="thread\worker.cpp">
       <Filter>src\thread</Filter>
     </ClCompile>
-    <ClCompile Include="singleton.ixx">
-      <Filter>src\util</Filter>
-    </ClCompile>
-    <ClCompile Include="roundBuffer.ixx">
-      <Filter>src\util</Filter>
-    </ClCompile>
-    <ClCompile Include="socket.ixx">
-      <Filter>src\iocp</Filter>
-    </ClCompile>
-    <ClCompile Include="conf.ixx">
-      <Filter>src\util</Filter>
-    </ClCompile>
-    <ClCompile Include="session.ixx">
-      <Filter>src\iocp</Filter>
-    </ClCompile>
-    <ClCompile Include="packetEx.ixx">
-      <Filter>src\util</Filter>
-    </ClCompile>
-    <ClCompile Include="IThread.ixx">
-      <Filter>src\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="threadImpl.ixx">
+    <ClCompile Include="thread\worker.ixx">
       <Filter>src\thread</Filter>
     </ClCompile>
-    <ClCompile Include="IIoHandler.ixx">
-      <Filter>src\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="IEventHandler.ixx">
-      <Filter>src\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="iocp.ixx">
+    <ClCompile Include="iocp\iocp.cpp">
       <Filter>src\iocp</Filter>
     </ClCompile>
-    <ClCompile Include="worker.ixx">
-      <Filter>src\thread</Filter>
+    <ClCompile Include="iocp\iocp.ixx">
+      <Filter>src\iocp</Filter>
     </ClCompile>
-    <ClCompile Include="core.ixx">
-      <Filter>src</Filter>
+    <ClCompile Include="iocp\session.cpp">
+      <Filter>src\iocp</Filter>
     </ClCompile>
+    <ClCompile Include="iocp\session.ixx">
+      <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp\socket.cpp">
+      <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp\socket.ixx">
+      <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\IEventHandler.ixx">
+      <Filter>src\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\IIoHandler.ixx">
+      <Filter>src\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\IThread.ixx">
+      <Filter>src\interface</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\define.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@ module;
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <mswsock.h>
-
+#include "../common/define.h"
 
 module iocp;
 import iocp.socket;
