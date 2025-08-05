@@ -22,24 +22,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="define.h">
       <Filter>src\common</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="thread\worker.h">
-      <Filter>src\thread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="iocp\iocp.cpp">
@@ -89,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="iocp.ixx">
       <Filter>src\iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="worker.ixx">
+      <Filter>src\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="core.ixx">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

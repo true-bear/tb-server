@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "../pch.h"
 #include "logicThread.h"
 #include "../logic_dispatch.h"
 

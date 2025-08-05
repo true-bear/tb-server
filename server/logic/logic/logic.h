@@ -1,9 +1,9 @@
 #pragma once
-#include "pch.h"
 
 #include "../thread/logicThread.h"
 
 import util.singleton;
+import iocp.session;
 
 class LogicDispatch;
 class PacketEx;

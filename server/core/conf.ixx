@@ -1,8 +1,8 @@
 module;
-#include "../pch.h"
+#include <windows.h>
 
 export module util.conf;
-
+import <string>;
 
 export namespace Config
 {

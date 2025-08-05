@@ -1,11 +1,14 @@
-﻿#include "pch.h"
-#include "core.h"
+﻿module;
+#include <windows.h>
+#include <iostream>
+#include <format>
+
+module core.engine;
 
 import iocp;
 import iocp.socket;
-import util.conf;
-
 import iocp.session;
+import util.conf;
 
 import <memory>;
 
@@ -82,7 +85,7 @@ void Core::Stop()
 
     for ([[maybe_unused]] const auto& _ : mWorkers)
     {
-        ::PostQueuedCompletionStatus(GetIocp(), 0, 0, nullptr);
+		Iocp::PQCS(0, 0, nullptr);
     }
 
     for (auto& worker : mWorkers)

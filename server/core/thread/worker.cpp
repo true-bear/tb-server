@@ -1,5 +1,16 @@
-#include "../pch.h"
-#include "worker.h"
+module;
+
+#include <iostream>
+#include <format>
+
+module thread.worker;
+
+import thread.Impl;
+import iface.handler.io;
+import iface.handler.event;
+import iocp;
+
+import <stop_token>;
 
 Worker::Worker(IEventHandler* eventHandler, IIoHandler* ioHandler,std::string_view name, int index)
 	: ThreadImpl(name)

@@ -1,4 +1,9 @@
-#include "../pch.h"
+module;
+#include <WinSock2.h>
+#include <MSWSock.h>
+#include <WS2tcpip.h>
+#include <windows.h>
+#include "../define.h"
 
 module iocp.socket;
 import util.conf;
