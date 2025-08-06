@@ -15,9 +15,12 @@ import thread.worker;
 import <unordered_map>;
 import <vector>;
 import <memory>;
+import <atomic>;
+import <mutex>;
+import <functional>;
+import <span>;
 
-
-export class Core : public Iocp
+export class Core : public Iocp, public IEventHandler, public IIoHandler
 {
 public:
     Core();
@@ -25,30 +28,34 @@ public:
 
     bool Init(const int maxSession);
     void Stop();
-
     bool CreateSessionPool();
-
     Session* GetSession(const unsigned int uID) const;
     const SOCKET& GetListenSocket() const { return mListenSocket.GetSocket(); }
-
     bool IsRunThread() const;
+    
+    void SetDispatchCallback(std::function<void(unsigned int, std::span<const std::byte>)> callback);
+
+    void OnRecv(unsigned int uID, unsigned long ioSize) override;
+    void OnSend(unsigned int uID, unsigned long ioSize) override;
+    void OnAccept(unsigned int uID, unsigned long long completeKey) override;
+    void OnClose(unsigned int uID) override;
 
     void GetIocpEvents(IocpEvents& events, unsigned long timeout);
 
-    void SetIoContext(IIoHandler* context);
-    void SetEventContext(IEventHandler* context);
-
 protected:
+    std::function<void(unsigned int, std::span<const std::byte>)> mDispatchCallback;
+
+private:
     SocketEx            mListenSocket;
 
     using SessionPool = std::unordered_map<unsigned int, std::unique_ptr<Session>>;
     SessionPool         mSessionPool;
 
-    using WorkerPool = std::vector<std::unique_ptr<Worker>>;
+    using WorkerPool =  std::vector<std::unique_ptr<Worker>>;
     WorkerPool          mWorkers;
 
     int                 mMaxSession{ 0 };
-    IIoHandler*         mIoHandler{ nullptr };
-    IEventHandler*      mEventHandler{ nullptr };
     std::atomic<bool>   mIsRunThread{ false };
+
+    std::mutex mSessionLock;
 };

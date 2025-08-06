@@ -8,8 +8,6 @@ export module iocp;
 
 import iocp.session;
 
-
-
 export struct IocpEvents
 {
     OVERLAPPED_ENTRY m_IoArray[IOCP_EVENT_COUNT];

@@ -11,6 +11,7 @@ import iface.handler.event;
 import iocp;
 
 import <stop_token>;
+import <span>;
 
 Worker::Worker(IEventHandler* eventHandler, IIoHandler* ioHandler,std::string_view name, int index)
 	: ThreadImpl(name)
@@ -27,10 +28,9 @@ void Worker::Run(std::stop_token st)
 		IocpEvents events;
 		mEventHandler->GetIocpEvents(events, 5);
 
-		for (int i = 0; i < events.m_eventCount; ++i)
+		auto eventRange = std::span{ events.m_IoArray, static_cast<size_t>(events.m_eventCount) };
+		for (auto& ioEvent : eventRange)
 		{
-			auto& ioEvent = events.m_IoArray[i];
-
 			if (ioEvent.lpOverlapped == nullptr)
 			{
 				std::cout << std::format("[{}] IOCP event without overlapped structure\n", mIndex);
