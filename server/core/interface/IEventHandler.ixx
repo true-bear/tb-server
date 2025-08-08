@@ -7,6 +7,7 @@ import iocp;
 export class IEventHandler
 {
 public:
+	[[nodiscard]] IEventHandler() = default;
     virtual ~IEventHandler() = default;
 
     virtual void GetIocpEvents(IocpEvents& outEvents, unsigned long timeout) = 0;

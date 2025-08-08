@@ -36,8 +36,8 @@ public:
 
 
 public:
-    Session();
-    ~Session();
+    [[nodiscard]] Session();
+    virtual ~Session();
 
     void			Init();
     void			DisconnectFinish();

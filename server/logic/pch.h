@@ -29,7 +29,7 @@
 #include <boost/lockfree/queue.hpp>
 
 #include "generated/message.pb.h"
-#include "common/define.h"
+import common.define;
 
 import core.engine;
 import util.packet;

@@ -10,6 +10,7 @@ import iocp;
 import iocp.socket;
 import iocp.session;
 import util.conf;
+import common.define;
 
 import <memory>;
 import <mutex>;
@@ -54,7 +55,6 @@ bool Core::Init(int maxSession)
         return false;
 
     auto ranges = std::views::iota(0, workerCount);
-
     for (int i : ranges)
     {
         auto worker = std::make_unique<Worker>(static_cast<IEventHandler*>(this), static_cast<IIoHandler*>(this), "worker", i);

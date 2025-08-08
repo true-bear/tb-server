@@ -7,9 +7,6 @@
     <ClCompile Include="logic\ECS\entity\entityRegister.cpp">
       <Filter>logic\ECS\entity</Filter>
     </ClCompile>
-    <ClCompile Include="thread\zoneThread.cpp">
-      <Filter>thread</Filter>
-    </ClCompile>
     <ClCompile Include="thread\logicThread.cpp">
       <Filter>thread</Filter>
     </ClCompile>
@@ -37,9 +34,6 @@
     </ClInclude>
     <ClInclude Include="logic\ECS\component\IComponent.h">
       <Filter>logic\ECS\component</Filter>
-    </ClInclude>
-    <ClInclude Include="thread\zoneThread.h">
-      <Filter>thread</Filter>
     </ClInclude>
     <ClInclude Include="thread\logicThread.h">
       <Filter>thread</Filter>

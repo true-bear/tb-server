@@ -3,7 +3,7 @@ export module thread.Impl;
 
 import iface.thread;
 
-import  <string_view>;
+import <string_view>;
 import <stop_token>;
 import <stop_token>;
 import <thread>;
@@ -13,7 +13,7 @@ import <string>;
 export class ThreadImpl : public IThread
 {
 public:
-    ThreadImpl(std::string_view name);
+    [[nodiscard]] ThreadImpl(std::string_view name);
     virtual ~ThreadImpl();
 
     virtual void Start() override;

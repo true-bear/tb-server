@@ -4,6 +4,7 @@ export module iface.handler.io;
 export class IIoHandler
 {
 public:
+	[[nodiscard]] IIoHandler() = default;
     virtual ~IIoHandler() = default;
 
     virtual void OnAccept(unsigned int sessionId, unsigned long long key) = 0;

@@ -79,10 +79,8 @@
     <ClCompile Include="interface\IThread.ixx">
       <Filter>src\interface</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="common\define.h">
+    <ClCompile Include="common\define.ixx">
       <Filter>src\common</Filter>
-    </ClInclude>
+    </ClCompile>
   </ItemGroup>
 </Project>

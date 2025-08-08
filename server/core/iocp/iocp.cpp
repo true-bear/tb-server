@@ -3,10 +3,10 @@ module;
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <mswsock.h>
-#include "../common/define.h"
 
 module iocp;
 import iocp.socket;
+import common.define;
 
 Iocp::~Iocp()
 {
@@ -58,7 +58,7 @@ void Iocp::GQCSEx(IocpEvents& IoEvent, unsigned long timeOut)
     bool ret = GetQueuedCompletionStatusEx(
         mIocp,
         IoEvent.m_IoArray,
-        IOCP_EVENT_COUNT,
+        NetDefaults::IOCP_EVENT_COUNT,
         (ULONG*)&IoEvent.m_eventCount,
         timeOut,
         FALSE

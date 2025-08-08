@@ -7,6 +7,8 @@ export module iocp.socket;
 export class SocketEx
 {
 public:
+	[[nodiscard]] SocketEx() = default;
+	virtual  ~SocketEx() { Close(); }
     bool Init();
     bool Close();
     bool BindAndListen();

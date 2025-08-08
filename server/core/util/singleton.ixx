@@ -11,7 +11,7 @@ public:
     }
 
 protected:
-    Singleton() = default;
+    [[nodiscard]] Singleton() = default;
     virtual ~Singleton() = default;
 
     Singleton(const Singleton&) = delete;

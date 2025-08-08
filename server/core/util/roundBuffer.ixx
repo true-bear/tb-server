@@ -8,7 +8,7 @@ import <cstring>;
 
 export class RoundBuffer {
 public:
-    explicit RoundBuffer(size_t capacity)
+    [[nodiscard]] explicit RoundBuffer(size_t capacity)
         : mBuffer(std::make_unique<std::byte[]>(capacity)),
         mCapacity(capacity), mReadPos(0), mWritePos(0) {
     }

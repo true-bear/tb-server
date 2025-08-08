@@ -2,7 +2,8 @@
 #include "../logic.h"
 #include "logic_chat.h"
 
-boost::lockfree::queue<PacketEx*> LogicManager::mPacketQueue{ PACKET_QUEUE_SIZE };
+
+boost::lockfree::queue<PacketEx*> LogicManager::mPacketQueue{ NetDefaults::PACKET_QUEUE_SIZE };
 
 LogicManager::LogicManager()
 {

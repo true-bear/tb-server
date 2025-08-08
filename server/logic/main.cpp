@@ -1,14 +1,17 @@
 ﻿#include "pch.h"
 #include "server.h"
+//#include <iostream>
+//#include <format>
 
 import util.singleton;
-import util.conf;
+import util.conf; 
+import common.define;
 
 int main()
 {
-    const int maxSession = Config::Load(CATEGORY_NET, MAX_SESSION_COUNT);
-	const int threadCount = Config::Load(CATEGORY_NET, MAX_WORK_THEAD_CNT);
-    const int port = Config::Load(CATEGORY_NET, PORT);
+    const int maxSession = Config::Load(L"NETWORK", L"maxSessionCount");
+	const int threadCount = Config::Load(L"NETWORK", L"workerCount");
+    const int port = Config::Load(L"NETWORK", L"port");
 
     if (!LogicServer::Get().Init(maxSession))
     {

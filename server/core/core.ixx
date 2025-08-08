@@ -1,6 +1,3 @@
-module;
-#include "common/define.h"
-
 export module core.engine;
 
 import iface.handler.io;
@@ -23,7 +20,7 @@ import <span>;
 export class Core : public Iocp, public IEventHandler, public IIoHandler
 {
 public:
-    Core();
+    [[nodiscard]] Core();
     virtual ~Core();
 
     bool Init(const int maxSession);

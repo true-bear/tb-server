@@ -5,6 +5,7 @@ import <string_view>;
 export class IThread
 {
 public:
+	[[nodiscard]] IThread() = default;
     virtual ~IThread() = default;
     virtual void Start() = 0;
     virtual void Stop() = 0;

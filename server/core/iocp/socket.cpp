@@ -3,10 +3,10 @@ module;
 #include <MSWSock.h>
 #include <WS2tcpip.h>
 #include <windows.h>
-#include "../common/define.h"
 
 module iocp.socket;
 import util.conf;
+import common.define;
 
 bool SocketEx::Init()
 {
@@ -26,7 +26,7 @@ bool SocketEx::Close()
 
 bool SocketEx::BindAndListen()
 {
-    int port = Config::Load(CATEGORY_NET, PORT);
+    int port = Config::Load(L"NETWORK", L"port");
 
     sockaddr_in addr = {};
     addr.sin_family = AF_INET;

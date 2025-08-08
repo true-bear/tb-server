@@ -11,7 +11,7 @@ import <stop_token>;
 export class Worker : public ThreadImpl
 {
 public:
-	Worker(IEventHandler* eventHandler, IIoHandler* ioHandler, std::string_view name, int index);
+	[[nodiscard]] Worker(IEventHandler* eventHandler, IIoHandler* ioHandler, std::string_view name, int index);
 	~Worker() override = default;
 
 private:
