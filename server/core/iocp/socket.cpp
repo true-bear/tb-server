@@ -19,12 +19,12 @@ bool SocketEx::Init()
     return mSocket != INVALID_SOCKET;
 }
 
-bool SocketEx::Close()
+bool SocketEx::Close() const
 {
     return closesocket(mSocket) != SOCKET_ERROR;
 }
 
-bool SocketEx::BindAndListen()
+bool SocketEx::BindAndListen() const
 {
     int port = Config::Load(L"NETWORK", L"port");
 
@@ -51,7 +51,7 @@ bool SocketEx::GetSocketInfo(WSAPROTOCOL_INFO& info) const
     return getsockopt(mSocket, SOL_SOCKET, SO_PROTOCOL_INFO, reinterpret_cast<char*>(&info), &len) == 0;
 }
 
-bool SocketEx::SetOption(int level, int optname, const void* optval, int optlen)
+bool SocketEx::SetOption(int level, int optname, const void* optval, int optlen) const
 {
     return setsockopt(mSocket, level, optname, static_cast<const char*>(optval), optlen) == 0;
 }

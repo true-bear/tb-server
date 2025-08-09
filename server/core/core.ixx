@@ -24,6 +24,7 @@ public:
     virtual ~Core();
 
     bool Init(const int maxSession);
+    void Run();
     void Stop();
     bool CreateSessionPool();
     Session* GetSession(const unsigned int uID) const;
@@ -50,6 +51,8 @@ private:
 
     using WorkerPool =  std::vector<std::unique_ptr<Worker>>;
     WorkerPool          mWorkers;
+
+    int                 mWorkerCnt{ 0 };
 
     int                 mMaxSession{ 0 };
     std::atomic<bool>   mIsRunThread{ false };

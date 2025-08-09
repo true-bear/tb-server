@@ -11,6 +11,7 @@ import <memory>;
 
 import iocp.socket;
 import util.roundbuffer;
+import common.define;
 
 export enum class IO_TYPE
 {
@@ -55,10 +56,10 @@ public:
     void			SetUniqueId(int id) { mUID = id; }
 
     unsigned int	GetUniqueId() const { return mUID; }
-    const SOCKET& GetRemoteSocket() const { return mRemoteSock.GetSocket(); }
-    RoundBuffer* GetRecvBuffer() const { return mRecvBuffer.get(); }
-    RoundBuffer* GetSendBuffer() const { return mSendBuffer.get(); }
-    char* GetRecvOverlappedBuffer() const;
+    const SOCKET&   GetRemoteSocket() const { return mRemoteSock.GetSocket(); }
+    RoundBuffer*    GetRecvBuffer() const { return mRecvBuffer.get(); }
+    RoundBuffer*    GetSendBuffer() const { return mSendBuffer.get(); }
+    char*           GetRecvOverlappedBuffer() const;
 
     bool			InitRemoteSocket() { mRemoteSock.Init(); }
     bool			IsConnected() const;
@@ -72,8 +73,8 @@ private:
     char						mAcceptBuf[64]{};
 
 private:
-    std::unique_ptr<RoundBuffer> mRecvBuffer{ std::make_unique<RoundBuffer>(4096) }; //todo 바꿔야함 일단 잠시 하드코딩
-    std::unique_ptr<RoundBuffer> mSendBuffer{ std::make_unique<RoundBuffer>(4096) };
+    std::unique_ptr<RoundBuffer> mRecvBuffer{ std::make_unique<RoundBuffer>(NetDefaults::RECV_BUFFER_MAX_SIZE) };
+    std::unique_ptr<RoundBuffer> mSendBuffer{ std::make_unique<RoundBuffer>(NetDefaults::SEND_BUFFER_MAX_SIZE) };
 };
 
 

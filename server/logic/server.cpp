@@ -20,7 +20,7 @@ bool LogicServer::Init(int maxSession)
 
 	std::cout << std::format("LogicServer::Init: mMaxSession = {}\n", mMaxSession);
 
-    SetDispatchCallback([this](unsigned int sessionId, std::span<const std::byte> packet) {
+    SetDispatchCallback([this](unsigned int sessionId, std::span<const std::byte> packet) noexcept {
         mLogicManager.DisPatchPacket(sessionId, packet);
         });
 
@@ -43,6 +43,7 @@ bool LogicServer::Init(int maxSession)
 
 void LogicServer::Run()
 {
+	Core::Run();
     mLogicManager.Start();
 }
 

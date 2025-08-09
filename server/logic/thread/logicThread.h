@@ -8,7 +8,7 @@ import thread.Impl;
 class LogicThread : public ThreadImpl
 {
 public:
-    LogicThread(std::string_view name,
+    [[nodiscard]] LogicThread(std::string_view name,
         std::function<Session* (int)> getSessionFunc,
         LogicDispatch& dispatcher,
         boost::lockfree::queue<PacketEx*>& packetQueue);

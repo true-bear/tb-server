@@ -10,12 +10,12 @@ public:
 	[[nodiscard]] SocketEx() = default;
 	virtual  ~SocketEx() { Close(); }
     bool Init();
-    bool Close();
-    bool BindAndListen();
+    bool Close() const;
+    bool BindAndListen() const;
     void Detach();
 
     bool SetSocket(SOCKET& newSocket) { mSocket = newSocket; return true; }
-    bool SetOption(int level, int optname, const void* optval, int optlen);
+    bool SetOption(int level, int optname, const void* optval, int optlen) const;
     bool GetPeerName(sockaddr_in& addr) const;
     const SOCKET& GetSocket() const { return mSocket; }
     bool GetSocketInfo(WSAPROTOCOL_INFO& info) const;

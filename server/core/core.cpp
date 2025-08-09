@@ -40,6 +40,8 @@ bool Core::Init(int maxSession)
     ::GetSystemInfo(&sysInfo);
     const int workerCount = static_cast<int>(sysInfo.dwNumberOfProcessors) * 2;
 
+    mWorkerCnt = workerCount;
+
     if (!CreateNewIocp(workerCount))
         return false;
 
@@ -53,16 +55,6 @@ bool Core::Init(int maxSession)
 
     if (!mDispatchCallback)
         return false;
-
-    auto ranges = std::views::iota(0, workerCount);
-    for (int i : ranges)
-    {
-        auto worker = std::make_unique<Worker>(static_cast<IEventHandler*>(this), static_cast<IIoHandler*>(this), "worker", i);
-        worker->Start();
-        mWorkers.emplace_back(std::move(worker));
-    }
-
-	std::cout << std::format("Core::Start: mMaxSession = {}\n", mMaxSession);
 
     return true;
 }
@@ -88,6 +80,19 @@ bool Core::CreateSessionPool()
     return true;
 }
 
+void Core::Run()
+{
+    auto ranges = std::views::iota(0, mWorkerCnt);
+    for (int i : ranges)
+    {
+        auto worker = std::make_unique<Worker>(static_cast<IEventHandler*>(this), static_cast<IIoHandler*>(this), "worker", i);
+        worker->Start();
+        mWorkers.emplace_back(std::move(worker));
+    }
+
+    std::cout << std::format("Core::Start: mMaxSession = {}\n", mMaxSession);
+
+}
 void Core::Stop()
 {
     mIsRunThread.store(false, std::memory_order_release);

@@ -112,7 +112,6 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir)generated\;$(SolutionDir)core\;$(ProjectDir)logic\;$(SolutionDir);$(ProjectDir)logic\ECS\;$(ProjectDir)logic\ECS\entity\;$(ProjectDir)logic\ECS\component\;$(ProjectDir)logic\ECS\system\;$(ProjectDir)logic\thread\;$(SolutionDir)..\proto-build\install\include;$(SolutionDir)logic\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalOptions>/D_ITERATOR_DEBUG_LEVEL=2 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

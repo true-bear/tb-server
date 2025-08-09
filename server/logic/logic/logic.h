@@ -15,7 +15,7 @@ using SessionGetFunc = std::function<Session* (int)>;
 class LogicManager : public Singleton<LogicManager>
 {
 public:
-    LogicManager();
+    [[nodiscard]]LogicManager();
     ~LogicManager();
 
     bool Init(SessionGetFunc getSession);

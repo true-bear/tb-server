@@ -22,10 +22,10 @@ public:
     virtual ~Iocp();
 
     bool CreateNewIocp(unsigned long threadCnt);
-    bool AddDeviceListenSocket(SOCKET listenSock);
-    bool AddDeviceRemoteSocket(Session* RemoteSession);
-    void GQCSEx(IocpEvents& IoEvent, unsigned long timeOut);
-    bool PQCS(unsigned long byte, ULONG_PTR completeKey, OVERLAPPED* overlapped);
+    bool AddDeviceListenSocket(SOCKET listenSock) const;
+    bool AddDeviceRemoteSocket(Session* RemoteSession) const;
+    void GQCSEx(IocpEvents& IoEvent, unsigned long timeOut) const;
+    bool PQCS(unsigned long byte, ULONG_PTR completeKey, OVERLAPPED* overlapped) const;
 
     const HANDLE& GetIocp() const { return mIocp; }
 

@@ -23,7 +23,7 @@ bool Iocp::CreateNewIocp(unsigned long threadCnt)
     return true;
 }
 
-bool Iocp::AddDeviceListenSocket(SOCKET listenSock)
+bool Iocp::AddDeviceListenSocket(SOCKET listenSock) const
 {
     auto ret = CreateIoCompletionPort(
         (HANDLE)listenSock,
@@ -38,7 +38,7 @@ bool Iocp::AddDeviceListenSocket(SOCKET listenSock)
     return true;
 }
 
-bool Iocp::AddDeviceRemoteSocket(Session* RemoteSession)
+bool Iocp::AddDeviceRemoteSocket(Session* RemoteSession) const
 {
     HANDLE ret = CreateIoCompletionPort(
         (HANDLE)RemoteSession->GetRemoteSocket(),
@@ -53,7 +53,7 @@ bool Iocp::AddDeviceRemoteSocket(Session* RemoteSession)
     return true;
 }
 
-void Iocp::GQCSEx(IocpEvents& IoEvent, unsigned long timeOut)
+void Iocp::GQCSEx(IocpEvents& IoEvent, unsigned long timeOut) const
 {
     bool ret = GetQueuedCompletionStatusEx(
         mIocp,
@@ -68,7 +68,7 @@ void Iocp::GQCSEx(IocpEvents& IoEvent, unsigned long timeOut)
         IoEvent.m_eventCount = 0;
 }
 
-bool Iocp::PQCS(unsigned long byte, ULONG_PTR completeKey, OVERLAPPED* overlapped)
+bool Iocp::PQCS(unsigned long byte, ULONG_PTR completeKey, OVERLAPPED* overlapped) const
 {
     return PostQueuedCompletionStatus(
         mIocp,
