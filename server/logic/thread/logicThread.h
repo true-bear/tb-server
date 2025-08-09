@@ -19,5 +19,5 @@ protected:
 private:
     std::function<Session* (int)> mGetSession;
     LogicDispatch& mDispatcher;
-    boost::lockfree::queue<PacketEx*>& mPacketQueue;
+    boost::lockfree::queue<PacketEx*>* mPacketQueue;
 };

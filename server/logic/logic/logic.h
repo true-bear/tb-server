@@ -18,16 +18,23 @@ public:
     [[nodiscard]]LogicManager();
     ~LogicManager();
 
-    bool Init(SessionGetFunc getSession);
+    bool Init(SessionGetFunc getSession, const int threadCount = 1);
     void Start();
     void Stop();
 
-    void DisPatchPacket(int sessionId, std::span<const std::byte> data);
-
+    [[nodiscard]] void DisPatchPacket(int sessionId, std::span<const std::byte> data);
+    int ShardIndex(int sessionId) const noexcept;
 private:
-    std::unique_ptr<LogicThread> mLogicThread;
+
+    struct Shard 
+    {
+        std::unique_ptr<LogicThread> thread;
+        std::unique_ptr<boost::lockfree::queue<PacketEx*>> queue;
+    };
+
+    std::vector<Shard> mShards;
+
     LogicDispatch mDispatcher;
-    static boost::lockfree::queue<PacketEx*> mPacketQueue;
     SessionGetFunc mGetSessionFunc;
 };
 

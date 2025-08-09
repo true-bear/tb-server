@@ -1,6 +1,4 @@
 #pragma once
-#include "../pch.h"
-
 class Session;
 
 void ProcessChat(Session* session, const std::byte* data, size_t size)
