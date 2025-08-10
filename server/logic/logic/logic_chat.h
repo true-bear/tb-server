@@ -1,33 +1,35 @@
 #pragma once
-class Session;
+#include "../common_types.h"
+#include "../pch.h"
+#include <format>
+#include <vector>
+
+
+import iocp.session;
 
 void ProcessChat(Session* session, const std::byte* data, size_t size)
 {
-    if (!session)
+    if (!session) return;
+
+    ChatPacket chat;
+    if (!chat.ParseFromArray(data, static_cast<int>(size))) return;
+
+    chat.set_message("show me the money ");
+
+    thread_local std::string scratch;
+    scratch.clear();
+    chat.SerializeToString(&scratch);
+
+    std::span<const std::byte> out{
+        reinterpret_cast<const std::byte*>(scratch.data()),
+        scratch.size()
+    };
+
+
+    if (!session->SendPacket(out))
     {
-		std::cout << std::format("ProcessChat: session is nullptr\n");
+        std::cout << "send failed " << std::endl;
         return;
     }
-
-    ChatPacket chatPacket;
-    if (!chatPacket.ParseFromArray(data, static_cast<int>(size)))
-        return;
-    
-
-    const int serializedSize = chatPacket.ByteSizeLong();
-    std::vector<std::byte> serializedData(serializedSize);
-    if (!chatPacket.SerializeToArray(reinterpret_cast<void*>(serializedData.data()), serializedSize))
-    {
-		std::cout << std::format("ProcessChat: SerializeToArray failed uid:{} size:{}\n", session->GetUniqueId(), serializedSize);
-        return;
-    }
-
-    const std::span<const std::byte> serializedSpan = serializedData;
-    if (!session->SendPacket(serializedSpan))
-    {
-		std::cout << std::format("ProcessChat: SendPacket failed uid:{} size:{}\n", session->GetUniqueId(), serializedData.size());
-		return;
-    }
-
-	std::cout << std::format("Chat: uid:{} msg:'{}'\n", session->GetUniqueId(), chatPacket.message());
 }
+

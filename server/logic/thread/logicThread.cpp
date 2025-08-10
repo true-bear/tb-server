@@ -1,54 +1,35 @@
 #include "../pch.h"
 #include "logicThread.h"
 #include "../logic_dispatch.h"
-
-import iocp.session;
-import thread.Impl;
-
-LogicThread::LogicThread(
-    std::string_view name,
-    std::function<Session* (int)> getSessionFunc,
-    LogicDispatch& dispatcher,
-    boost::lockfree::queue<PacketEx*>& packetQueue)
-    : ThreadImpl(name),
-    mGetSession(getSessionFunc),
-    mDispatcher(dispatcher),
-	mPacketQueue(&packetQueue)
-{
-}
+#include "../logic/common_types.h"
+#include <thread>
+#include <chrono>
 
 void LogicThread::Run(std::stop_token st)
 {
     while (!st.stop_requested())
     {
-        PacketEx* packet = nullptr;
-        if (!mPacketQueue->pop(packet))
+        PacketNode* node = nullptr;
+        if (!mPacketQueue.pop(node))
         {
             std::this_thread::sleep_for(std::chrono::microseconds(1));
             continue;
         }
 
-        auto pkt = std::unique_ptr<PacketEx>(packet);
+        Session* session = mGetSession(node->sessionId);
+        if (session)
+        {
+            std::span<const std::byte> payload{ node->data.data(), node->size };
 
-        auto session = mGetSession(pkt->GetSessionId());
-        if (!session)
-            continue;
-        
-        const std::span<const std::byte> data = pkt->GetData();
-        if (data.size() <= sizeof(uint16_t))
-            continue;
-        
-        const std::byte* protoStart = data.data() + sizeof(uint16_t);
-        const int protoSize = static_cast<int>(data.size() - sizeof(uint16_t));
+            switch (node->type) {
+            case static_cast<int>(PacketType::CHAT):
+                mDispatcher.Dispatch(static_cast<size_t>(static_cast<int>(PacketType::CHAT)),
+                    session, payload.data(), payload.size());
+                break;
+            default: break;
+            }
+        }
 
-        PacketHeader header;
-        if (!header.ParseFromArray(protoStart, protoSize))
-            continue;
-
-        PacketType type = header.type();
-        mDispatcher.Dispatch(static_cast<size_t>(type), session, data.data(), data.size());
+        mFreeList.push(node);
     }
-
-    std::cout << std::format("[{}] LogicThread Á¾·á\n", GetName());
 }
-

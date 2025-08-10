@@ -1,9 +1,9 @@
 #pragma once
 #include "logic.h"
 
+import core.engine;
 import util.singleton;
-
-class Session;
+import iocp.session;
 
 using RecvPakcetType = std::function<void(Session*, const char*, uint16_t)>;
 

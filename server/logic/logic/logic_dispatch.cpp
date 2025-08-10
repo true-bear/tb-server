@@ -2,15 +2,13 @@
 #include "logic_dispatch.h"
 
 
-void LogicDispatch::Register(size_t packetType, RecvFunc func)
+void LogicDispatch::Register(size_t packetType, RecvFunc fn) 
 {
-    mRecvFuncMap.insert_or_assign(packetType, std::move(func));
+    mRecvFuncMap[packetType] = fn;
 }
 
-void LogicDispatch::Dispatch(size_t packetType, Session* session, const std::byte* data, size_t size)
+void LogicDispatch::Dispatch(size_t packetType, Session* session, const std::byte* data, size_t size) const
 {
-    if (auto iter = mRecvFuncMap.find(packetType); iter != mRecvFuncMap.end())
-    {
-        iter->second(session, data, size);
-    }
+    if (auto it = mRecvFuncMap.find(packetType); it != mRecvFuncMap.end())
+        it->second(session, data, size);
 }

@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="generated\message.pb.h" />
+    <ClInclude Include="logic\common_types.h" />
     <ClInclude Include="logic\ECS\component\ComponentPool.h" />
     <ClInclude Include="logic\ECS\component\IComponent.h" />
     <ClInclude Include="logic\ECS\entity\entityID.h" />

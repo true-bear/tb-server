@@ -1,40 +1,37 @@
+// logic/LogicManager.h
 #pragma once
-
+#include "../pch.h"
+#include "common_types.h"
+#include "logic_dispatch.h"
 #include "../thread/logicThread.h"
 
 import util.singleton;
-import iocp.session;
-
-class LogicDispatch;
-class PacketEx;
-class Session;
-class LogicDispatch;
-
-using SessionGetFunc = std::function<Session* (int)>;
 
 class LogicManager : public Singleton<LogicManager>
 {
 public:
-    [[nodiscard]]LogicManager();
+    [[nodiscard]] LogicManager();
     ~LogicManager();
 
-    bool Init(SessionGetFunc getSession, const int threadCount = 1);
+    bool Init(SessionGetFunc getSession, int threadCount = 1);
     void Start();
     void Stop();
 
-    [[nodiscard]] void DisPatchPacket(int sessionId, std::span<const std::byte> data);
+    bool DispatchPacket(int sessionId, std::span<const std::byte> frame) noexcept;
     int ShardIndex(int sessionId) const noexcept;
-private:
 
-    struct Shard 
-    {
+private:
+    struct Shard {
         std::unique_ptr<LogicThread> thread;
-        std::unique_ptr<boost::lockfree::queue<PacketEx*>> queue;
+        std::unique_ptr<PacketQueueT> queue;
     };
 
+    FreeListT mFreeList;
+    std::vector<std::unique_ptr<PacketNode[]>> mPoolBlocks;
     std::vector<Shard> mShards;
 
-    LogicDispatch mDispatcher;
+    LogicDispatch  mDispatcher;
     SessionGetFunc mGetSessionFunc;
-};
 
+    bool InitPools(std::size_t nodeCount);
+};

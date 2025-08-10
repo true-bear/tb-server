@@ -50,6 +50,9 @@
     <ClInclude Include="generated\message.pb.h">
       <Filter>generated</Filter>
     </ClInclude>
+    <ClInclude Include="logic\common_types.h">
+      <Filter>logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="logic">
