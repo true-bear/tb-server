@@ -21,12 +21,13 @@ void LogicThread::Run(std::stop_token st)
         {
             std::span<const std::byte> payload{ node->data.data(), node->size };
 
-            switch (node->type) {
-            case static_cast<int>(PacketType::CHAT):
-                mDispatcher.Dispatch(static_cast<size_t>(static_cast<int>(PacketType::CHAT)),
-                    session, payload.data(), payload.size());
-                break;
-            default: break;
+            switch (node->type) 
+            {
+                case static_cast<int>(PacketType::CHAT):
+                    mDispatcher.Dispatch(static_cast<size_t>(static_cast<int>(PacketType::CHAT)),
+                        session, payload.data(), payload.size());
+                    break;
+                default: break;
             }
         }
 

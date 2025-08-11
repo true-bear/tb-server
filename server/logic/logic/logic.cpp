@@ -89,7 +89,8 @@ bool LogicManager::DispatchPacket(int sessionId, std::span<const std::byte> fram
         return false;
 
     PacketNode* node = nullptr;
-    if (!mFreeList.pop(node)) return false;
+    if (!mFreeList.pop(node)) 
+        return false;
 
     node->sessionId = sessionId;
     node->type = static_cast<int>(type);

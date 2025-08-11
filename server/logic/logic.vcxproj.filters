@@ -13,9 +13,6 @@
     <ClCompile Include="logic\logic.cpp">
       <Filter>logic</Filter>
     </ClCompile>
-    <ClCompile Include="logic\logic_dispatch.cpp">
-      <Filter>logic</Filter>
-    </ClCompile>
     <ClCompile Include="generated\message.pb.cc">
       <Filter>generated</Filter>
     </ClCompile>

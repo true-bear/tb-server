@@ -2,10 +2,11 @@
 #include "logic_dispatch.h"
 
 
-void LogicDispatch::Register(size_t packetType, RecvFunc fn) 
+void LogicDispatch::Register(size_t type, F fn) 
 {
-    mRecvFuncMap[packetType] = fn;
+    mRecvFuncMap[type] = fn;
 }
+
 
 void LogicDispatch::Dispatch(size_t packetType, Session* session, const std::byte* data, size_t size) const
 {

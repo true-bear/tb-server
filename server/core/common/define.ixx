@@ -21,4 +21,5 @@ export namespace NetDefaults {
     inline constexpr int SEND_BUFFER_MAX_SIZE = 4096;
     inline constexpr int IOCP_EVENT_COUNT = 100;
     inline constexpr int PACKET_QUEUE_SIZE = 4096;
+	inline constexpr int MAX_PACKET_SIZE = 4096;
 }

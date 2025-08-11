@@ -1,6 +1,11 @@
 module;
+#include <cstddef>
+#include <cstdint>
+#include <array>
 
 export module util.packet;
+
+import common.define;
 
 import <vector>;
 import <span>;
@@ -22,4 +27,12 @@ private:
     int mSessionId;
     std::vector<std::byte> mData;
 };
+
+export struct FrameView 
+{
+    int mSessionId;
+    int mType;
+    std::span<const std::byte> mPayLoad;
+};
+
 

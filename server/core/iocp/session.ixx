@@ -5,7 +5,6 @@ module;
 
 export module iocp.session;
 
-import <cstdint>;
 import <span>;
 import <memory>;
 
