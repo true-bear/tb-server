@@ -13,11 +13,11 @@ import iocp;
 import <stop_token>;
 import <span>;
 
-Worker::Worker(IEventHandler* eventHandler, IIoHandler* ioHandler,std::string_view name, int index)
-	: ThreadImpl(name)
+Worker::Worker(IEventHandler* eventHandler, IIoHandler* ioHandler, std::string_view name, int index, ThreadType type)
+	: ThreadImpl(name, type)
 	, mEventHandler(eventHandler)
 	, mIoHandler(ioHandler)
-	, mIndex(index)
+	, mIndex(index) 
 {
 }
 

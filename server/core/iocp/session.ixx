@@ -62,6 +62,7 @@ public:
 
     bool			InitRemoteSocket() { mRemoteSock.Init(); }
     bool			IsConnected() const;
+
 private:
     SocketEx					mRemoteSock;
     OverlappedIoEx				mRecvOverEx;

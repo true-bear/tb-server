@@ -9,6 +9,7 @@ module core.engine;
 import iocp;
 import iocp.socket;
 import iocp.session;
+import thread.types;
 import util.conf;
 import common.define;
 
@@ -85,7 +86,12 @@ void Core::Run()
     auto ranges = std::views::iota(0, mWorkerCnt);
     for (int i : ranges)
     {
-        auto worker = std::make_unique<Worker>(static_cast<IEventHandler*>(this), static_cast<IIoHandler*>(this), "worker", i);
+        auto worker = std::make_unique<Worker>(
+            static_cast<IEventHandler*>(this), 
+            static_cast<IIoHandler*>(this), 
+            "worker", 
+            i, 
+            ThreadType::Worker);
         worker->Start();
         mWorkers.emplace_back(std::move(worker));
     }

@@ -6,6 +6,7 @@
 
 import iocp.session;
 import thread.Impl;
+import thread.types;
 
 class LogicThread : public ThreadImpl
 {
@@ -14,9 +15,10 @@ public:
         SessionGetFunc getSession,
         LogicDispatch& dispatcher,
         PacketQueueT& queue,
-        FreeListT& freeList
+        FreeListT& freeList, 
+		ThreadType type = ThreadType::Logic
     )
-        : ThreadImpl(name)
+        : ThreadImpl(name, type)
         , mGetSession(getSession)
         , mDispatcher(dispatcher)
         , mPacketQueue(queue)

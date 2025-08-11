@@ -6,6 +6,7 @@
 #include <cstring>
 #include <thread>
 #include <format>
+#include <memory>
 
 LogicManager::LogicManager() = default;
 LogicManager::~LogicManager() { Stop(); }
@@ -52,7 +53,8 @@ bool LogicManager::Init(SessionGetFunc getSession, int threadCount)
             mGetSessionFunc,
             mDispatcher,
             *q,
-            mFreeList
+            mFreeList,
+			ThreadType::Logic
         );
         mShards[i].queue = std::move(q);
         mShards[i].thread = std::move(th);

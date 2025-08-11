@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="proto\message.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="proto">
+      <UniqueIdentifier>{18167646-23c3-497d-a0ee-fa59a5099a1c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="proto\message.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

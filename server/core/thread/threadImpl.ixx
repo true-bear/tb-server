@@ -2,6 +2,7 @@ module;
 export module thread.Impl;
 
 import iface.thread;
+import thread.types;
 
 import <string_view>;
 import <stop_token>;
@@ -13,8 +14,10 @@ import <string>;
 export class ThreadImpl : public IThread
 {
 public:
-    [[nodiscard]] ThreadImpl(std::string_view name);
+    ThreadImpl(std::string_view name, ThreadType type);
     virtual ~ThreadImpl();
+
+    void SetThreadName(std::string_view name);
 
     virtual void Start() override;
     virtual void Stop() override;
@@ -25,7 +28,9 @@ protected:
     virtual void Run(std::stop_token st) = 0;
 
 private:
-    std::jthread mThread;
-    std::string mName;
-    std::atomic<bool> mRunning{ false };
+    std::jthread        mThread;
+    std::string         mName;
+	int                 mIndex{ 0 };
+    std::atomic<bool>   mRunning{ false };
+    ThreadType          mType{ ThreadType::Unknown };
 };
