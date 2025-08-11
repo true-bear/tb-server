@@ -108,9 +108,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)generated\;$(SolutionDir)core\;$(ProjectDir)logic\;$(SolutionDir);$(ProjectDir)logic\ECS\;$(ProjectDir)logic\ECS\entity\;$(ProjectDir)logic\ECS\component\;$(ProjectDir)logic\ECS\system\;$(ProjectDir)logic\thread\;$(SolutionDir)..\proto-build\install\include;$(SolutionDir)logic\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)proto\;$(SolutionDir)core\;$(ProjectDir)logic\;$(SolutionDir);$(ProjectDir)logic\ECS\;$(ProjectDir)logic\ECS\entity\;$(ProjectDir)logic\ECS\component\;$(ProjectDir)logic\ECS\system\;$(ProjectDir)logic\thread\;$(SolutionDir)..\proto-build\install\include;$(SolutionDir)logic\proto;$(ProjectDir)server\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -139,9 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="generated\message.pb.cc">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="logic\ECS\entity\entityRegister.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -158,7 +155,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="server.cpp">
+    <ClCompile Include="proto\message.pb.cc" />
+    <ClCompile Include="server\game_server.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="thread\logicThread.cpp">
@@ -166,7 +164,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="generated\message.pb.h" />
     <ClInclude Include="logic\common_types.h" />
     <ClInclude Include="logic\ECS\component\ComponentPool.h" />
     <ClInclude Include="logic\ECS\component\IComponent.h" />
@@ -176,7 +173,8 @@
     <ClInclude Include="logic\logic_chat.h" />
     <ClInclude Include="logic\logic_dispatch.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="server.h" />
+    <ClInclude Include="proto\message.pb.h" />
+    <ClInclude Include="server\game_server.h" />
     <ClInclude Include="thread\logicThread.h" />
   </ItemGroup>
   <ItemGroup>

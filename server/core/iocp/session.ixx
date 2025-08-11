@@ -5,20 +5,16 @@ module;
 
 export module iocp.session;
 
-import <span>;
+import <cstdint>;
 import <memory>;
+import <span>;
+import <vector>;
+import <functional>;
 
 import iocp.socket;
 import util.roundbuffer;
 import common.define;
-
-export enum class IO_TYPE
-{
-    NONE,
-    RECV,
-    SEND,
-    ACCEPT
-};
+import util.conf;
 
 export struct OverlappedIoEx : public OVERLAPPED
 {
@@ -30,11 +26,14 @@ export struct OverlappedIoEx : public OVERLAPPED
 
 
 };
+
+export class Session;
+export using OnRawRecvFn = void(*)(Session*, const uint8_t*, size_t);
+export void SetOnRawRecv(OnRawRecvFn cb);
+
+
 export class Session
 {
-public:
-
-
 public:
     [[nodiscard]] Session();
     virtual ~Session();
@@ -63,6 +62,9 @@ public:
     bool			InitRemoteSocket() { mRemoteSock.Init(); }
     bool			IsConnected() const;
 
+    void            SetRole(ServerRole r) noexcept { mRole = r; }
+    ServerRole      GetRole() const noexcept { return mRole; }
+
 private:
     SocketEx					mRemoteSock;
     OverlappedIoEx				mRecvOverEx;
@@ -71,6 +73,8 @@ private:
 
     unsigned int				mUID = -1;
     char						mAcceptBuf[64]{};
+
+    ServerRole      mRole{ ServerRole::Client };
 
 private:
     std::unique_ptr<RoundBuffer> mRecvBuffer{ std::make_unique<RoundBuffer>(NetDefaults::RECV_BUFFER_MAX_SIZE) };

@@ -85,5 +85,8 @@
     <ClCompile Include="thread\types.ixx">
       <Filter>src\thread</Filter>
     </ClCompile>
+    <ClCompile Include="common\message.ixx">
+      <Filter>src\common</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

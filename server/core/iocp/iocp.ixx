@@ -7,6 +7,7 @@ export module iocp;
 
 import iocp.session;
 import common.define;
+import util.conf;
 
 export struct IocpEvents
 {

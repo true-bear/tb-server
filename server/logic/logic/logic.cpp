@@ -30,7 +30,8 @@ bool LogicManager::InitPools(std::size_t nodeCount)
     return true;
 }
 
-int LogicManager::ShardIndex(int sessionId) const noexcept {
+int LogicManager::ShardIndex(int sessionId) const noexcept 
+{
     std::size_t k = mShards.size();
     return k ? static_cast<int>(static_cast<uint32_t>(sessionId) % k) : 0;
 }

@@ -1,19 +1,19 @@
-#include "server.h"
-#include "logic/logic.h"
+#include "game_server.h"
+#include "../logic/logic.h"
 
 import util.singleton;
 import iocp.session;
 
-LogicServer::LogicServer()
+GameServer::GameServer()
 {
 }
 
-LogicServer::~LogicServer()
+GameServer::~GameServer()
 {
     Stop();
 }
 
-bool LogicServer::Init(int maxSession)
+bool GameServer::Init(int maxSession)
 {
     mMaxSession = maxSession;
 
@@ -40,13 +40,13 @@ bool LogicServer::Init(int maxSession)
     return true;
 }
 
-void LogicServer::Run()
+void GameServer::Run()
 {
 	Core::Run();
     mLogicManager.Start();
 }
 
-void LogicServer::Stop()
+void GameServer::Stop()
 {
     mLogicManager.Stop();
     Core::Stop();

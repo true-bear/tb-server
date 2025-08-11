@@ -1,5 +1,5 @@
 #pragma once
-#include "logic.h"
+#include "../logic/logic.h"
 
 import core.engine;
 import util.singleton;
@@ -7,11 +7,11 @@ import iocp.session;
 
 using RecvPakcetType = std::function<void(Session*, const char*, uint16_t)>;
 
-class LogicServer : public Core, public Singleton<LogicServer>
+class GameServer : public Core, public Singleton<GameServer>
 {
 public:
-    LogicServer();
-    virtual ~LogicServer();
+    GameServer();
+    virtual ~GameServer();
 
     bool Init(int maxSessionCount);
     virtual void Run();

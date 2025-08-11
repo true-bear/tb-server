@@ -11,7 +11,6 @@ import iocp.socket;
 import iocp.session;
 import thread.types;
 import util.conf;
-import common.define;
 
 import <memory>;
 import <mutex>;

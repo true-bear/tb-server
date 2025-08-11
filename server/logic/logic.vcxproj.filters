@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="server.cpp" />
     <ClCompile Include="logic\ECS\entity\entityRegister.cpp">
       <Filter>logic\ECS\entity</Filter>
     </ClCompile>
@@ -13,13 +12,15 @@
     <ClCompile Include="logic\logic.cpp">
       <Filter>logic</Filter>
     </ClCompile>
-    <ClCompile Include="generated\message.pb.cc">
-      <Filter>generated</Filter>
+    <ClCompile Include="server\game_server.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\message.pb.cc">
+      <Filter>proto</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="server.h" />
     <ClInclude Include="logic\ECS\entity\entityID.h">
       <Filter>logic\ECS\entity</Filter>
     </ClInclude>
@@ -44,19 +45,19 @@
     <ClInclude Include="logic\logic_dispatch.h">
       <Filter>logic</Filter>
     </ClInclude>
-    <ClInclude Include="generated\message.pb.h">
-      <Filter>generated</Filter>
-    </ClInclude>
     <ClInclude Include="logic\common_types.h">
       <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="server\game_server.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\message.pb.h">
+      <Filter>proto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="logic">
       <UniqueIdentifier>{f6f34883-543c-4055-9410-3717796533c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="generated">
-      <UniqueIdentifier>{4810329b-c552-4a1f-8a00-9e6971b1535a}</UniqueIdentifier>
     </Filter>
     <Filter Include="logic\ECS">
       <UniqueIdentifier>{f559b926-0360-4f01-af31-c83dd76c93c3}</UniqueIdentifier>
@@ -72,6 +73,12 @@
     </Filter>
     <Filter Include="thread">
       <UniqueIdentifier>{9aac9229-51c5-419f-b218-18dedbcd590f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server">
+      <UniqueIdentifier>{9d520255-c976-40ea-9ab0-38478e37bd33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="proto">
+      <UniqueIdentifier>{4810329b-c552-4a1f-8a00-9e6971b1535a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

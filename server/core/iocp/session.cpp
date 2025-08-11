@@ -10,6 +10,20 @@ module;
 module iocp.session;
 import iocp.socket;
 import util.roundbuffer;
+import common.define;
+
+import <cstdint>;
+import <memory>;
+import <span>;
+import <vector>;
+import <functional>;
+
+static OnRawRecvFn gOnRawRecv = nullptr;
+
+void SetOnRawRecv(OnRawRecvFn cb) 
+{ 
+	gOnRawRecv = cb; 
+}
 
 Session::Session()
 {
@@ -170,6 +184,13 @@ bool Session::RecvPacket(unsigned long ioSize)
 	}
 
 	mRecvBuffer->MoveWritePos(ioSize);
+
+	if (gOnRawRecv) 
+	{
+		const uint8_t* p = reinterpret_cast<const uint8_t*>(GetRecvOverlappedBuffer());
+		gOnRawRecv(this, p, static_cast<size_t>(ioSize));
+	}
+
 	return true;
 }
 
@@ -232,7 +253,7 @@ bool Session::SendReady()
 	return true;
 }
 
-
-bool Session::IsConnected() const {
+bool Session::IsConnected() const 
+{
 	return mRemoteSock.GetSocket() != INVALID_SOCKET;
 }

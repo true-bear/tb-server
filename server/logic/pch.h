@@ -32,6 +32,6 @@
 #include <unordered_map>
 
 
-#include "generated/message.pb.h"
+#include "proto/message.pb.h"
 
 
