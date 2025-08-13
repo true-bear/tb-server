@@ -5,6 +5,7 @@
     <ClCompile Include="proto\message.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
+    <ClCompile Include="gateway.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="proto">
@@ -15,5 +16,6 @@
     <ClInclude Include="proto\message.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
+    <ClInclude Include="gateway.h" />
   </ItemGroup>
 </Project>

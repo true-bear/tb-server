@@ -277,10 +277,7 @@ void Core::OnConnect(unsigned int uID)
     if (!session)
         return;
     
-    SocketEx tmp; 
-    tmp.SetSocket(session->GetRemoteSocket());
-
-    if (!tmp.FinishConnect()) 
+    if (!session->SetFinishConnectContext())
     {
         OnClose(uID);
         return;
@@ -307,19 +304,29 @@ bool Core::ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, uns
 
     connSession->SetUniqueId(sid);
     connSession->SetRole(role);
-    connSession->AttachSocket(sock);
+    connSession->AttachSocket(std::move(sock));
 
-    Session* sess = connSession.get();
-    mSessionPool.emplace(sid, std::move(sess));
 
-    if (!AddDeviceRemoteSocket(connSession.get())) 
+    mSessionPool.emplace(sid, std::move(connSession));
+
+	auto add = GetSession(sid);
+    if (!add)
     {
+		std::cerr << "ConnectTo: GetSession failed for sid: " << sid << "\n";
+		mSessionPool.erase(sid);
+		return false;
+    }
+
+    if (!AddDeviceRemoteSocket(add))
+    {
+        const DWORD gle = ::GetLastError();
+        std::cerr << "AddDeviceRemoteSocket failed, GLE=" << gle << "\n";
         mSessionPool.erase(sid);
         sock.Close();
         return false;
     }
 
-    if (!sock.ConnectEx(ip.c_str(), port, connSession->GetConnectOverEx()))
+    if (!sock.ConnectEx(ip.c_str(), port, add->GetConnectOverEx()))
     {
         mSessionPool.erase(sid);
         sock.Close();

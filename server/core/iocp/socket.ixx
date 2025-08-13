@@ -10,6 +10,20 @@ export class SocketEx
 public:
 	[[nodiscard]] SocketEx() = default;
 	virtual  ~SocketEx() { Close(); }
+
+    SocketEx(const SocketEx&) = delete;
+    SocketEx& operator=(const SocketEx&) = delete;
+
+    SocketEx(SocketEx&& other) noexcept { mSocket = other.mSocket; other.mSocket = INVALID_SOCKET; }
+    SocketEx& operator=(SocketEx&& other) noexcept {
+        if (this != &other) {
+            Close();
+            mSocket = other.mSocket;
+            other.mSocket = INVALID_SOCKET;
+        }
+        return *this;
+    }
+
     bool Init();
     bool Close() const;
     bool BindAndListen(const int port) const;

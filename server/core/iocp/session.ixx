@@ -50,7 +50,7 @@ public:
     unsigned int	GetUniqueId() const { return mUID; }
 
     const SOCKET&   GetRemoteSocket() const { return mRemoteSock.GetSocket(); }
-    void            AttachSocket(SocketEx s) noexcept { mRemoteSock = s; }
+    void            AttachSocket(SocketEx&& s) noexcept { mRemoteSock = std::move(s); }
 
     RoundBuffer*    GetRecvBuffer() const { return mRecvBuffer.get(); }
     RoundBuffer*    GetSendBuffer() const { return mSendBuffer.get(); }
@@ -67,6 +67,7 @@ public:
     OverlappedIoEx* GetAcceptOverEx()  noexcept { return &mAcceptOverEx; }
     OverlappedIoEx* GetConnectOverEx() noexcept { return &mConnectOverEx; }
 
+    bool            SetFinishConnectContext() { return mRemoteSock.FinishConnect(); }
 private:
     SocketEx					mRemoteSock;
 
