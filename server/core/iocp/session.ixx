@@ -27,18 +27,13 @@ export struct OverlappedIoEx : public OVERLAPPED
 
 };
 
-export class Session;
-export using OnRawRecvFn = void(*)(Session*, const uint8_t*, size_t);
-export void SetOnRawRecv(OnRawRecvFn cb);
-
-
 export class Session
 {
 public:
     [[nodiscard]] Session();
     virtual ~Session();
 
-    void			Init();
+    void			Reset();
     void			DisconnectFinish();
 
     bool			AcceptReady(const SOCKET& listenSock, const int uID);
@@ -52,9 +47,11 @@ public:
     bool			SendReady();
 
     void			SetUniqueId(int id) { mUID = id; }
-
     unsigned int	GetUniqueId() const { return mUID; }
+
     const SOCKET&   GetRemoteSocket() const { return mRemoteSock.GetSocket(); }
+    void            AttachSocket(SocketEx s) noexcept { mRemoteSock = s; }
+
     RoundBuffer*    GetRecvBuffer() const { return mRecvBuffer.get(); }
     RoundBuffer*    GetSendBuffer() const { return mSendBuffer.get(); }
     char*           GetRecvOverlappedBuffer() const;
@@ -65,16 +62,23 @@ public:
     void            SetRole(ServerRole r) noexcept { mRole = r; }
     ServerRole      GetRole() const noexcept { return mRole; }
 
+    OverlappedIoEx* GetRecvOverEx()    noexcept { return &mRecvOverEx; }
+    OverlappedIoEx* GetSendOverEx()    noexcept { return &mSendOverEx; }
+    OverlappedIoEx* GetAcceptOverEx()  noexcept { return &mAcceptOverEx; }
+    OverlappedIoEx* GetConnectOverEx() noexcept { return &mConnectOverEx; }
+
 private:
     SocketEx					mRemoteSock;
+
     OverlappedIoEx				mRecvOverEx;
     OverlappedIoEx				mSendOverEx;
     OverlappedIoEx              mAcceptOverEx;
+    OverlappedIoEx              mConnectOverEx;
 
     unsigned int				mUID = -1;
     char						mAcceptBuf[64]{};
 
-    ServerRole      mRole{ ServerRole::Client };
+    ServerRole                  mRole{ ServerRole::Client };
 
 private:
     std::unique_ptr<RoundBuffer> mRecvBuffer{ std::make_unique<RoundBuffer>(NetDefaults::RECV_BUFFER_MAX_SIZE) };

@@ -8,17 +8,21 @@ module;
 export module util.conf;
 import <string>;
 
-export namespace Config
+export namespace Config 
 {
-	inline int Load(const wchar_t* category, const wchar_t* optName)
-	{
-		wchar_t buf[100] = { 0 };
+    inline int ReadInt(const wchar_t* sec, const wchar_t* key, int def = -1) 
+    {
+        wchar_t buf[64]{};
+        GetPrivateProfileStringW(sec, key, std::to_wstring(def).c_str(), buf, 64, L"..\\network.ini");
+        return _wtoi(buf);
+    }
 
-		DWORD result = GetPrivateProfileStringW(category, optName, L"-1", buf, 100, L"..\\network.ini");
-		std::wstring ResultString(buf, result);
-
-		return std::stoi(ResultString);
-	}
+    inline std::wstring ReadStr(const wchar_t* sec, const wchar_t* key, const wchar_t* def = L"") 
+    {
+        wchar_t buf[256]{};
+        GetPrivateProfileStringW(sec, key, def, buf, 256, L"..\\network.ini");
+        return buf;
+    }
 }
 
 export namespace ConfigKeys

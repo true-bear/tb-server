@@ -2,6 +2,7 @@
 #include "../logic/logic.h"
 
 import util.singleton;
+import util.conf;
 import iocp.session;
 
 GameServer::GameServer()
@@ -13,11 +14,11 @@ GameServer::~GameServer()
     Stop();
 }
 
-bool GameServer::Init(int maxSession)
+bool GameServer::Init()
 {
-    mMaxSession = maxSession;
+    const int maxSession = Config::ReadInt(L"NETWORK", L"maxSessionCount");
 
-	std::cout << std::format("LogicServer::Init: mMaxSession = {}\n", mMaxSession);
+	std::cout << std::format("LogicServer::Init: mMaxSession = {}\n", maxSession);
 
     SetDispatchCallback([this](unsigned int sessionId, std::span<const std::byte> packet) noexcept {
         mLogicManager.DispatchPacket(sessionId, packet);

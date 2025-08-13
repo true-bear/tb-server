@@ -31,5 +31,8 @@ void ProcessChat(Session* session, const std::byte* data, size_t size)
         std::cout << "send failed " << std::endl;
         return;
     }
+
+	std::cout << "send success :" << chat.sessionid() << " size: "
+		<< scratch.size() << " message: " << chat.message() << std::endl;
 }
 

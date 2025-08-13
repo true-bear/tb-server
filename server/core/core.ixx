@@ -1,5 +1,7 @@
 export module core.engine;
 
+import common.define;
+
 import iface.handler.io;
 import iface.handler.event;
 
@@ -17,6 +19,8 @@ import <mutex>;
 import <functional>;
 import <span>;
 
+export using DispatchFn = std::function<void(unsigned int, std::span<const std::byte>)>;
+
 export class Core : public Iocp, public IEventHandler, public IIoHandler
 {
 public:
@@ -31,14 +35,17 @@ public:
     const SOCKET& GetListenSocket() const { return mListenSocket.GetSocket(); }
     bool IsRunThread() const;
     
-    void SetDispatchCallback(std::function<void(unsigned int, std::span<const std::byte>)> callback);
+    void SetDispatchCallback(DispatchFn callback);
 
     void OnRecv(unsigned int uID, unsigned long ioSize) override;
     void OnSend(unsigned int uID, unsigned long ioSize) override;
     void OnAccept(unsigned int uID, unsigned long long completeKey) override;
     void OnClose(unsigned int uID) override;
+    void OnConnect(unsigned int uID) override;
 
     void GetIocpEvents(IocpEvents& events, unsigned long timeout);
+
+    bool ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, unsigned& outSessionId);
 
 protected:
     std::function<void(unsigned int, std::span<const std::byte>)> mDispatchCallback;

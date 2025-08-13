@@ -38,12 +38,12 @@ bool Iocp::AddDeviceListenSocket(SOCKET listenSock) const
     return true;
 }
 
-bool Iocp::AddDeviceRemoteSocket(Session* RemoteSession) const
+bool Iocp::AddDeviceRemoteSocket(Session* session) const
 {
     HANDLE ret = CreateIoCompletionPort(
-        (HANDLE)RemoteSession->GetRemoteSocket(),
+        (HANDLE)session->GetRemoteSocket(),
         mIocp,
-        (ULONG_PTR)&RemoteSession,
+        static_cast<ULONG_PTR>(session->GetUniqueId()),
         0
     );
 

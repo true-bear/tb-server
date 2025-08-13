@@ -13,7 +13,8 @@ inline constexpr std::size_t MAX_PACKET_SIZE = 4096;
 inline constexpr std::size_t FREE_LIST_CAP = 32768;
 inline constexpr std::size_t PACKET_QUEUE_CAP = 8192;
 
-struct alignas(64) PacketNode {
+struct alignas(64) PacketNode 
+{
     int       sessionId{};
     int       type{};
     uint32_t  size{};

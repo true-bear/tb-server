@@ -16,7 +16,6 @@ import <cstring>;
 
 using Byte = std::byte;
 
-
 export class PacketEx
 {
 public:
@@ -35,17 +34,34 @@ private:
     std::vector<Byte> mData;
 };
 
-std::vector<std::byte> AssemblePacket(const MsgHeader& h, std::span<const std::byte> payload)
+#pragma pack(push, 1)
+export struct GameHeader 
 {
-    const uint32_t frameLen = static_cast<uint32_t>(sizeof(MsgHeader) + payload.size());
-    const size_t total = sizeof(uint32_t) + frameLen;
-    std::vector<std::byte> out(total);
+    uint16_t type;
+    uint32_t size;
+};
+#pragma pack(pop)
 
-    std::memcpy(out.data(), &frameLen, sizeof(uint32_t));
-    std::memcpy(out.data() + sizeof(uint32_t), &h, sizeof(MsgHeader));
+export enum class PacketType : uint16_t { CHAT_C2S = 1, CHAT_S2C = 2 };
 
-    if (!payload.empty())
-        std::memcpy(out.data() + sizeof(uint32_t) + sizeof(MsgHeader), payload.data(), payload.size());
-    return out;
+//export inline std::vector<std::byte> Serialize(PacketType type, const google::protobuf::Message& msg) 
+//{
+//    std::string body; 
+//    msg.SerializeToString(&body);
+//
+//    GameHeader h{ static_cast<uint16_t>(type), static_cast<uint32_t>(body.size()) };
+//    std::vector<std::byte> buf(sizeof(GameHeader) + body.size());
+//    std::memcpy(buf.data(), &h, sizeof(GameHeader));
+//    std::memcpy(buf.data() + sizeof(GameHeader), body.data(), body.size());
+//    return buf;
+//}
+
+export inline bool ParseHeader(std::span<const std::byte> frame, GameHeader& out, std::span<const std::byte>& body) 
+{
+    if (frame.size() < sizeof(GameHeader)) return false;
+    std::memcpy(&out, frame.data(), sizeof(GameHeader));
+    if (frame.size() < sizeof(GameHeader) + out.size) return false;
+    body = frame.subspan(sizeof(GameHeader), out.size);
+    return true;
 }
 

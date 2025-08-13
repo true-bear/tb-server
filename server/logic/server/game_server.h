@@ -13,7 +13,8 @@ public:
     GameServer();
     virtual ~GameServer();
 
-    bool Init(int maxSessionCount);
+    bool Init();
+
     virtual void Run();
     virtual void Stop();
 

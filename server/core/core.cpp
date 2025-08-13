@@ -33,7 +33,11 @@ bool Core::Init(int maxSession)
     
     mMaxSession = maxSession;
 
-    if (!mListenSocket.Init() || !mListenSocket.BindAndListen())
+    //memo 바깥으로 뺄거다 서버 올릴때 받아오자
+    const int threadCount = Config::ReadInt(L"NETWORK", L"workerCount");
+    int port = Config::ReadInt(L"LOGIC", L"listenPort");
+
+    if (!mListenSocket.Init() || !mListenSocket.BindAndListen(port))
         return false;
 
     SYSTEM_INFO sysInfo;
@@ -95,8 +99,10 @@ void Core::Run()
         mWorkers.emplace_back(std::move(worker));
     }
 
-    std::cout << std::format("Core::Start: mMaxSession = {}\n", mMaxSession);
 
+    int port = Config::ReadInt(L"LOGIC", L"listenPort");
+    std::cout << std::format("Core::Start: port = {}\n", port);
+    std::cout << std::format("Core::Start: mMaxSession = {}\n", mMaxSession);
 }
 void Core::Stop()
 {
@@ -126,10 +132,11 @@ Session* Core::GetSession(unsigned int uID) const
     {
         return it->second.get();
     }
+
     return nullptr;
 }
 
-void Core::SetDispatchCallback(std::function<void(unsigned int, std::span<const std::byte>)> callback)
+void Core::SetDispatchCallback(DispatchFn callback)
 {
     mDispatchCallback = std::move(callback);
 }
@@ -228,15 +235,24 @@ void Core::OnClose(unsigned int uID)
 		return;
     }
     
+    const bool sessionType = (session->GetRole() == ServerRole::Server);
 
     session->DisconnectFinish();
-    session->Init();
+    session->Reset();
 
-    if (!session->AcceptReady(GetListenSocket(), uID))
-    {
-        std::cout << std::format("OnClose: AcceptReady failed for session {}\n", uID);
-        return;
-    }
+	if (sessionType)
+	{
+		mSessionPool.erase(uID);
+	}
+	else
+	{
+        if (!session->AcceptReady(GetListenSocket(), uID))
+        {
+            std::cout << std::format("OnClose: AcceptReady failed for session {}\n", uID);
+            return;
+        }
+	}
+
 
     std::cout << std::format("OnClose: session {} disconnected\n", uID);
     return;
@@ -253,4 +269,65 @@ void Core::OnSend(unsigned int uID, unsigned long ioSize)
     {
         sendBuffer->MoveReadPos(static_cast<size_t>(ioSize));
     }
+}
+
+void Core::OnConnect(unsigned int uID)
+{
+    Session* session = GetSession(uID);
+    if (!session)
+        return;
+    
+    SocketEx tmp; 
+    tmp.SetSocket(session->GetRemoteSocket());
+
+    if (!tmp.FinishConnect()) 
+    {
+        OnClose(uID);
+        return;
+    }
+
+	session->RecvReady();
+}
+
+bool Core::ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, unsigned& outSessionId)
+{
+    SocketEx sock;
+    if (!sock.Init())
+        return false;
+
+    // 임시 세션ID 5000
+    const unsigned sid = 5000;
+
+    auto connSession = std::make_unique<Session>();
+    if (!connSession)
+    {
+        sock.Close();
+        return false;
+    }
+
+    connSession->SetUniqueId(sid);
+    connSession->SetRole(role);
+    connSession->AttachSocket(sock);
+
+    Session* sess = connSession.get();
+    mSessionPool.emplace(sid, std::move(sess));
+
+    if (!AddDeviceRemoteSocket(connSession.get())) 
+    {
+        mSessionPool.erase(sid);
+        sock.Close();
+        return false;
+    }
+
+    if (!sock.ConnectEx(ip.c_str(), port, connSession->GetConnectOverEx()))
+    {
+        mSessionPool.erase(sid);
+        sock.Close();
+        return false;
+    }
+
+    sock.Detach();
+
+    outSessionId = sid;
+    return true;
 }

@@ -49,6 +49,9 @@ void Worker::Run(std::stop_token st)
 
 			switch (over->mIOType)
 			{
+			case IO_TYPE::CONNECT:
+				mIoHandler->OnConnect(sessionId);
+				break;
 			case IO_TYPE::ACCEPT:
 				mIoHandler->OnAccept(sessionId, ioEvent.lpCompletionKey);
 				break;

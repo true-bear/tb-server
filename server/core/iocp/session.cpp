@@ -18,35 +18,32 @@ import <span>;
 import <vector>;
 import <functional>;
 
-static OnRawRecvFn gOnRawRecv = nullptr;
-
-void SetOnRawRecv(OnRawRecvFn cb) 
-{ 
-	gOnRawRecv = cb; 
-}
-
 Session::Session()
 {
 	ZeroMemory(&mRecvOverEx, sizeof(OverlappedIoEx));
 	ZeroMemory(&mSendOverEx, sizeof(OverlappedIoEx));
 	ZeroMemory(&mAcceptOverEx, sizeof(OverlappedIoEx));
+	ZeroMemory(&mConnectOverEx, sizeof(OverlappedIoEx));
 
 	mRecvOverEx.mIOType = IO_TYPE::RECV;
 	mSendOverEx.mIOType = IO_TYPE::SEND;
 	mAcceptOverEx.mIOType = IO_TYPE::ACCEPT;
+	mConnectOverEx.mIOType = IO_TYPE::CONNECT;
 }
 
 Session::~Session() = default;
 
-void Session::Init()
+void Session::Reset()
 {
 	ZeroMemory(&mRecvOverEx, sizeof(OverlappedIoEx));
 	ZeroMemory(&mSendOverEx, sizeof(OverlappedIoEx));
 	ZeroMemory(&mAcceptOverEx, sizeof(OverlappedIoEx));
+	ZeroMemory(&mConnectOverEx, sizeof(OverlappedIoEx));
 
 	mRecvOverEx.mIOType = IO_TYPE::RECV;
 	mSendOverEx.mIOType = IO_TYPE::SEND;
 	mAcceptOverEx.mIOType = IO_TYPE::ACCEPT;
+	mConnectOverEx.mIOType = IO_TYPE::CONNECT;
 
 	mRecvBuffer->Reset();
 	mSendBuffer->Reset();
@@ -185,12 +182,6 @@ bool Session::RecvPacket(unsigned long ioSize)
 
 	mRecvBuffer->MoveWritePos(ioSize);
 
-	if (gOnRawRecv) 
-	{
-		const uint8_t* p = reinterpret_cast<const uint8_t*>(GetRecvOverlappedBuffer());
-		gOnRawRecv(this, p, static_cast<size_t>(ioSize));
-	}
-
 	return true;
 }
 
@@ -202,7 +193,7 @@ char* Session::GetRecvOverlappedBuffer() const
 bool Session::SendPacket(std::span<const std::byte> data)
 {
 	const uint16_t sizeHeader = static_cast<uint16_t>(data.size());
-	const uint16_t sizeHeaderBE = htons(sizeHeader);
+	const uint16_t sizeHeaderBE = htons(static_cast<uint16_t>(data.size()));
 
 	const auto* headerBytes = reinterpret_cast<const std::byte*>(&sizeHeaderBE);
 	const std::span<const std::byte> headerSpan{ headerBytes, sizeof(sizeHeaderBE) };

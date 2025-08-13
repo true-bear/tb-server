@@ -24,10 +24,8 @@ bool SocketEx::Close() const
     return closesocket(mSocket) != SOCKET_ERROR;
 }
 
-bool SocketEx::BindAndListen() const
+bool SocketEx::BindAndListen(const int port) const
 {
-    int port = Config::Load(L"NETWORK", L"port");
-
     sockaddr_in addr = {};
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
@@ -59,4 +57,61 @@ bool SocketEx::SetOption(int level, int optname, const void* optval, int optlen)
 void SocketEx::Detach()
 {
     mSocket = INVALID_SOCKET;
+}
+
+
+bool SocketEx::ConnectEx(const wchar_t* ip, uint16_t port, WSAOVERLAPPED* ov)
+{
+    if (mSocket == INVALID_SOCKET && !Init())
+        return false;
+
+    sockaddr_in local{};
+    local.sin_family = AF_INET;
+    local.sin_addr.s_addr = htonl(INADDR_ANY);
+    local.sin_port = 0;
+    if (::bind(mSocket, reinterpret_cast<sockaddr*>(&local), sizeof(local)) != 0)
+        return false;
+    
+
+    sockaddr_in remote{};
+    remote.sin_family = AF_INET;
+    remote.sin_port = htons(port);
+    {
+        IN_ADDR in{};
+        if (InetPtonW(AF_INET, ip, &in) != 1)
+            return false;
+        remote.sin_addr = in;
+    }
+
+    LPFN_CONNECTEX pConnectEx = nullptr;
+    {
+        GUID guid = WSAID_CONNECTEX;
+        DWORD bytes = 0;
+        if (WSAIoctl(mSocket, SIO_GET_EXTENSION_FUNCTION_POINTER,
+            &guid, sizeof(guid),
+            &pConnectEx, sizeof(pConnectEx),
+            &bytes, nullptr, nullptr) != 0)
+        {
+            return false;
+        }
+    }
+
+    BOOL ok = pConnectEx(mSocket,
+        reinterpret_cast<sockaddr*>(&remote), sizeof(remote),
+        nullptr, 0, nullptr,
+        ov);
+
+    if (!ok) 
+    {
+        const int e = WSAGetLastError();
+        if (e != WSA_IO_PENDING)
+            return false;
+    }
+
+    return true;
+}
+
+bool SocketEx::FinishConnect() const
+{
+    return ::setsockopt(mSocket, SOL_SOCKET, SO_UPDATE_CONNECT_CONTEXT, nullptr, 0) == 0;
 }

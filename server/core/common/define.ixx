@@ -8,7 +8,8 @@ export enum class IO_TYPE
     NONE,
     RECV,
     SEND,
-    ACCEPT
+    ACCEPT,
+	CONNECT,
 };
 
 export enum class ServerRole : uint8_t
