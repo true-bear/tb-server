@@ -48,6 +48,10 @@ void Session::Reset()
 	mRecvBuffer->Reset();
 	mSendBuffer->Reset();
 
+	std::scoped_lock lk(mSendLock);
+
+	mSendPending.store(false, std::memory_order_release);
+
 	ZeroMemory(mAcceptBuf, sizeof(mAcceptBuf));
 }
 
@@ -192,20 +196,58 @@ char* Session::GetRecvOverlappedBuffer() const
 
 bool Session::SendPacket(std::span<const std::byte> data)
 {
-	const uint16_t sizeHeader = static_cast<uint16_t>(data.size());
-	const uint16_t sizeHeaderBE = htons(static_cast<uint16_t>(data.size()));
+	const uint16_t sizeBE = htons(static_cast<uint16_t>(data.size()));
+	const auto* hdr = reinterpret_cast<const std::byte*>(&sizeBE);
+	const std::span<const std::byte> headerSpan{ hdr, sizeof(sizeBE) };
 
-	const auto* headerBytes = reinterpret_cast<const std::byte*>(&sizeHeaderBE);
-	const std::span<const std::byte> headerSpan{ headerBytes, sizeof(sizeHeaderBE) };
+	std::scoped_lock lk(mSendLock);
 
-	if (!mSendBuffer->Write(headerSpan) ||
-		!mSendBuffer->Write(data))
+	if (!mSendBuffer->Write(headerSpan) || !mSendBuffer->Write(data)) 
 	{
-		std::cout << std::format("SendPacket: Write failed for uid: {} size: {}\n", mUID, data.size());
+		std::cout << std::format("SendPacket: Write failed uid:{} sz:{}\n", mUID, data.size());
 		return false;
 	}
 
-	return SendReady();
+	if (mSendPending.load(std::memory_order_acquire))
+		return true;
+
+	mSendPending.store(true, std::memory_order_release);
+	return PostSendLocked();
+}
+
+bool Session::PostSendLocked()
+{
+	const size_t readable = mSendBuffer->ReadableSize();
+	if (readable == 0) 
+	{
+		mSendPending = false;
+		return true;
+	}
+
+	mSendOverEx.mUID = mUID;
+	mSendOverEx.mWsaBuf.len = static_cast<ULONG>(readable);
+	mSendOverEx.mWsaBuf.buf = reinterpret_cast<char*>(mSendBuffer->ReadPtr());
+
+	DWORD sent = 0;
+	DWORD flags = 0;
+	int ret = WSASend(
+		mRemoteSock.GetSocket(),
+		&mSendOverEx.mWsaBuf,
+		1, &sent, flags,
+		reinterpret_cast<LPWSAOVERLAPPED>(&mSendOverEx),
+		nullptr);
+
+	if (ret == SOCKET_ERROR) 
+	{
+		const int err = WSAGetLastError();
+		if (err != WSA_IO_PENDING) 
+		{
+			std::cout << std::format("WSASend failed wsa:{} uid:{}\n", err, mUID);
+			mSendPending = false;
+			return false;
+		}
+	}
+	return true;
 }
 
 bool Session::SendReady()
@@ -244,7 +286,37 @@ bool Session::SendReady()
 	return true;
 }
 
+void Session::SendFinish(size_t bytes)
+{
+	std::scoped_lock lk(mSendLock);
+
+	size_t readable = mSendBuffer->ReadableSize();
+
+	if (bytes > readable) 
+	{
+		std::cerr << std::format("OnSendComplete clip {} -> {} (uid={})\n",bytes, readable, mUID);
+		bytes = readable;
+	}
+
+	mSendBuffer->MoveReadPos(bytes);
+
+	if (mSendBuffer->ReadableSize() > 0) 
+	{
+		PostSendLocked();
+		return;
+	}
+
+	mSendPending.store(false, std::memory_order_release);
+}
+
 bool Session::IsConnected() const 
 {
 	return mRemoteSock.GetSocket() != INVALID_SOCKET;
+}
+
+void Session::PrepareConnectOv() noexcept
+{
+	ZeroMemory(static_cast<OVERLAPPED*>(&mConnectOverEx), sizeof(OVERLAPPED));
+	mConnectOverEx.mIOType = IO_TYPE::CONNECT;
+	mConnectOverEx.mUID = static_cast<int>(mUID);
 }

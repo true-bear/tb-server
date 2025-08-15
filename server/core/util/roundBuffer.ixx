@@ -58,7 +58,8 @@ public:
         mWritePos += size;
     }
 
-    bool Write(std::span<const std::byte> data) {
+    bool Write(std::span<const std::byte> data) 
+    {
         if (data.size() > WritableSize())
             return false;
 

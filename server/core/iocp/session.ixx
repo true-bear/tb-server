@@ -13,8 +13,11 @@ import <functional>;
 
 import iocp.socket;
 import util.roundbuffer;
+
 import common.define;
 import util.conf;
+
+import <mutex>;
 
 export struct OverlappedIoEx : public OVERLAPPED
 {
@@ -43,13 +46,15 @@ public:
     bool			RecvReady();
 
     bool			SendPacket(std::span<const std::byte> data);
-
     bool			SendReady();
+    void            SendFinish(size_t bytes);
+    bool            PostSendLocked();
 
     void			SetUniqueId(int id) { mUID = id; }
     unsigned int	GetUniqueId() const { return mUID; }
 
-    const SOCKET&   GetRemoteSocket() const { return mRemoteSock.GetSocket(); }
+    SocketEx&       GetRemoteSock()       noexcept { return mRemoteSock; }
+    const SOCKET&   GetRemoteSocket() noexcept { return mRemoteSock.GetSocket(); }
     void            AttachSocket(SocketEx&& s) noexcept { mRemoteSock = std::move(s); }
 
     RoundBuffer*    GetRecvBuffer() const { return mRecvBuffer.get(); }
@@ -67,6 +72,8 @@ public:
     OverlappedIoEx* GetAcceptOverEx()  noexcept { return &mAcceptOverEx; }
     OverlappedIoEx* GetConnectOverEx() noexcept { return &mConnectOverEx; }
 
+    WSAOVERLAPPED*  GetConnectOv()     noexcept { return reinterpret_cast<WSAOVERLAPPED*>(&mConnectOverEx); }
+    void            PrepareConnectOv() noexcept;
     bool            SetFinishConnectContext() { return mRemoteSock.FinishConnect(); }
 private:
     SocketEx					mRemoteSock;
@@ -81,6 +88,8 @@ private:
 
     ServerRole                  mRole{ ServerRole::Client };
 
+	std::mutex                  mSendLock;
+    std::atomic<bool>           mSendPending{ false };
 private:
     std::unique_ptr<RoundBuffer> mRecvBuffer{ std::make_unique<RoundBuffer>(NetDefaults::RECV_BUFFER_MAX_SIZE) };
     std::unique_ptr<RoundBuffer> mSendBuffer{ std::make_unique<RoundBuffer>(NetDefaults::SEND_BUFFER_MAX_SIZE) };

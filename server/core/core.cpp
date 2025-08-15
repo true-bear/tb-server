@@ -1,5 +1,7 @@
 ﻿module;
-#include <windows.h>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#include <mswsock.h>
 #include <iostream>
 #include <format>
 #include <ranges>
@@ -30,15 +32,9 @@ bool Core::Init(const int listenPort, const int maxSession, const int workerCoun
 {
     mMaxSession = maxSession;
     mWorkerCnt = workerCount;
-	//mDispatchCallback = std::move(dispatcher);
 
     if (!mListenSocket.Init() || !mListenSocket.BindAndListen(listenPort))
         return false;
-
- /*   SYSTEM_INFO sysInfo;
-    ::GetSystemInfo(&sysInfo);
-    const int workerCount = static_cast<int>(sysInfo.dwNumberOfProcessors) * 2;*/
-
 
     if (!CreateNewIocp(mWorkerCnt))
         return false;
@@ -254,81 +250,82 @@ void Core::OnClose(unsigned int uID)
 
 void Core::OnSend(unsigned int uID, unsigned long ioSize)
 {
-    auto session = GetSession(uID);
-    if (!session)
-        return;
-
-    auto* sendBuffer = session->GetSendBuffer();
-    if (sendBuffer)
-    {
-        sendBuffer->MoveReadPos(static_cast<size_t>(ioSize));
-    }
+    if (auto* s = GetSession(uID)) 
+        s->SendFinish(static_cast<size_t>(ioSize));
 }
 
-void Core::OnConnect(unsigned int uID)
+void Core::OnConnect(unsigned uID)
 {
-    Session* session = GetSession(uID);
-    if (!session)
-        return;
-    
-    if (!session->SetFinishConnectContext())
+    if (auto* s = GetSession(uID)) 
     {
-        OnClose(uID);
-        return;
-    }
+        DWORD flags = 0, bytes = 0;
+        BOOL ok = WSAGetOverlappedResult(
+            s->GetRemoteSocket(), s->GetConnectOv(), &bytes, FALSE, &flags);
 
-	session->RecvReady();
+        if (!ok) 
+        {
+            const int wsa = WSAGetLastError();
+            std::cerr << "[CONNECT] fail sid=" << uID << " wsa=" << wsa << "\n";
+            OnClose(uID);
+            return;
+        }
+
+        if (!s->SetFinishConnectContext()) 
+        {
+            std::cerr << "[CONNECT] update ctx fail sid=" << uID
+                << " gle=" << GetLastError() << "\n";
+            OnClose(uID);
+            return;
+        }
+
+        if (!s->RecvReady()) 
+        {
+            std::cerr << "[CONNECT] RecvReady fail sid=" << uID << "\n";
+            OnClose(uID);
+            return;
+        }
+        std::cout << "[CONNECT] OK sid=" << uID << "\n";
+    }
 }
 
 bool Core::ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, unsigned& outSessionId)
 {
-    SocketEx sock;
-    if (!sock.Init())
+    SocketEx tmp;
+    if (!tmp.Init())
         return false;
 
-    // 임시 세션ID 5000
     const unsigned sid = 5000;
 
-    auto connSession = std::make_unique<Session>();
-    if (!connSession)
-    {
-        sock.Close();
+    auto newSession = std::make_unique<Session>();
+    if (!newSession) 
         return false;
-    }
 
+    newSession->SetUniqueId(sid);
+    newSession->SetRole(role);
+    newSession->AttachSocket(std::move(tmp));
 
-    connSession->SetUniqueId(sid);
-    connSession->SetRole(role);
-    connSession->AttachSocket(std::move(sock));
+    Session* connSession = newSession.get();
+    mSessionPool.emplace(sid, std::move(newSession));
 
-
-    mSessionPool.emplace(sid, std::move(connSession));
-
-	auto add = GetSession(sid);
-    if (!add)
+    if (!AddDeviceRemoteSocket(connSession))
     {
-		std::cerr << "ConnectTo: GetSession failed for sid: " << sid << "\n";
-		mSessionPool.erase(sid);
-		return false;
-    }
-
-    if (!AddDeviceRemoteSocket(add))
-    {
-        const DWORD gle = ::GetLastError();
-        std::cerr << "AddDeviceRemoteSocket failed, GLE=" << gle << "\n";
+        std::cerr << "AddDeviceRemoteSocket failed, GLE=" << GetLastError() << "\n";
         mSessionPool.erase(sid);
-        sock.Close();
         return false;
     }
 
-    if (!sock.ConnectEx(ip.c_str(), port, add->GetConnectOverEx()))
+    connSession->PrepareConnectOv();
+
+    if (!connSession->GetRemoteSock().ConnectEx(ip.c_str(), port, connSession->GetConnectOv()))
     {
-        mSessionPool.erase(sid);
-        sock.Close();
-        return false;
+        const int e = WSAGetLastError();
+        if (e != WSA_IO_PENDING) 
+        {
+            std::cerr << "ConnectEx failed, WSA=" << e << "\n";
+            mSessionPool.erase(sid);
+            return false;
+        }
     }
-
-    sock.Detach();
 
     outSessionId = sid;
     return true;
