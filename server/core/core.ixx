@@ -27,7 +27,7 @@ public:
     [[nodiscard]] Core();
     virtual ~Core();
 
-    bool Init(const int maxSession);
+    bool Init(const int listenPort, const int maxSession, const int workerCount);
     void Run();
     void Stop();
     bool CreateSessionPool();

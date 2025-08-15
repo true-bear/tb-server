@@ -25,22 +25,19 @@ static std::span<const std::byte> ToSpan(const std::string& s) {
     return { reinterpret_cast<const std::byte*>(s.data()), s.size() };
 }
 
-bool Gateway::InitAndConnect()
+bool Gateway::InitAndConnect(const int sessionCount, const int worker, const int port)
 {
-    // 메모 : 생성자에서 세팅하는게 좋을듯 너무 번거롭다
     SetDispatchCallback([this](unsigned id, std::span<const byte> frame) {
         this->Dispatch(id, frame);
         });
 
-    const int maxSession = Config::ReadInt(L"NETWORK", L"maxSessionCount", 5000);
-    if (!Core::Init(maxSession)) 
+    if (!Core::Init(port, sessionCount, worker))
     {
         std::cout << "Gateway: Core::Init failed\n";
         return false;
     }
 
     const auto host = Config::ReadStr(L"GATEWAY", L"logicHost", L"127.0.0.1");
-    const uint16_t port = static_cast<uint16_t>(Config::ReadInt(L"GATEWAY", L"logicPort", 9000));
 
     unsigned sid{};
     if (!Core::ConnectTo(host, port, ServerRole::Server, sid)) 
@@ -112,6 +109,6 @@ void Gateway::HandleFromLogic(unsigned /*logicSid*/, std::span<const std::byte> 
 
     auto payload = frame.subspan(RELAY_HDR);
 
-    if (!client->SendPacket(payload))
+    if (!session->SendPacket(payload))
         std::cerr << "Gateway: SendPacket to client failed\n";
 }

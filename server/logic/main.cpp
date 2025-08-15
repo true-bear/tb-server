@@ -17,5 +17,6 @@ int main()
     std::getline(std::cin, wait);
 
     GameServer::Get().Stop();
+    google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }

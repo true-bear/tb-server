@@ -31,10 +31,10 @@ void Worker::Run(std::stop_token st)
 		auto eventRange = std::span{ events.m_IoArray, static_cast<size_t>(events.m_eventCount) };
 		for (auto& ioEvent : eventRange)
 		{
-			if (ioEvent.lpOverlapped == nullptr)
+			if (!ioEvent.lpOverlapped) 
 			{
-				std::cout << std::format("[{}] IOCP event without overlapped structure\n", mIndex);
-				return;
+				std::cout << std::format("[{}] null overlapped (shutdown?)\n", mIndex);
+				continue;
 			}
 
 			unsigned long ioSize = ioEvent.dwNumberOfBytesTransferred;

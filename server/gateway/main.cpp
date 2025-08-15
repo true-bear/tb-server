@@ -6,7 +6,11 @@ import core.engine;
 
 int main()
 {
-    if (!Gateway::Get().InitAndConnect())
+	const int maxSession = static_cast<int>(Config::ReadInt(L"GATEWAY", L"maxSessionCount", 1000));
+    const int port       = static_cast<int>(Config::ReadInt(L"GATEWAY", L"listenPort", 9000));
+	const int worker     = static_cast<int>(Config::ReadInt(L"GATEWAY", L"workerCount", 3));
+
+    if (!Gateway::Get().InitAndConnect(maxSession, worker, port))
     {
         std::cerr << "Gateway init failed\n";
         return 1;

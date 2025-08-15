@@ -26,27 +26,21 @@ Core::~Core()
     Stop();
 }
 
-bool Core::Init(int maxSession)
+bool Core::Init(const int listenPort, const int maxSession, const int workerCount)
 {
-    if (maxSession <= 0)
-        return false;
-    
     mMaxSession = maxSession;
+    mWorkerCnt = workerCount;
+	//mDispatchCallback = std::move(dispatcher);
 
-    //memo 바깥으로 뺄거다 서버 올릴때 받아오자
-    const int threadCount = Config::ReadInt(L"NETWORK", L"workerCount");
-    int port = Config::ReadInt(L"LOGIC", L"listenPort");
-
-    if (!mListenSocket.Init() || !mListenSocket.BindAndListen(port))
+    if (!mListenSocket.Init() || !mListenSocket.BindAndListen(listenPort))
         return false;
 
-    SYSTEM_INFO sysInfo;
+ /*   SYSTEM_INFO sysInfo;
     ::GetSystemInfo(&sysInfo);
-    const int workerCount = static_cast<int>(sysInfo.dwNumberOfProcessors) * 2;
+    const int workerCount = static_cast<int>(sysInfo.dwNumberOfProcessors) * 2;*/
 
-    mWorkerCnt = workerCount;
 
-    if (!CreateNewIocp(workerCount))
+    if (!CreateNewIocp(mWorkerCnt))
         return false;
 
     if (!AddDeviceListenSocket(mListenSocket.GetSocket()))
@@ -301,6 +295,7 @@ bool Core::ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, uns
         sock.Close();
         return false;
     }
+
 
     connSession->SetUniqueId(sid);
     connSession->SetRole(role);

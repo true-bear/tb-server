@@ -16,7 +16,9 @@ GameServer::~GameServer()
 
 bool GameServer::Init()
 {
-    const int maxSession = Config::ReadInt(L"NETWORK", L"maxSessionCount");
+	const int port = Config::ReadInt(L"LOGIC", L"listenPort");
+    const int maxSession = Config::ReadInt(L"LOGIC", L"maxSessionCount");
+	const int worker = Config::ReadInt(L"LOGIC", L"workerCount");
 
 	std::cout << std::format("LogicServer::Init: mMaxSession = {}\n", maxSession);
 
@@ -24,7 +26,7 @@ bool GameServer::Init()
         mLogicManager.DispatchPacket(sessionId, packet);
         });
 
-    if (!Core::Init(maxSession))
+    if (!Core::Init(port, maxSession, worker))
     {
 		std::cout << "Core Init failed\n";
         return false;

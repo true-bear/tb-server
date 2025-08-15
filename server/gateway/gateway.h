@@ -18,7 +18,7 @@ static constexpr size_t RELAY_HDR = 4;
 class Gateway  : public Core, public Singleton<Gateway>
 {
 public:
-    bool InitAndConnect();
+    bool InitAndConnect(const int sessionCount, const int worker, const int port);
 
 private:
     static std::span<const byte> ToBytes(const std::string& s)
