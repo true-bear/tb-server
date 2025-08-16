@@ -17,11 +17,13 @@ import <span>;
 
 using std::byte;
 
-static std::span<const std::byte> ToSpan(const std::vector<std::byte>& v) {
+static std::span<const std::byte> ToSpan(const std::vector<std::byte>& v) 
+{
     return { v.data(), v.size() };
 }
 
-static std::span<const std::byte> ToSpan(const std::string& s) {
+static std::span<const std::byte> ToSpan(const std::string& s) 
+{
     return { reinterpret_cast<const std::byte*>(s.data()), s.size() };
 }
 
@@ -71,7 +73,11 @@ void Gateway::Dispatch(unsigned id, std::span<const byte> frame)
 void Gateway::HandleFromClient(unsigned clientSid, std::span<const std::byte> frame)
 {
     Session* logic = GetSession(mLogicSid);
-    if (!logic) { std::cerr << "GW: logic not ready\n"; return; }
+    if (!logic) 
+    { 
+        std::cerr << "GW: logic not ready\n"; 
+        return; 
+    }
 
     const uint32_t idN = htonl(clientSid);
 
@@ -79,7 +85,8 @@ void Gateway::HandleFromClient(unsigned clientSid, std::span<const std::byte> fr
     std::memcpy(relay.data() + 0, &idN, 4);
     std::memcpy(relay.data() + 4, frame.data(), frame.size());
 
-    if (!logic->SendPacket({ relay.data(), relay.size() })) {
+    if (!logic->SendPacket({ relay.data(), relay.size() })) 
+    {
         std::cerr << "GW: SendPacket to logic failed\n";
     }
 
@@ -96,65 +103,17 @@ void Gateway::HandleFromLogic(unsigned /*logicSid*/, std::span<const std::byte> 
     unsigned target = ntohl(sidNet);
 
     Session* cli = GetSession(target);
-    if (!cli) {
+    if (!cli) 
+    {
         unsigned fb = mLastClientSid.load(std::memory_order_acquire);
-        if (fb == 0 || !(cli = GetSession(fb))) {
+        if (fb == 0 || !(cli = GetSession(fb))) 
+        {
             std::cerr << "GW: client not found (target=" << target << ")\n";
             return;
         }
         target = fb;
     }
 
-    auto payload = frame.subspan(RELAY_HDR); // [2B type][4B len][body]
+    auto payload = frame.subspan(RELAY_HDR);
     (void)cli->SendPacket(payload);
 }
-
-
-//void Gateway::HandleFromClient(unsigned clientSid, std::span<const std::byte> frame)
-//{
-//    Session* session = GetSession(mLogicSid);
-//    if (!session)
-//    {
-//        std::cerr << "Gateway:  session not exist\n";
-//        return;
-//    }
-//
-//    std::vector<std::byte> relay;
-//    relay.resize(RELAY_HDR + frame.size());
-//
-//    const uint32_t sid_net = htonl(clientSid);
-//    std::memcpy(relay.data(), &sid_net, RELAY_HDR);
-//    std::memcpy(relay.data() + RELAY_HDR, frame.data(), frame.size());
-//
-//    if (!session->SendPacket(ToSpan(relay)))
-//    {
-//        const int err = WSAGetLastError();
-//        std::cout << "SendPacket: Write failed uid:" << clientSid
-//            << " sz:" << relay.size() << " wsa=" << err << "\n";
-//    }
-//}
-
-//void Gateway::HandleFromLogic(unsigned /*logicSid*/, std::span<const std::byte> frame)
-//{
-//    if (frame.size() < RELAY_HDR) 
-//    {
-//        std::cerr << "Gateway: invalid relay frame (too small)\n";
-//        return;
-//    }
-//
-//    uint32_t sid_net = 0;
-//    std::memcpy(&sid_net, frame.data(), RELAY_HDR);
-//    const unsigned targetClient = ntohl(sid_net);
-//
-//    Session* session = GetSession(targetClient);
-//    if (!session)
-//    {
-//        std::cerr << std::format("Gateway: client {} not found for response\n", targetClient);
-//        return;
-//    }
-//
-//    auto payload = frame.subspan(RELAY_HDR);
-//
-//    if (!session->SendPacket(payload))
-//        std::cerr << "Gateway: SendPacket to client failed\n";
-//}

@@ -6,7 +6,8 @@ import <span>;
 import <stdexcept>;
 import <cstring>;
 
-export class RoundBuffer {
+export class RoundBuffer 
+{
 public:
     [[nodiscard]] explicit RoundBuffer(size_t capacity)
         : mBuffer(std::make_unique<std::byte[]>(capacity)),
@@ -43,7 +44,8 @@ public:
             mReadPos = mWritePos = 0;
     }
 
-    bool Peek(std::byte* out, size_t size) {
+    bool Peek(std::byte* out, size_t size) 
+    {
         if (size > ReadableSize())
             return false;
 
@@ -51,7 +53,8 @@ public:
         return true;
     }
 
-    void MoveWritePos(size_t size) {
+    void MoveWritePos(size_t size) 
+    {
         if (size > WritableSize())
             throw std::out_of_range("MoveWritePos overflow");
 
@@ -68,7 +71,8 @@ public:
         return true;
     }
 
-    bool Read(std::span<std::byte> outBuffer, size_t size) {
+    bool Read(std::span<std::byte> outBuffer, size_t size) 
+    {
         if (size > ReadableSize())
             return false;
 
@@ -77,7 +81,8 @@ public:
         return true;
     }
 
-    void Reset() noexcept {
+    void Reset() noexcept 
+    {
         mReadPos = 0;
         mWritePos = 0;
     }

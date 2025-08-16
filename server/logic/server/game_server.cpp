@@ -49,7 +49,8 @@ bool GameServer::Init()
         }
         });
 
-    if (!Core::Init(port, maxSession, worker)) {
+    if (!Core::Init(port, maxSession, worker)) 
+    {
         std::cout << "Core Init failed\n";
         return false;
     }
