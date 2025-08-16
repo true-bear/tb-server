@@ -131,6 +131,8 @@ void Core::SetDispatchCallback(DispatchFn callback)
     mDispatchCallback = std::move(callback);
 }
 
+
+
 void Core::GetIocpEvents(IocpEvents& events, unsigned long timeout)
 {
     GQCSEx(events, timeout);
@@ -141,7 +143,7 @@ void Core::OnRecv(unsigned int uID, unsigned long ioSize)
     auto session = GetSession(uID);
     if (!session)
     {
-        std::cout << std::format("OnRecv: session not found for id: {}\n", uID);
+        std::cout << std::format("OnRecv : session not found for id: {}\n", uID);
         return;
     }
 

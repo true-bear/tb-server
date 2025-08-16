@@ -103,8 +103,12 @@ bool LogicManager::DispatchPacket(int sessionId, std::span<const std::byte> fram
 
     auto& q = *mShards[ShardIndex(sessionId)].queue;
 
-    if (!q.push(node)) 
-        mFreeList.push(node); return false; 
+    if (!q.push(node))
+    {
+        mFreeList.push(node); 
+        return false;
+
+    }
     
     return true;
 }

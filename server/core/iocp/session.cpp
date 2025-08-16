@@ -67,8 +67,8 @@ void Session::DisconnectFinish()
 
 bool Session::AcceptReady(const SOCKET& listenSock, const int uID)
 {
-	SOCKET socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_IP,
-		NULL, 0, WSA_FLAG_OVERLAPPED);
+	SOCKET socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, nullptr, 0, WSA_FLAG_OVERLAPPED);
+
 	if (socket == INVALID_SOCKET)
 		return false;
 
@@ -218,37 +218,43 @@ bool Session::SendPacket(std::span<const std::byte> data)
 bool Session::PostSendLocked()
 {
 	const size_t readable = mSendBuffer->ReadableSize();
-	if (readable == 0) 
-	{
-		mSendPending = false;
+	if (readable == 0) {
+		mSendPending.store(false, std::memory_order_release);
 		return true;
 	}
 
+	ZeroMemory(static_cast<OVERLAPPED*>(&mSendOverEx), sizeof(OVERLAPPED));
+	mSendOverEx.mIOType = IO_TYPE::SEND;
 	mSendOverEx.mUID = mUID;
-	mSendOverEx.mWsaBuf.len = static_cast<ULONG>(readable);
+
 	mSendOverEx.mWsaBuf.buf = reinterpret_cast<char*>(mSendBuffer->ReadPtr());
+	mSendOverEx.mWsaBuf.len = static_cast<ULONG>(readable);
 
 	DWORD sent = 0;
 	DWORD flags = 0;
-	int ret = WSASend(
+	const int rc = ::WSASend(
 		mRemoteSock.GetSocket(),
 		&mSendOverEx.mWsaBuf,
 		1, &sent, flags,
 		reinterpret_cast<LPWSAOVERLAPPED>(&mSendOverEx),
-		nullptr);
+		nullptr
+	);
 
-	if (ret == SOCKET_ERROR) 
+	if (rc == SOCKET_ERROR) 
 	{
 		const int err = WSAGetLastError();
 		if (err != WSA_IO_PENDING) 
 		{
 			std::cout << std::format("WSASend failed wsa:{} uid:{}\n", err, mUID);
-			mSendPending = false;
+			mSendPending.store(false, std::memory_order_release);
 			return false;
 		}
 	}
+
+	std::cout << std::format("SendPacket: uid:{}\n", mUID);
 	return true;
 }
+
 
 bool Session::SendReady()
 {

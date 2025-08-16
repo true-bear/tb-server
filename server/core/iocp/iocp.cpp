@@ -38,19 +38,15 @@ bool Iocp::AddDeviceListenSocket(SOCKET listenSock) const
     return true;
 }
 
-bool Iocp::AddDeviceRemoteSocket(Session* session) const
+bool Iocp::AddDeviceRemoteSocket(Session* remote) const
 {
     HANDLE ret = CreateIoCompletionPort(
-        (HANDLE)session->GetRemoteSocket(),
+        (HANDLE)remote->GetRemoteSocket(),
         mIocp,
-        static_cast<ULONG_PTR>(session->GetUniqueId()),
+        (ULONG_PTR)remote,
         0
     );
-
-    if (ret != mIocp)
-        return false;
-
-    return true;
+    return (ret == mIocp);
 }
 
 void Iocp::GQCSEx(IocpEvents& IoEvent, unsigned long timeOut) const

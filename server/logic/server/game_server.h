@@ -20,6 +20,6 @@ public:
 
 private:
     int mMaxSession = 0;
-
+    std::atomic<unsigned> mGatewaySid{ 0 };
     LogicManager mLogicManager;
 };

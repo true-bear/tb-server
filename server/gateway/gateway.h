@@ -33,4 +33,5 @@ private:
 
 private:
     unsigned mLogicSid{ 0 };
+    std::atomic<unsigned> mLastClientSid{ 0 };
 };
