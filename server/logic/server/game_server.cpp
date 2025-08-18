@@ -35,7 +35,8 @@ bool GameServer::Init()
         unsigned expected = 0;
         (void)mGatewaySid.compare_exchange_strong(expected, sid, std::memory_order_acq_rel);
 
-        if (pkt.size() >= sizeof(uint32_t)) {
+        if (pkt.size() >= sizeof(uint32_t)) 
+        {
             uint32_t cidN = 0;
             std::memcpy(&cidN, pkt.data(), sizeof(cidN));
             const int clientId = static_cast<int>(ntohl(cidN));

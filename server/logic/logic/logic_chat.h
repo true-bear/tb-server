@@ -5,13 +5,25 @@
 #include <vector>
 
 import iocp.session;
+import util.packet;
 
-inline void ProcessChat(Session* gwSession, const std::byte* data, size_t size)
+import <span>;
+using Byte = std::byte;
+
+inline void ProcessChat(Session* gwSession, const std::byte* data, size_t size) // span으로 바꿀것
 {
-    if (!gwSession) return;
+    if (!gwSession) 
+        return;
+
+    std::span<const Byte> frame{ data, size };
+
+    std::uint32_t clientSid{};
+    if (!UnWrapPacket(frame, clientSid)) 
+        return;
 
     ChatPacket chat;
-    if (!chat.ParseFromArray(data, static_cast<int>(size)))
+    if (!chat.ParseFromArray(reinterpret_cast<const char*>(frame.data()),
+        static_cast<int>(frame.size())))
         return;
 
     chat.set_message("show me the money");
@@ -20,19 +32,9 @@ inline void ProcessChat(Session* gwSession, const std::byte* data, size_t size)
     if (!chat.SerializeToString(&payload))
         return;
 
-    // 하드코딩 지워야함
-    const uint32_t cidN = htonl(999);
+    auto relay = WrapPacket(clientSid, payload);
+    gwSession->SendPacket({ relay.data(), relay.size() });
 
-    std::string relay;
-    relay.resize(sizeof(uint32_t) + payload.size());
-    std::memcpy(relay.data(), &cidN, sizeof(uint32_t));
-    std::memcpy(relay.data() + sizeof(uint32_t), payload.data(), payload.size());
-
-    const auto bytes = std::span<const std::byte>(
-        reinterpret_cast<const std::byte*>(relay.data()),
-        relay.size());
-
-    (void)gwSession->SendPacket(bytes);
-
-    std::cout << std::format("send success : size: {} message: {}\n", payload.size(), chat.message());
+    std::cout << std::format("send success : size: {} message: {}\n",
+        payload.size(), chat.message());
 }

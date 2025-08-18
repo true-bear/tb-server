@@ -11,26 +11,32 @@ export class RoundBuffer
 public:
     [[nodiscard]] explicit RoundBuffer(size_t capacity)
         : mBuffer(std::make_unique<std::byte[]>(capacity)),
-        mCapacity(capacity), mReadPos(0), mWritePos(0) {
+        mCapacity(capacity), mReadPos(0), mWritePos(0) 
+    {
     }
 
-    [[nodiscard]] size_t ReadableSize() const noexcept {
+    [[nodiscard]] size_t ReadableSize() const noexcept 
+    {
         return mWritePos - mReadPos;
     }
 
-    [[nodiscard]] size_t WritableSize() const noexcept {
+    [[nodiscard]] size_t WritableSize() const noexcept 
+    {
         return mCapacity - mWritePos;
     }
 
-    [[nodiscard]] size_t Capacity() const noexcept {
+    [[nodiscard]] size_t Capacity() const noexcept 
+    {
         return mCapacity;
     }
 
-    [[nodiscard]] std::byte* ReadPtr() noexcept {
+    [[nodiscard]] std::byte* ReadPtr() noexcept 
+    {
         return mBuffer.get() + mReadPos;
     }
 
-    [[nodiscard]] std::byte* WritePtr() noexcept {
+    [[nodiscard]] std::byte* WritePtr() noexcept 
+    {
         return mBuffer.get() + mWritePos;
     }
 

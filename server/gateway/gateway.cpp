@@ -81,9 +81,9 @@ void Gateway::HandleFromClient(unsigned clientSid, std::span<const std::byte> fr
 
     const uint32_t idN = htonl(clientSid);
 
-    std::vector<std::byte> relay(4 + frame.size());
-    std::memcpy(relay.data() + 0, &idN, 4);
-    std::memcpy(relay.data() + 4, frame.data(), frame.size());
+    std::vector<std::byte> relay(sizeof(uint32_t) + frame.size());
+    std::memcpy(relay.data() + 0, &idN, sizeof(uint32_t));
+    std::memcpy(relay.data() + sizeof(uint32_t), frame.data(), frame.size());
 
     if (!logic->SendPacket({ relay.data(), relay.size() })) 
     {
@@ -96,7 +96,8 @@ void Gateway::HandleFromClient(unsigned clientSid, std::span<const std::byte> fr
 
 void Gateway::HandleFromLogic(unsigned /*logicSid*/, std::span<const std::byte> frame)
 {
-    if (frame.size() < RELAY_HDR) return;
+    if (frame.size() < RELAY_HDR) 
+        return;
 
     uint32_t sidNet = 0;
     std::memcpy(&sidNet, frame.data(), RELAY_HDR);
