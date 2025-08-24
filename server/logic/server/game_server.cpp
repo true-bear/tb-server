@@ -1,11 +1,8 @@
 #include "game_server.h"
 #include "../logic/logic.h"
 
-#include <WinSock2.h>   // ntohl/htonl
-#include <ws2tcpip.h>
-#include <cstring>      // std::memcpy
-#include <functional>   // std::function
-#include <cstdint>
+#include <WinSock2.h>
+#include <functional>
 
 import util.singleton;
 import util.conf;
@@ -31,16 +28,16 @@ bool GameServer::Init()
 
     std::cout << std::format("LogicServer::Init: mMaxSession = {}\n", maxSession);
 
-    SetDispatchCallback([this](unsigned sid, std::span<const std::byte> pkt) noexcept {
-        unsigned expected = 0;
+    SetDispatchCallback([this](const std::uint64_t sid, std::span<const std::byte> pkt) noexcept {
+        std::uint64_t expected = 0;
         (void)mGatewaySid.compare_exchange_strong(expected, sid, std::memory_order_acq_rel);
 
-        if (pkt.size() >= sizeof(uint32_t)) 
+        if (pkt.size() >= sizeof(std::uint32_t))
         {
-            uint32_t cidN = 0;
+            std::uint32_t cidN = 0;
             std::memcpy(&cidN, pkt.data(), sizeof(cidN));
             const int clientId = static_cast<int>(ntohl(cidN));
-            const auto inner = pkt.subspan(sizeof(uint32_t));
+            const auto inner = pkt.subspan(sizeof(std::uint32_t));
 
             mLogicManager.DispatchPacket(clientId, inner);
         }
@@ -58,7 +55,7 @@ bool GameServer::Init()
 
     if (!mLogicManager.Init(
         [this](int /*ignored*/) -> Session* {
-            const unsigned gw = mGatewaySid.load(std::memory_order_acquire);
+            const auto gw = mGatewaySid.load(std::memory_order_acquire);
             return this->GetSession(gw);
         },
         worker))

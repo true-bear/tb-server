@@ -8,9 +8,10 @@ import iocp.session;
 import util.packet;
 
 import <span>;
+
 using Byte = std::byte;
 
-inline void ProcessChat(Session* gwSession, const std::byte* data, size_t size) // span¿∏∑Œ πŸ≤‹∞Õ
+inline void ProcessChat(Session* gwSession, const std::byte* data, const size_t size)
 {
     if (!gwSession) 
         return;
@@ -18,7 +19,7 @@ inline void ProcessChat(Session* gwSession, const std::byte* data, size_t size) 
     std::span<const Byte> frame{ data, size };
 
     std::uint32_t clientSid{};
-    if (!UnWrapPacket(frame, clientSid)) 
+    if (!packet_util::UnWrapPacket(frame, clientSid))
         return;
 
     ChatPacket chat;
@@ -32,7 +33,7 @@ inline void ProcessChat(Session* gwSession, const std::byte* data, size_t size) 
     if (!chat.SerializeToString(&payload))
         return;
 
-    auto relay = WrapPacket(clientSid, payload);
+    auto relay = packet_util::WrapPacket(clientSid, payload);
     gwSession->SendPacket({ relay.data(), relay.size() });
 
     std::cout << std::format("send success : size: {} message: {}\n",

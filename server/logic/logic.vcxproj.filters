@@ -3,9 +3,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="logic\ECS\entity\entityRegister.cpp">
-      <Filter>logic\ECS\entity</Filter>
-    </ClCompile>
     <ClCompile Include="thread\logicThread.cpp">
       <Filter>thread</Filter>
     </ClCompile>
@@ -21,18 +18,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="logic\ECS\entity\entityID.h">
-      <Filter>logic\ECS\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="logic\ECS\entity\entityRegister.h">
-      <Filter>logic\ECS\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="logic\ECS\component\ComponentPool.h">
-      <Filter>logic\ECS\component</Filter>
-    </ClInclude>
-    <ClInclude Include="logic\ECS\component\IComponent.h">
-      <Filter>logic\ECS\component</Filter>
-    </ClInclude>
     <ClInclude Include="thread\logicThread.h">
       <Filter>thread</Filter>
     </ClInclude>
@@ -58,18 +43,6 @@
   <ItemGroup>
     <Filter Include="logic">
       <UniqueIdentifier>{f6f34883-543c-4055-9410-3717796533c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="logic\ECS">
-      <UniqueIdentifier>{f559b926-0360-4f01-af31-c83dd76c93c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="logic\ECS\entity">
-      <UniqueIdentifier>{3dcc7b98-4569-459d-a72b-cb589b6e8c51}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="logic\ECS\component">
-      <UniqueIdentifier>{69ff308d-fe48-4af6-8c0f-9366dfe95abf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="logic\ECS\system">
-      <UniqueIdentifier>{5801bcaf-6e81-4c5f-aeee-c259a7168ebc}</UniqueIdentifier>
     </Filter>
     <Filter Include="thread">
       <UniqueIdentifier>{9aac9229-51c5-419f-b218-18dedbcd590f}</UniqueIdentifier>

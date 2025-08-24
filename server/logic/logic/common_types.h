@@ -7,7 +7,7 @@
 #include <boost/lockfree/stack.hpp>
 
 import iocp.session;
-using SessionGetFunc = std::function<Session* (int)>;
+using SessionGetFunc = std::function<Session* (std::uint64_t)>;
 
 inline constexpr std::size_t MAX_PACKET_SIZE = 4096;
 inline constexpr std::size_t FREE_LIST_CAP = 32768;
@@ -15,9 +15,9 @@ inline constexpr std::size_t PACKET_QUEUE_CAP = 8192;
 
 struct alignas(64) PacketNode 
 {
-    int       sessionId{};
-    int       type{};
-    uint32_t  size{};
+    std::uint64_t       sessionId{};
+    int                 type{};
+    std::uint32_t       size{};
     std::array<std::byte, MAX_PACKET_SIZE> data;
 };
 

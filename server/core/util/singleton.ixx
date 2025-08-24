@@ -4,7 +4,8 @@ import <concepts>;
 import <type_traits>;
 
 export template<typename T>
-class Singleton {
+class Singleton 
+{
 public:
     static T& Get() requires std::default_initializable<T>&& std::destructible<T> //memo : 생성 파괴 가능한 클래스 concepts
     {

@@ -1,3 +1,5 @@
+module;
+#include <cstdint>
 
 export module iface.handler.event;
 
@@ -11,5 +13,5 @@ public:
     virtual ~IEventHandler() = default;
 
     virtual void GetIocpEvents(IocpEvents& outEvents, unsigned long timeout) = 0;
-    virtual Session* GetSession(unsigned int uid) const = 0;
+    virtual Session* GetSession(const std::uint64_t uid) const = 0;
 };

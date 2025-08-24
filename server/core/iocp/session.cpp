@@ -65,7 +65,7 @@ void Session::DisconnectFinish()
 	}
 }
 
-bool Session::AcceptReady(const SOCKET& listenSock, const int uID)
+bool Session::AcceptReady(const SOCKET& listenSock, const std::uint64_t uID)
 {
 	SOCKET socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, nullptr, 0, WSA_FLAG_OVERLAPPED);
 
@@ -178,7 +178,7 @@ bool Session::RecvReady()
 
 bool Session::RecvPacket(unsigned long ioSize)
 {
-	if (ioSize == 0 || ioSize > 4096) //todo : 하드 코딩 제거
+	if (ioSize == 0 || ioSize > NetDefaults::RECV_BUFFER_MAX_SIZE)
 	{
 		std::cout << std::format("RecvPacket: Invalid ioSize: {} for id: {}\n", ioSize, mUID);
 		return false;
@@ -218,7 +218,8 @@ bool Session::SendPacket(std::span<const std::byte> data)
 bool Session::PostSendLocked()
 {
 	const size_t readable = mSendBuffer->ReadableSize();
-	if (readable == 0) {
+	if (readable == 0) 
+	{
 		mSendPending.store(false, std::memory_order_release);
 		return true;
 	}

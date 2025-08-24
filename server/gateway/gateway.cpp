@@ -17,16 +17,6 @@ import <span>;
 
 using std::byte;
 
-static std::span<const std::byte> ToSpan(const std::vector<std::byte>& v) 
-{
-    return { v.data(), v.size() };
-}
-
-static std::span<const std::byte> ToSpan(const std::string& s) 
-{
-    return { reinterpret_cast<const std::byte*>(s.data()), s.size() };
-}
-
 bool Gateway::InitAndConnect(const int sessionCount, const int worker, const int port)
 {
     SetDispatchCallback([this](unsigned id, std::span<const byte> frame) {
@@ -40,21 +30,21 @@ bool Gateway::InitAndConnect(const int sessionCount, const int worker, const int
     }
 
     const auto host = Config::ReadStr(L"GATEWAY", L"logicHost", L"127.0.0.1");
-    const int  logicPort = Config::ReadInt(L"GATEWAY", L"logicPort", 9000);
+    const int logicPort = Config::ReadInt(L"GATEWAY", L"logicPort", 9000);
+    const int logicSession = Config::ReadInt(L"GATEWAY", L"logicSession", 5000);
 
-    unsigned sid{};
-    if (!Core::ConnectTo(host, static_cast<uint16_t>(logicPort), ServerRole::Server, sid)) 
+    if (!Core::ConnectTo(host, static_cast<uint16_t>(logicPort), ServerRole::Server, logicSession))
     {
         std::wcout << L"Gateway: ConnectTo(" << host << L":" << logicPort << L") failed\n";
         return false;
     }
 
-    mLogicSid = sid;
+    mLogicSid = logicSession;
 
     return true;
 }
 
-void Gateway::Dispatch(unsigned id, std::span<const byte> frame)
+void Gateway::Dispatch(const std::uint64_t id, std::span<const byte> frame)
 {
     Session* session = GetSession(id);
     if (!session)
@@ -66,11 +56,11 @@ void Gateway::Dispatch(unsigned id, std::span<const byte> frame)
     }
     else 
     {
-        HandleFromLogic(id, frame);
+        HandleFromLogic(frame);
     }
 }
 
-void Gateway::HandleFromClient(unsigned clientSid, std::span<const std::byte> frame)
+void Gateway::HandleFromClient(const std::uint64_t clientSid, std::span<const std::byte> frame)
 {
     Session* logic = GetSession(mLogicSid);
     if (!logic) 
@@ -79,11 +69,11 @@ void Gateway::HandleFromClient(unsigned clientSid, std::span<const std::byte> fr
         return; 
     }
 
-    const uint32_t idN = htonl(clientSid);
+    const std::uint32_t idN = htonl(clientSid);
 
-    std::vector<std::byte> relay(sizeof(uint32_t) + frame.size());
-    std::memcpy(relay.data() + 0, &idN, sizeof(uint32_t));
-    std::memcpy(relay.data() + sizeof(uint32_t), frame.data(), frame.size());
+    std::vector<std::byte> relay(sizeof(std::uint32_t) + frame.size());
+    std::memcpy(relay.data(), &idN, sizeof(std::uint32_t));
+    std::memcpy(relay.data() + sizeof(std::uint32_t), frame.data(), frame.size());
 
     if (!logic->SendPacket({ relay.data(), relay.size() })) 
     {
@@ -94,12 +84,12 @@ void Gateway::HandleFromClient(unsigned clientSid, std::span<const std::byte> fr
 }
 
 
-void Gateway::HandleFromLogic(unsigned /*logicSid*/, std::span<const std::byte> frame)
+void Gateway::HandleFromLogic(std::span<const std::byte> frame)
 {
     if (frame.size() < RELAY_HDR) 
         return;
 
-    uint32_t sidNet = 0;
+    std::uint32_t sidNet = 0;
     std::memcpy(&sidNet, frame.data(), RELAY_HDR);
     unsigned target = ntohl(sidNet);
 

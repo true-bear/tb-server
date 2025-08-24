@@ -26,10 +26,10 @@ private:
         return std::span<const byte>(reinterpret_cast<const byte*>(s.data()), s.size());
     }
 
-    void Dispatch(unsigned id, std::span<const byte> frame);
+    void Dispatch(const std::uint64_t id, std::span<const byte> frame);
 
-    void HandleFromClient(unsigned clientSid, std::span<const byte> frame);
-    void HandleFromLogic(unsigned /*logicSid*/, std::span<const byte> frame);
+    void HandleFromClient(const std::uint64_t clientSid, std::span<const byte> frame);
+    void HandleFromLogic(std::span<const byte> frame);
 
 private:
     unsigned mLogicSid{ 0 };

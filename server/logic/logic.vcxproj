@@ -139,9 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="logic\ECS\entity\entityRegister.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="logic\logic.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -165,10 +162,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logic\common_types.h" />
-    <ClInclude Include="logic\ECS\component\ComponentPool.h" />
-    <ClInclude Include="logic\ECS\component\IComponent.h" />
-    <ClInclude Include="logic\ECS\entity\entityID.h" />
-    <ClInclude Include="logic\ECS\entity\entityRegister.h" />
     <ClInclude Include="logic\logic.h" />
     <ClInclude Include="logic\logic_chat.h" />
     <ClInclude Include="logic\logic_dispatch.h" />

@@ -42,7 +42,7 @@ void Worker::Run(std::stop_token st)
 			if (!over)
 				continue;
 
-			int sessionId = over->mUID;
+			const std::uint64_t sessionId = over->mUID;
 			auto session = mEventHandler->GetSession(sessionId);
 			if (!session)
 				continue;

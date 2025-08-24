@@ -5,8 +5,6 @@ import core.engine;
 import util.singleton;
 import iocp.session;
 
-using RecvPakcetType = std::function<void(Session*, const char*, uint16_t)>;
-
 class GameServer : public Core, public Singleton<GameServer>
 {
 public:
@@ -20,6 +18,6 @@ public:
 
 private:
     int mMaxSession = 0;
-    std::atomic<unsigned> mGatewaySid{ 0 };
+    std::atomic<std::uint64_t> mGatewaySid{ 0 };
     LogicManager mLogicManager;
 };

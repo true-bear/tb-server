@@ -21,13 +21,11 @@ import <mutex>;
 
 export struct OverlappedIoEx : public OVERLAPPED
 {
-    WSABUF mWsaBuf;
-    int mUID;
-    IO_TYPE mIOType;
+    WSABUF        mWsaBuf;
+    std::uint64_t mUID;
+    IO_TYPE       mIOType;
 
-    OverlappedIoEx(IO_TYPE type = IO_TYPE::NONE) :OVERLAPPED{}, mWsaBuf{}, mUID(-1), mIOType(type) {}
-
-
+    OverlappedIoEx(IO_TYPE type = IO_TYPE::NONE) :OVERLAPPED{}, mWsaBuf{}, mUID(0), mIOType(type) {}
 };
 
 export class Session
@@ -39,7 +37,7 @@ public:
     void			Reset();
     void			DisconnectFinish();
 
-    bool			AcceptReady(const SOCKET& listenSock, const int uID);
+    bool			AcceptReady(const SOCKET& listenSock, const std::uint64_t uID);
     bool			AcceptFinish(const SOCKET& listenSocket);
 
     bool			RecvPacket(unsigned long ioSize);
@@ -50,8 +48,8 @@ public:
     void            SendFinish(size_t bytes);
     bool            PostSendLocked();
 
-    void			SetUniqueId(int id) { mUID = id; }
-    unsigned int	GetUniqueId() const { return mUID; }
+    void			SetUniqueId(const std::uint64_t id) { mUID = id; }
+    std::uint64_t	    GetUniqueId() const { return mUID; }
 
     SocketEx&       GetRemoteSock()       noexcept { return mRemoteSock; }
     const SOCKET&   GetRemoteSocket() noexcept { return mRemoteSock.GetSocket(); }
@@ -83,7 +81,7 @@ private:
     OverlappedIoEx              mAcceptOverEx;
     OverlappedIoEx              mConnectOverEx;
 
-    unsigned int				mUID = -1;
+    std::uint64_t				mUID{ 0 };
     char						mAcceptBuf[64]{};
 
     ServerRole                  mRole{ ServerRole::Client };

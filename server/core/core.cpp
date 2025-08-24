@@ -64,7 +64,7 @@ bool Core::CreateSessionPool()
 
         session->SetUniqueId(i);
 
-        const auto& listenSocket = mListenSocket.GetSocket();
+        auto listenSocket = mListenSocket.GetSocket();
         if (!session->AcceptReady(listenSocket, i))
             return false;
 
@@ -116,7 +116,7 @@ bool Core::IsRunThread() const
     return mIsRunThread.load(std::memory_order_acquire);
 }
 
-Session* Core::GetSession(unsigned int uID) const
+Session* Core::GetSession(const std::uint64_t uID) const
 {
     if (const auto it = mSessionPool.find(uID); it != mSessionPool.end())
     {
@@ -133,12 +133,12 @@ void Core::SetDispatchCallback(DispatchFn callback)
 
 
 
-void Core::GetIocpEvents(IocpEvents& events, unsigned long timeout)
+void Core::GetIocpEvents(IocpEvents& events, const unsigned long timeout)
 {
     GQCSEx(events, timeout);
 }
 
-void Core::OnRecv(unsigned int uID, unsigned long ioSize)
+void Core::OnRecv(const std::uint64_t uID, const std::uint32_t ioSize)
 {
     auto session = GetSession(uID);
     if (!session)
@@ -190,10 +190,10 @@ void Core::OnRecv(unsigned int uID, unsigned long ioSize)
     }
 }
 
-void Core::OnAccept(unsigned int uID, unsigned long long completekey)
+void Core::OnAccept(const std::uint64_t uID, const std::uint64_t key)
 {
     auto session = GetSession(uID);
-    if (!session || completekey != 0)
+    if (!session || key != 0)
     {
         std::cout << std::format("OnAccept: invalid session or completeKey: {}\n", uID);
         return;
@@ -216,7 +216,7 @@ void Core::OnAccept(unsigned int uID, unsigned long long completekey)
     session->RecvReady();  
 }
 
-void Core::OnClose(unsigned int uID)
+void Core::OnClose(const std::uint64_t uID)
 {
     std::lock_guard<std::mutex> lock(mSessionLock);
 
@@ -250,13 +250,13 @@ void Core::OnClose(unsigned int uID)
     return;
 }
 
-void Core::OnSend(unsigned int uID, unsigned long ioSize)
+void Core::OnSend(const std::uint64_t uID, const std::uint32_t ioSize)
 {
     if (auto* s = GetSession(uID)) 
         s->SendFinish(static_cast<size_t>(ioSize));
 }
 
-void Core::OnConnect(unsigned uID)
+void Core::OnConnect(const std::uint64_t uID)
 {
     if (auto* s = GetSession(uID)) 
     {
@@ -290,29 +290,28 @@ void Core::OnConnect(unsigned uID)
     }
 }
 
-bool Core::ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, unsigned& outSessionId)
+bool Core::ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, const std::uint64_t logicSessionId)
 {
     SocketEx tmp;
     if (!tmp.Init())
         return false;
 
-    const unsigned sid = 5000;
 
     auto newSession = std::make_unique<Session>();
     if (!newSession) 
         return false;
 
-    newSession->SetUniqueId(sid);
+    newSession->SetUniqueId(logicSessionId);
     newSession->SetRole(role);
     newSession->AttachSocket(std::move(tmp));
 
     Session* connSession = newSession.get();
-    mSessionPool.emplace(sid, std::move(newSession));
+    mSessionPool.emplace(logicSessionId, std::move(newSession));
 
     if (!AddDeviceRemoteSocket(connSession))
     {
         std::cerr << "AddDeviceRemoteSocket failed, GLE=" << GetLastError() << "\n";
-        mSessionPool.erase(sid);
+        mSessionPool.erase(logicSessionId);
         return false;
     }
 
@@ -324,11 +323,10 @@ bool Core::ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, uns
         if (e != WSA_IO_PENDING) 
         {
             std::cerr << "ConnectEx failed, WSA=" << e << "\n";
-            mSessionPool.erase(sid);
+            mSessionPool.erase(logicSessionId);
             return false;
         }
     }
 
-    outSessionId = sid;
     return true;
 }

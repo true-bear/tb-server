@@ -45,13 +45,20 @@ void ThreadImpl::SetThreadName(std::string_view name)
 {
     using SetThreadDescriptionFn = HRESULT(WINAPI*)(HANDLE, PCWSTR);
     HMODULE h = ::GetModuleHandleW(L"Kernel32.dll");
-    if (!h) return;
+    
+    if (!h) 
+        return;
+
     auto* fn = reinterpret_cast<SetThreadDescriptionFn>(
         ::GetProcAddress(h, "SetThreadDescription"));
-    if (!fn) return;
+    if (!fn) 
+        return;
 
     int wlen = MultiByteToWideChar(CP_UTF8, 0, name.data(), (int)name.size(), nullptr, 0);
-    if (wlen <= 0) return;
+    
+    if (wlen <= 0) 
+        return;
+
     std::wstring wname(wlen, L'\0');
     MultiByteToWideChar(CP_UTF8, 0, name.data(), (int)name.size(), wname.data(), wlen);
     fn(::GetCurrentThread(), wname.c_str());

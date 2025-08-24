@@ -31,29 +31,30 @@ public:
     void Run();
     void Stop();
     bool CreateSessionPool();
-    Session* GetSession(const unsigned int uID) const;
+
+    Session* GetSession(const std::uint64_t uID) const;
     const SOCKET& GetListenSocket() const { return mListenSocket.GetSocket(); }
     bool IsRunThread() const;
     
     void SetDispatchCallback(DispatchFn callback);
 
-    void OnRecv(unsigned int uID, unsigned long ioSize) override;
-    void OnSend(unsigned int uID, unsigned long ioSize) override;
-    void OnAccept(unsigned int uID, unsigned long long completeKey) override;
-    void OnClose(unsigned int uID) override;
-    void OnConnect(unsigned int uID) override;
+    void OnAccept(const std::uint64_t sessionId, const std::uint64_t key) override;
+    void OnRecv(const std::uint64_t sessionId, const std::uint32_t size) override;
+    void OnSend(const std::uint64_t sessionId, const std::uint32_t size) override;
+    void OnClose(const std::uint64_t sessionId) override;
+    void OnConnect(const std::uint64_t sessionId) override;
 
     void GetIocpEvents(IocpEvents& events, unsigned long timeout);
 
-    bool ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, unsigned& outSessionId);
+    bool ConnectTo(const std::wstring& ip, const uint16_t port, const ServerRole role, const std::uint64_t logicSessionId);
 
 protected:
-    std::function<void(unsigned int, std::span<const std::byte>)> mDispatchCallback;
+    std::function<void(std::uint64_t, std::span<const std::byte>)> mDispatchCallback;
 
 private:
     SocketEx            mListenSocket;
 
-    using SessionPool = std::unordered_map<unsigned int, std::unique_ptr<Session>>;
+    using SessionPool = std::unordered_map<std::uint64_t, std::unique_ptr<Session>>;
     SessionPool         mSessionPool;
 
     using WorkerPool =  std::vector<std::unique_ptr<Worker>>;

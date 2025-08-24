@@ -8,6 +8,8 @@ module iocp.socket;
 import util.conf;
 import common.define;
 
+import <string_view>;
+
 bool SocketEx::Init()
 {
     WSADATA wsaData;
@@ -60,7 +62,7 @@ void SocketEx::Detach()
 }
 
 
-bool SocketEx::ConnectEx(const wchar_t* ip, uint16_t port, WSAOVERLAPPED* ov)
+bool SocketEx::ConnectEx(std::wstring_view ip, uint16_t port, WSAOVERLAPPED* ov)
 {
     if (mSocket == INVALID_SOCKET && !Init())
         return false;
@@ -78,7 +80,7 @@ bool SocketEx::ConnectEx(const wchar_t* ip, uint16_t port, WSAOVERLAPPED* ov)
     remote.sin_port = htons(port);
     {
         IN_ADDR in{};
-        if (InetPtonW(AF_INET, ip, &in) != 1)
+        if (InetPtonW(AF_INET, ip.data(), &in) != 1)
             return false;
         remote.sin_addr = in;
     }

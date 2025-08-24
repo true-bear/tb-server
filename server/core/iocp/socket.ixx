@@ -5,6 +5,8 @@ module;
 
 export module iocp.socket;
 
+import <string_view>;
+
 export class SocketEx
 {
 public:
@@ -14,9 +16,16 @@ public:
     SocketEx(const SocketEx&) = delete;
     SocketEx& operator=(const SocketEx&) = delete;
 
-    SocketEx(SocketEx&& other) noexcept { mSocket = other.mSocket; other.mSocket = INVALID_SOCKET; }
-    SocketEx& operator=(SocketEx&& other) noexcept {
-        if (this != &other) {
+    SocketEx(SocketEx&& other) noexcept 
+    { 
+        mSocket = other.mSocket; 
+        other.mSocket = INVALID_SOCKET; 
+    }
+
+    SocketEx& operator=(SocketEx&& other) noexcept 
+    {
+        if (this != &other) 
+        {
             Close();
             mSocket = other.mSocket;
             other.mSocket = INVALID_SOCKET;
@@ -35,7 +44,7 @@ public:
     const SOCKET& GetSocket() const { return mSocket; }
     bool GetSocketInfo(WSAPROTOCOL_INFO& info) const;
 
-    bool ConnectEx(const wchar_t* ip, uint16_t port, WSAOVERLAPPED* ov);
+    bool ConnectEx(std::wstring_view ip, uint16_t port, WSAOVERLAPPED* ov);
     bool FinishConnect() const;
 
 private:

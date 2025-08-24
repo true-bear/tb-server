@@ -13,12 +13,12 @@ public:
     [[nodiscard]] LogicManager();
     ~LogicManager();
 
-    bool Init(SessionGetFunc getSession, int threadCount = 1);
+    bool Init(SessionGetFunc getSession, const int threadCount = 1);
     void Start();
     void Stop();
 
-    bool DispatchPacket(int sessionId, std::span<const std::byte> frame) noexcept;
-    int ShardIndex(int sessionId) const noexcept;
+    bool DispatchPacket(const std::uint64_t sessionId, std::span<const std::byte> frame) noexcept;
+    std::uint64_t ShardIndex(const std::uint64_t sessionId) const noexcept;
 
 private:
     struct Shard {
