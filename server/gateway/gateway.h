@@ -32,6 +32,6 @@ private:
     void HandleFromLogic(std::span<const byte> frame);
 
 private:
-    unsigned mLogicSid{ 0 };
-    std::atomic<unsigned> mLastClientSid{ 0 };
+    std::uint64_t mLogicSid{ 0 };
+    std::atomic<std::uint64_t> mLastClientSid{ 0 };
 };

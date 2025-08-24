@@ -94,6 +94,7 @@ void Core::Run()
     std::cout << std::format("Core::Start: port = {}\n", port);
     std::cout << std::format("Core::Start: mMaxSession = {}\n", mMaxSession);
 }
+
 void Core::Stop()
 {
     mIsRunThread.store(false, std::memory_order_release);
@@ -130,8 +131,6 @@ void Core::SetDispatchCallback(DispatchFn callback)
 {
     mDispatchCallback = std::move(callback);
 }
-
-
 
 void Core::GetIocpEvents(IocpEvents& events, const unsigned long timeout)
 {

@@ -2,6 +2,7 @@ module;
 
 #include <iostream>
 #include <format>
+#include <ranges>
 
 module thread.worker;
 
@@ -23,50 +24,41 @@ Worker::Worker(IEventHandler* eventHandler, IIoHandler* ioHandler, std::string_v
 
 void Worker::Run(std::stop_token st)
 {
-	while (!st.stop_requested())
-	{
-		IocpEvents events;
-		mEventHandler->GetIocpEvents(events, 5);
+    while (!st.stop_requested())
+    {
+        IocpEvents events;
+        mEventHandler->GetIocpEvents(events, 5);
 
-		auto eventRange = std::span{ events.m_IoArray, static_cast<size_t>(events.m_eventCount) };
-		for (auto& ioEvent : eventRange)
-		{
-			if (!ioEvent.lpOverlapped) 
-			{
-				std::cout << std::format("[{}] null overlapped (shutdown?)\n", mIndex);
-				continue;
-			}
+        std::span events_view{ events.m_IoArray, static_cast<std::size_t>(events.m_eventCount) };
 
-			unsigned long ioSize = ioEvent.dwNumberOfBytesTransferred;
-			auto* over = reinterpret_cast<OverlappedIoEx*>(ioEvent.lpOverlapped);
-			if (!over)
-				continue;
+        auto pipeline = events_view 
+            | std::views::filter([](const auto& e) { return e.lpOverlapped != nullptr; })
+            | std::views::transform([](const auto& e) {
+            auto* over = reinterpret_cast<OverlappedIoEx*>(e.lpOverlapped);
+            return std::tuple{ over, e.dwNumberOfBytesTransferred, e.lpCompletionKey };});
 
-			const std::uint64_t sessionId = over->mUID;
-			auto session = mEventHandler->GetSession(sessionId);
-			if (!session)
-				continue;
+        for (auto [over, ioSize, compKey] : pipeline)
+        {
+            const std::uint64_t sessionId = over->mUID;
+            if (auto* session = mEventHandler->GetSession(sessionId); !session)
+                continue;
 
-			switch (over->mIOType)
-			{
-			case IO_TYPE::CONNECT:
-				mIoHandler->OnConnect(sessionId);
-				break;
-			case IO_TYPE::ACCEPT:
-				mIoHandler->OnAccept(sessionId, ioEvent.lpCompletionKey);
-				break;
-			case IO_TYPE::RECV:
-				if (ioSize == 0)
-					mIoHandler->OnClose(sessionId);
-				else
-					mIoHandler->OnRecv(sessionId, ioSize);
-				break;
-			case IO_TYPE::SEND:
-				mIoHandler->OnSend(sessionId, ioSize);
-				break;
-			default:
-				break;
-			}
-		}
-	}
+            switch (over->mIOType)
+            {
+            case IO_TYPE::CONNECT: 
+                mIoHandler->OnConnect(sessionId); 
+                break;
+            case IO_TYPE::ACCEPT:  
+                mIoHandler->OnAccept(sessionId, compKey); 
+                break;
+            case IO_TYPE::RECV:
+                (ioSize == 0) ? mIoHandler->OnClose(sessionId): mIoHandler->OnRecv(sessionId, ioSize);
+                break;
+            case IO_TYPE::SEND:    
+                mIoHandler->OnSend(sessionId, ioSize); 
+                break;
+            default: break;
+            }
+        }
+    }
 }

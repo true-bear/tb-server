@@ -24,29 +24,27 @@ export using DispatchFn = std::function<void(unsigned int, std::span<const std::
 export class Core : public Iocp, public IEventHandler, public IIoHandler
 {
 public:
-    [[nodiscard]] Core();
+    Core();
     virtual ~Core();
 
-    bool Init(const int listenPort, const int maxSession, const int workerCount);
-    void Run();
-    void Stop();
-    bool CreateSessionPool();
+    bool            Init(const int listenPort, const int maxSession, const int workerCount);
+    void            Run();
+    void            Stop();
+    Session*        GetSession(const std::uint64_t uID) const;
+    void            SetDispatchCallback(DispatchFn callback);
 
-    Session* GetSession(const std::uint64_t uID) const;
-    const SOCKET& GetListenSocket() const { return mListenSocket.GetSocket(); }
-    bool IsRunThread() const;
-    
-    void SetDispatchCallback(DispatchFn callback);
+    bool            ConnectTo(const std::wstring& ip, const uint16_t port, const ServerRole role, const std::uint64_t logicSessionId);
+private:
 
-    void OnAccept(const std::uint64_t sessionId, const std::uint64_t key) override;
-    void OnRecv(const std::uint64_t sessionId, const std::uint32_t size) override;
-    void OnSend(const std::uint64_t sessionId, const std::uint32_t size) override;
-    void OnClose(const std::uint64_t sessionId) override;
-    void OnConnect(const std::uint64_t sessionId) override;
-
-    void GetIocpEvents(IocpEvents& events, unsigned long timeout);
-
-    bool ConnectTo(const std::wstring& ip, const uint16_t port, const ServerRole role, const std::uint64_t logicSessionId);
+    bool            CreateSessionPool();
+    const SOCKET&   GetListenSocket() const { return mListenSocket.GetSocket(); }
+    bool            IsRunThread() const;
+    void            OnAccept(const std::uint64_t sessionId, const std::uint64_t key) override;
+    void            OnRecv(const std::uint64_t sessionId, const std::uint32_t size) override;
+    void            OnSend(const std::uint64_t sessionId, const std::uint32_t size) override;
+    void            OnClose(const std::uint64_t sessionId) override;
+    void            OnConnect(const std::uint64_t sessionId) override;
+    void            GetIocpEvents(IocpEvents& events, unsigned long timeout);
 
 protected:
     std::function<void(std::uint64_t, std::span<const std::byte>)> mDispatchCallback;

@@ -9,7 +9,7 @@
     <ClCompile Include="logic\logic.cpp">
       <Filter>logic</Filter>
     </ClCompile>
-    <ClCompile Include="server\game_server.cpp">
+    <ClCompile Include="server\gameServer.cpp">
       <Filter>server</Filter>
     </ClCompile>
     <ClCompile Include="proto\message.pb.cc">
@@ -33,7 +33,7 @@
     <ClInclude Include="logic\common_types.h">
       <Filter>logic</Filter>
     </ClInclude>
-    <ClInclude Include="server\game_server.h">
+    <ClInclude Include="server\gameServer.h">
       <Filter>server</Filter>
     </ClInclude>
     <ClInclude Include="proto\message.pb.h">

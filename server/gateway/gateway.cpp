@@ -19,7 +19,7 @@ using std::byte;
 
 bool Gateway::InitAndConnect(const int sessionCount, const int worker, const int port)
 {
-    SetDispatchCallback([this](unsigned id, std::span<const byte> frame) {
+    SetDispatchCallback([this](std::uint64_t id, std::span<const byte> frame) {
         this->Dispatch(id, frame);
         });
 

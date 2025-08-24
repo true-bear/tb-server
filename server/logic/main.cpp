@@ -1,4 +1,4 @@
-﻿#include "server/game_server.h"
+﻿#include "server/gameServer.h"
 
 import util.singleton;
 import util.conf; 

@@ -153,7 +153,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="proto\message.pb.cc" />
-    <ClCompile Include="server\game_server.cpp">
+    <ClCompile Include="server\gameServer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="thread\logicThread.cpp">
@@ -167,7 +167,7 @@
     <ClInclude Include="logic\logic_dispatch.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="proto\message.pb.h" />
-    <ClInclude Include="server\game_server.h" />
+    <ClInclude Include="server\gameServer.h" />
     <ClInclude Include="thread\logicThread.h" />
   </ItemGroup>
   <ItemGroup>

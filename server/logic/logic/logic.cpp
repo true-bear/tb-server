@@ -105,9 +105,7 @@ bool LogicManager::DispatchPacket(const std::uint64_t sessionId, std::span<const
     node->type = static_cast<int>(type);
     node->size = bodyLen;
 
-    std::memcpy(node->data.data(),
-        frame.data() + packet_util::kHeaderSize,
-        bodyLen);
+    std::memcpy(node->data.data(), frame.data() + packet_util::kHeaderSize, bodyLen);
 
     auto& q = *mShards[ShardIndex(sessionId)].queue;
     if (!q.push(node))

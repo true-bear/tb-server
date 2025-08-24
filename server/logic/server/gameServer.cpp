@@ -1,4 +1,4 @@
-#include "game_server.h"
+#include "gameServer.h"
 #include "../logic/logic.h"
 
 #include <WinSock2.h>
