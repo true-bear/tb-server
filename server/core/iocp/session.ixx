@@ -28,7 +28,7 @@ export struct OverlappedIoEx : public OVERLAPPED
     OverlappedIoEx(IO_TYPE type = IO_TYPE::NONE) :OVERLAPPED{}, mWsaBuf{}, mUID(0), mIOType(type) {}
 };
 
-export class [[nodiscard]] Session
+export class Session
 {
 public:
     Session();

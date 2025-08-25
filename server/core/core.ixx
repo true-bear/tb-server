@@ -19,7 +19,11 @@ import <mutex>;
 import <functional>;
 import <span>;
 
-export using DispatchFn = std::function<void(unsigned int, std::span<const std::byte>)>;
+template <typename T>
+concept DispatchCallable =
+    requires(T t, uint64_t id, std::span<const std::byte> data) {
+        { t(id, data) } -> std::same_as<void>;
+};
 
 export class Core : public Iocp, public IEventHandler, public IIoHandler
 {
@@ -31,7 +35,9 @@ public:
     void            Run();
     void            Stop();
     Session*        GetSession(const std::uint64_t uID) const;
-    void            SetDispatchCallback(DispatchFn callback);
+
+    template <DispatchCallable F>
+    inline void     SetDispatchCallback(F&& callback){ mDispatchCallback = std::forward<F>(callback); }   
 
     bool            ConnectTo(const std::wstring& ip, const uint16_t port, const ServerRole role, const std::uint64_t logicSessionId);
 private:

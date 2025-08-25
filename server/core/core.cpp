@@ -127,11 +127,6 @@ Session* Core::GetSession(const std::uint64_t uID) const
     return nullptr;
 }
 
-void Core::SetDispatchCallback(DispatchFn callback)
-{
-    mDispatchCallback = std::move(callback);
-}
-
 void Core::GetIocpEvents(IocpEvents& events, const unsigned long timeout)
 {
     GQCSEx(events, timeout);
