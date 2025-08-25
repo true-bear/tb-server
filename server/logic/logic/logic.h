@@ -10,7 +10,7 @@ import util.singleton;
 class LogicManager : public Singleton<LogicManager>
 {
 public:
-    [[nodiscard]] LogicManager();
+    LogicManager();
     ~LogicManager();
 
     bool Init(SessionGetFunc getSession, const int threadCount = 1);

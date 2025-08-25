@@ -6,7 +6,7 @@ export module iface.handler.io;
 export class IIoHandler
 {
 public:
-	[[nodiscard]] IIoHandler() = default;
+	IIoHandler() = default;
     virtual ~IIoHandler() = default;
 
     virtual void OnAccept(const std::uint64_t sessionId, const std::uint64_t key) = 0;

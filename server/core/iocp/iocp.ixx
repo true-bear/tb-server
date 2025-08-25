@@ -19,7 +19,7 @@ export struct IocpEvents
 export class Iocp
 {
 public:
-	[[nodiscard]] Iocp() = default;
+	Iocp() = default;
     virtual ~Iocp();
 
     bool CreateNewIocp(unsigned long threadCnt);

@@ -9,7 +9,7 @@ import <cstring>;
 export class RoundBuffer 
 {
 public:
-    [[nodiscard]] explicit RoundBuffer(size_t capacity)
+    explicit RoundBuffer(size_t capacity)
         : mBuffer(std::make_unique<std::byte[]>(capacity)),
         mCapacity(capacity), mReadPos(0), mWritePos(0) 
     {
@@ -40,7 +40,7 @@ public:
         return mBuffer.get() + mWritePos;
     }
 
-    void MoveReadPos(size_t size) 
+    void MoveReadPos(size_t size)
     {
         if (size > ReadableSize())
             throw std::out_of_range("MoveReadPos overflow");
@@ -50,7 +50,7 @@ public:
             mReadPos = mWritePos = 0;
     }
 
-    bool Peek(std::byte* out, size_t size) 
+    bool Peek(std::byte* out, size_t size)
     {
         if (size > ReadableSize())
             return false;
@@ -67,7 +67,7 @@ public:
         mWritePos += size;
     }
 
-    bool Write(std::span<const std::byte> data) 
+    bool Write(std::span<const std::byte> data)
     {
         if (data.size() > WritableSize())
             return false;

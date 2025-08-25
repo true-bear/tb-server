@@ -10,6 +10,31 @@ import common.define;
 
 import <string_view>;
 
+SocketEx::SocketEx() = default;
+
+SocketEx::~SocketEx() 
+{
+    Close();
+}
+
+SocketEx::SocketEx(SocketEx&& other) noexcept 
+{
+    mSocket = other.mSocket;
+    other.mSocket = INVALID_SOCKET;
+}
+
+SocketEx& SocketEx::operator=(SocketEx&& other) noexcept 
+{
+    if (this != &other) 
+    {
+        Close();
+        mSocket = other.mSocket;
+        other.mSocket = INVALID_SOCKET;
+    }
+
+    return *this;
+}
+
 bool SocketEx::Init()
 {
     WSADATA wsaData;
@@ -39,6 +64,17 @@ bool SocketEx::BindAndListen(const int port) const
     return ::listen(mSocket, SOMAXCONN) == 0;
 }
 
+bool SocketEx::SetSocket(const SOCKET& newSocket) 
+{
+    mSocket = newSocket;
+    return true;
+}
+
+const SOCKET& SocketEx::GetSocket() const 
+{
+    return mSocket;
+}
+
 bool SocketEx::GetPeerName(sockaddr_in& addr) const
 {
     int addrlen = sizeof(addr);
@@ -60,7 +96,6 @@ void SocketEx::Detach()
 {
     mSocket = INVALID_SOCKET;
 }
-
 
 bool SocketEx::ConnectEx(std::wstring_view ip, uint16_t port, WSAOVERLAPPED* ov)
 {

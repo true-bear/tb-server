@@ -28,10 +28,10 @@ export struct OverlappedIoEx : public OVERLAPPED
     OverlappedIoEx(IO_TYPE type = IO_TYPE::NONE) :OVERLAPPED{}, mWsaBuf{}, mUID(0), mIOType(type) {}
 };
 
-export class Session
+export class [[nodiscard]] Session
 {
 public:
-    [[nodiscard]] Session();
+    Session();
     virtual ~Session();
 
     void			Reset();
@@ -49,7 +49,7 @@ public:
     bool            PostSendLocked();
 
     void			SetUniqueId(const std::uint64_t id) { mUID = id; }
-    std::uint64_t	    GetUniqueId() const { return mUID; }
+    std::uint64_t	GetUniqueId() const { return mUID; }
 
     SocketEx&       GetRemoteSock()       noexcept { return mRemoteSock; }
     const SOCKET&   GetRemoteSocket() noexcept { return mRemoteSock.GetSocket(); }

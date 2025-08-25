@@ -20,10 +20,10 @@ import <functional>;
 
 Session::Session()
 {
-	ZeroMemory(&mRecvOverEx, sizeof(OverlappedIoEx));
-	ZeroMemory(&mSendOverEx, sizeof(OverlappedIoEx));
-	ZeroMemory(&mAcceptOverEx, sizeof(OverlappedIoEx));
-	ZeroMemory(&mConnectOverEx, sizeof(OverlappedIoEx));
+	memset(&mRecvOverEx, 0, sizeof(OverlappedIoEx));
+	memset(&mSendOverEx, 0, sizeof(OverlappedIoEx));
+	memset(&mAcceptOverEx, 0, sizeof(OverlappedIoEx));
+	memset(&mConnectOverEx, 0, sizeof(OverlappedIoEx));
 
 	mRecvOverEx.mIOType = IO_TYPE::RECV;
 	mSendOverEx.mIOType = IO_TYPE::SEND;
@@ -35,10 +35,10 @@ Session::~Session() = default;
 
 void Session::Reset()
 {
-	ZeroMemory(&mRecvOverEx, sizeof(OverlappedIoEx));
-	ZeroMemory(&mSendOverEx, sizeof(OverlappedIoEx));
-	ZeroMemory(&mAcceptOverEx, sizeof(OverlappedIoEx));
-	ZeroMemory(&mConnectOverEx, sizeof(OverlappedIoEx));
+	memset(&mRecvOverEx, 0, sizeof(OverlappedIoEx));
+	memset(&mSendOverEx, 0, sizeof(OverlappedIoEx));
+	memset(&mAcceptOverEx, 0, sizeof(OverlappedIoEx));
+	memset(&mConnectOverEx, 0, sizeof(OverlappedIoEx));
 
 	mRecvOverEx.mIOType = IO_TYPE::RECV;
 	mSendOverEx.mIOType = IO_TYPE::SEND;
@@ -52,7 +52,7 @@ void Session::Reset()
 
 	mSendPending.store(false, std::memory_order_release);
 
-	ZeroMemory(mAcceptBuf, sizeof(mAcceptBuf));
+	memset(&mAcceptBuf, 0, sizeof(mAcceptBuf));
 }
 
 
@@ -224,7 +224,8 @@ bool Session::PostSendLocked()
 		return true;
 	}
 
-	ZeroMemory(static_cast<OVERLAPPED*>(&mSendOverEx), sizeof(OVERLAPPED));
+	memset(static_cast<OVERLAPPED*>(&mSendOverEx), 0, sizeof(OVERLAPPED));
+
 	mSendOverEx.mIOType = IO_TYPE::SEND;
 	mSendOverEx.mUID = mUID;
 
@@ -323,7 +324,7 @@ bool Session::IsConnected() const
 
 void Session::PrepareConnectOv() noexcept
 {
-	ZeroMemory(static_cast<OVERLAPPED*>(&mConnectOverEx), sizeof(OVERLAPPED));
+	memset(static_cast<OVERLAPPED*>(&mConnectOverEx), 0, sizeof(OVERLAPPED));
 	mConnectOverEx.mIOType = IO_TYPE::CONNECT;
 	mConnectOverEx.mUID = static_cast<int>(mUID);
 }
