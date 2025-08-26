@@ -33,7 +33,10 @@ bool Core::Init(const int listenPort, const int maxSession, const int workerCoun
     mMaxSession = maxSession;
     mWorkerCnt = workerCount;
 
-    if (!mListenSocket.Init() || !mListenSocket.BindAndListen(listenPort))
+    if (!mListenSocket.Init())
+        return false;
+
+    if (!mListenSocket.BindAndListen(listenPort))
         return false;
 
     if (!CreateNewIocp(mWorkerCnt))
@@ -136,17 +139,12 @@ void Core::OnRecv(const std::uint64_t uID, const std::uint32_t ioSize)
 {
     auto session = GetSession(uID);
     if (!session)
-    {
-        std::cout << std::format("OnRecv : session not found for id: {}\n", uID);
         return;
-    }
+    
 
     auto recvBuffer = session->GetRecvBuffer();
     if (!recvBuffer)
-    {
-        std::cout << "OnRecv: recvBuffer null id:" << uID << std::endl;
         return;
-    }
 
     session->RecvPacket(ioSize);
 
@@ -178,20 +176,16 @@ void Core::OnRecv(const std::uint64_t uID, const std::uint32_t ioSize)
 
 
     if (!session->RecvReady())
-    {
-        std::cout << std::format("OnRecv: RecvReady failed for session {}\n", uID);
         OnClose(uID);
-    }
+    
 }
 
 void Core::OnAccept(const std::uint64_t uID, const std::uint64_t key)
 {
     auto session = GetSession(uID);
     if (!session || key != 0)
-    {
-        std::cout << std::format("OnAccept: invalid session or completeKey: {}\n", uID);
         return;
-    }
+    
 
     if (!AddDeviceRemoteSocket(session))
     {
@@ -216,10 +210,7 @@ void Core::OnClose(const std::uint64_t uID)
 
     auto session = GetSession(uID);
     if (!session)
-    {
-        std::cout << std::format("OnClose: session not found for uID: {}\n", uID);
 		return;
-    }
     
     const bool sessionType = (session->GetRole() == ServerRole::Server);
 
@@ -233,10 +224,7 @@ void Core::OnClose(const std::uint64_t uID)
 	else
 	{
         if (!session->AcceptReady(GetListenSocket(), uID))
-        {
-            std::cout << std::format("OnClose: AcceptReady failed for session {}\n", uID);
             return;
-        }
 	}
 
 
@@ -260,26 +248,22 @@ void Core::OnConnect(const std::uint64_t uID)
 
         if (!ok) 
         {
-            const int wsa = WSAGetLastError();
-            std::cerr << "[CONNECT] fail sid=" << uID << " wsa=" << wsa << "\n";
             OnClose(uID);
             return;
         }
 
         if (!s->SetFinishConnectContext()) 
         {
-            std::cerr << "[CONNECT] update ctx fail sid=" << uID
-                << " gle=" << GetLastError() << "\n";
             OnClose(uID);
             return;
         }
 
         if (!s->RecvReady()) 
         {
-            std::cerr << "[CONNECT] RecvReady fail sid=" << uID << "\n";
             OnClose(uID);
             return;
         }
+
         std::cout << "[CONNECT] OK sid=" << uID << "\n";
     }
 }
@@ -304,7 +288,6 @@ bool Core::ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, con
 
     if (!AddDeviceRemoteSocket(connSession))
     {
-        std::cerr << "AddDeviceRemoteSocket failed, GLE=" << GetLastError() << "\n";
         mSessionPool.erase(logicSessionId);
         return false;
     }
@@ -316,7 +299,6 @@ bool Core::ConnectTo(const std::wstring& ip, uint16_t port, ServerRole role, con
         const int e = WSAGetLastError();
         if (e != WSA_IO_PENDING) 
         {
-            std::cerr << "ConnectEx failed, WSA=" << e << "\n";
             mSessionPool.erase(logicSessionId);
             return false;
         }

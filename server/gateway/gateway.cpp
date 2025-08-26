@@ -75,9 +75,9 @@ void Gateway::HandleFromClient(const std::uint64_t clientSid, std::span<const st
     std::memcpy(relay.data(), &idN, sizeof(std::uint32_t));
     std::memcpy(relay.data() + sizeof(std::uint32_t), frame.data(), frame.size());
 
-    if (!logic->SendPacket({ relay.data(), relay.size() })) 
+    if (logic->SendPacket({ relay.data(), relay.size() })) 
     {
-        std::cerr << "GW: SendPacket to logic failed\n";
+        std::cout << std::format("GW -> LOGIC : session: {}\n", clientSid);
     }
 
     mLastClientSid.store(clientSid, std::memory_order_release);
@@ -106,5 +106,8 @@ void Gateway::HandleFromLogic(std::span<const std::byte> frame)
     }
 
     auto payload = frame.subspan(RELAY_HDR);
-    (void)cli->SendPacket(payload);
+    if (cli->SendPacket(payload))
+    {
+        std::cout << std::format("LOGIC -> GW : session: {}\n", target);
+    }
 }

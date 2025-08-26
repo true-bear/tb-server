@@ -27,15 +27,16 @@ inline void ProcessChat(Session* gwSession, const std::byte* data, const size_t 
         static_cast<int>(frame.size())))
         return;
 
-    chat.set_message("show me the money");
+    chat.set_message("simple echo");
 
     std::string payload;
     if (!chat.SerializeToString(&payload))
         return;
 
     auto relay = packet_util::WrapPacket(clientSid, payload);
-    gwSession->SendPacket({ relay.data(), relay.size() });
-
-    std::cout << std::format("send success : size: {} message: {}\n",
-        payload.size(), chat.message());
+    
+    if (gwSession->SendPacket({ relay.data(), relay.size() }))
+    {
+        std::cout << std::format("send success : size: {} message: {}\n", relay.size(), chat.message());
+    }
 }

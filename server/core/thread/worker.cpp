@@ -31,14 +31,15 @@ void Worker::Run(std::stop_token st)
 
         std::span events_view{ events.m_IoArray, static_cast<std::size_t>(events.m_eventCount) };
 
-        auto pipeline = events_view 
-            | std::views::filter([](const auto& e) { return e.lpOverlapped != nullptr; })
-            | std::views::transform([](const auto& e) {
-            auto* over = reinterpret_cast<OverlappedIoEx*>(e.lpOverlapped);
-            return std::tuple{ over, e.dwNumberOfBytesTransferred, e.lpCompletionKey };});
-
-        for (auto [over, ioSize, compKey] : pipeline)
+        for (const auto& e : events_view)
         {
+            if (e.lpOverlapped == nullptr)
+                return;
+
+            auto* over = reinterpret_cast<OverlappedIoEx*>(e.lpOverlapped);
+            auto  ioSize = e.dwNumberOfBytesTransferred;
+            auto  compKey = e.lpCompletionKey;
+
             const std::uint64_t sessionId = over->mUID;
             if (auto* session = mEventHandler->GetSession(sessionId); !session)
                 continue;

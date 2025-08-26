@@ -203,10 +203,7 @@ bool Session::SendPacket(std::span<const std::byte> data)
 	std::scoped_lock lk(mSendLock);
 
 	if (!mSendBuffer->Write(headerSpan) || !mSendBuffer->Write(data)) 
-	{
-		std::cout << std::format("SendPacket: Write failed uid:{} sz:{}\n", mUID, data.size());
 		return false;
-	}
 
 	if (mSendPending.load(std::memory_order_acquire))
 		return true;
@@ -247,13 +244,11 @@ bool Session::PostSendLocked()
 		const int err = WSAGetLastError();
 		if (err != WSA_IO_PENDING) 
 		{
-			std::cout << std::format("WSASend failed wsa:{} uid:{}\n", err, mUID);
 			mSendPending.store(false, std::memory_order_release);
 			return false;
 		}
 	}
 
-	std::cout << std::format("SendPacket: uid:{}\n", mUID);
 	return true;
 }
 
@@ -286,7 +281,6 @@ bool Session::SendReady()
 		const int error = WSAGetLastError();
 		if (error != WSA_IO_PENDING)
 		{
-			std::cout << std::format("SendReady: WSASend failed with error: {} id: {}\n", error, mUID);
 			return false;
 		}
 	}
@@ -301,10 +295,8 @@ void Session::SendFinish(size_t bytes)
 	size_t readable = mSendBuffer->ReadableSize();
 
 	if (bytes > readable) 
-	{
-		std::cerr << std::format("OnSendComplete clip {} -> {} (uid={})\n",bytes, readable, mUID);
 		bytes = readable;
-	}
+	
 
 	mSendBuffer->MoveReadPos(bytes);
 
