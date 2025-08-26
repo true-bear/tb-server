@@ -3,6 +3,7 @@ module;
 #include <iostream>
 #include <format>
 #include <ranges>
+#include <tuple>
 
 module thread.worker;
 
@@ -31,15 +32,16 @@ void Worker::Run(std::stop_token st)
 
         std::span events_view{ events.m_IoArray, static_cast<std::size_t>(events.m_eventCount) };
 
-        for (const auto& e : events_view)
-        {
-            if (e.lpOverlapped == nullptr)
-                return;
-
+        auto pipeline =
+            events_view
+            | std::views::take_while([](const auto& e) { return e.lpOverlapped != nullptr; })
+            | std::views::transform([](const auto& e) {
             auto* over = reinterpret_cast<OverlappedIoEx*>(e.lpOverlapped);
-            auto  ioSize = e.dwNumberOfBytesTransferred;
-            auto  compKey = e.lpCompletionKey;
+            return std::tuple{ over, e.dwNumberOfBytesTransferred, e.lpCompletionKey };
+                });
 
+        for (auto [over, ioSize, compKey] : pipeline)
+        {
             const std::uint64_t sessionId = over->mUID;
             if (auto* session = mEventHandler->GetSession(sessionId); !session)
                 continue;
