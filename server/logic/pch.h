@@ -21,7 +21,7 @@
 #include <queue>
 #include <mutex>
 #include <typeindex>
-
+#include <cstring>
 #include <functional>
 
 #include <string_view>

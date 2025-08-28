@@ -134,10 +134,13 @@
     <ClCompile Include="gateway.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="proto\message.pb.cc" />
+    <ClCompile Include="thread\sendThread.cpp" />
+    <ClCompile Include="thread\sendType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gateway.h" />
     <ClInclude Include="proto\message.pb.h" />
+    <ClInclude Include="thread\sendThread.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">

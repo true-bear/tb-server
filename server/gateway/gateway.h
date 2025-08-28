@@ -1,4 +1,14 @@
 #pragma once
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#include "thread/sendThread.h"
+#include "thread/sendType.h"
 #include <windows.h>
 #include <string>
 #include <iostream>
@@ -20,6 +30,12 @@ class Gateway  : public Core, public Singleton<Gateway>
 public:
     bool InitAndConnect(const int sessionCount, const int worker, const int port);
 
+    void HandleFromLogic(std::span<const std::byte> frame);
+    void HandleFromClient(const std::uint64_t clientSid, std::span<const byte> frame);
+
+    virtual void Run();
+    virtual void Stop();
+
 private:
     static std::span<const byte> ToBytes(const std::string& s)
     {
@@ -28,10 +44,14 @@ private:
 
     void Dispatch(const std::uint64_t id, std::span<const byte> frame);
 
-    void HandleFromClient(const std::uint64_t clientSid, std::span<const byte> frame);
-    void HandleFromLogic(std::span<const byte> frame);
+
+
+    bool EnqueueSend(std::uint64_t sessionId, std::span<const std::byte> data);
 
 private:
+    GatewaySendQueue mSendQueue;
+    std::unique_ptr<SendThread> mSendThread;
+
     std::uint64_t mLogicSid{ 0 };
     std::atomic<std::uint64_t> mLastClientSid{ 0 };
 };

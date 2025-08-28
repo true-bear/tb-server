@@ -18,7 +18,7 @@ public:
     void Stop();
 
     bool DispatchPacket(const std::uint64_t sessionId, std::span<const std::byte> frame) noexcept;
-    std::uint64_t ShardIndex(const std::uint64_t sessionId) const noexcept;
+    std::size_t ShardIndex(const std::uint64_t sessionId) const noexcept;
 
 private:
     struct Shard {

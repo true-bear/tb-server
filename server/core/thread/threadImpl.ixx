@@ -6,7 +6,6 @@ import thread.types;
 
 import <string_view>;
 import <stop_token>;
-import <stop_token>;
 import <thread>;
 import <atomic>;
 import <string>;
@@ -34,3 +33,4 @@ private:
     std::atomic<bool>   mRunning{ false };
     ThreadType          mType{ ThreadType::Unknown };
 };
+

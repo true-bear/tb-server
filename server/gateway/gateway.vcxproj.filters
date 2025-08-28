@@ -6,10 +6,19 @@
       <Filter>proto</Filter>
     </ClCompile>
     <ClCompile Include="gateway.cpp" />
+    <ClCompile Include="thread\sendThread.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\sendType.h">
+      <Filter>thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="proto">
       <UniqueIdentifier>{18167646-23c3-497d-a0ee-fa59a5099a1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thread">
+      <UniqueIdentifier>{23172551-b69b-45b1-b50c-e213950416e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -17,5 +26,8 @@
       <Filter>proto</Filter>
     </ClInclude>
     <ClInclude Include="gateway.h" />
+    <ClInclude Include="thread\sendThread.h">
+      <Filter>thread</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

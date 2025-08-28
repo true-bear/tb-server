@@ -1,13 +1,7 @@
 #include "../pch.h"
 #include "logic.h"
 #include "logic_chat.h"
-
-#include <algorithm>
-#include <cstring>
-#include <thread>
-#include <format>
-#include <array>
-#include <memory>
+#include <ranges>
 
 import util.packet;
 
@@ -23,7 +17,7 @@ bool LogicManager::InitPools(std::size_t nodeCount)
         const std::size_t take = std::min(left, BLOCK);
         auto block = std::make_unique<PacketNode[]>(take);
 
-        for (std::size_t i = 0; i < take; ++i)
+        for (auto i : std::views::iota(size_t{ 0 }, take))
             mFreeList.push(&block[i]);
 
         mPoolBlocks.emplace_back(std::move(block));
@@ -32,10 +26,10 @@ bool LogicManager::InitPools(std::size_t nodeCount)
     return true;
 }
 
-std::uint64_t LogicManager::ShardIndex(const std::uint64_t sessionId) const noexcept
+std::size_t LogicManager::ShardIndex(const std::uint64_t sessionId) const noexcept
 {
     std::size_t k = mShards.size();
-    return k ? static_cast<std::uint64_t>(static_cast<std::uint64_t>(sessionId) % k) : 0;
+    return static_cast<int>(sessionId % k);
 }
 
 bool LogicManager::Init(SessionGetFunc getSession, const int threadCount)
@@ -48,7 +42,7 @@ bool LogicManager::Init(SessionGetFunc getSession, const int threadCount)
 
     mShards.resize(threadCount);
 
-    for (int i = 0; i < threadCount; ++i) 
+    for (auto i : std::views::iota(0, threadCount))
     {
         auto q = std::make_unique<PacketQueueT>();
         auto th = std::make_unique<LogicThread>(
@@ -105,7 +99,7 @@ bool LogicManager::DispatchPacket(const std::uint64_t sessionId, std::span<const
     node->type = static_cast<int>(type);
     node->size = bodyLen;
 
-    std::memcpy(node->data.data(), frame.data() + packet_util::kHeaderSize, bodyLen);
+    std::copy_n(frame.data() + packet_util::kHeaderSize, bodyLen, node->data.begin());
 
     auto& q = *mShards[ShardIndex(sessionId)].queue;
     if (!q.push(node))
