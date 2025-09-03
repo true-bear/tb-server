@@ -21,17 +21,15 @@ public:
     std::size_t ShardIndex(const std::uint64_t sessionId) const noexcept;
 
 private:
-    struct Shard {
+    struct Shard 
+    {
         std::unique_ptr<LogicThread> thread;
         std::unique_ptr<PacketQueueT> queue;
     };
 
-    FreeListT mFreeList;
-    std::vector<std::unique_ptr<PacketNode[]>> mPoolBlocks;
     std::vector<Shard> mShards;
 
     LogicDispatch  mDispatcher;
     SessionGetFunc mGetSessionFunc;
 
-    bool InitPools(std::size_t nodeCount);
 };

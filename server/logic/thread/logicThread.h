@@ -15,14 +15,12 @@ public:
         SessionGetFunc getSession,
         LogicDispatch& dispatcher,
         PacketQueueT& queue,
-        FreeListT& freeList, 
 		ThreadType type = ThreadType::Logic
     )
         : ThreadImpl(name, type)
         , mGetSession(getSession)
         , mDispatcher(dispatcher)
         , mPacketQueue(queue)
-        , mFreeList(freeList)
     {
     }
 
@@ -32,5 +30,4 @@ private:
     SessionGetFunc mGetSession;
     LogicDispatch& mDispatcher;
     PacketQueueT& mPacketQueue;
-    FreeListT& mFreeList;
 };

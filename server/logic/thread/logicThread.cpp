@@ -7,9 +7,10 @@
 
 void LogicThread::Run(std::stop_token st)
 {
+    PacketNode* node = nullptr;
+
     while (!st.stop_requested())
     {
-        PacketNode* node = nullptr;
         if (!mPacketQueue.pop(node))
         {
             std::this_thread::sleep_for(std::chrono::microseconds(1));
@@ -19,10 +20,11 @@ void LogicThread::Run(std::stop_token st)
         Session* session = mGetSession(node->sessionId);
         if (session)
         {
-            std::span<const std::byte> payload{ node->data.data(), node->size };
+            std::span<const std::byte> payload{ node->data, node->size };
             mDispatcher.Dispatch(node->type, session, payload.data(), payload.size());
         }
 
-        mFreeList.push(node);
+        ::operator delete(node->data);
+        delete node;
     }
 }

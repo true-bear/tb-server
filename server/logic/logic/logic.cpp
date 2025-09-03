@@ -4,26 +4,12 @@
 #include <ranges>
 
 import util.packet;
+import util.conf;
 
 LogicManager::LogicManager() = default;
-LogicManager::~LogicManager() { Stop(); }
-
-bool LogicManager::InitPools(std::size_t nodeCount)
-{
-    constexpr std::size_t BLOCK = 4096;
-
-    for (std::size_t left = nodeCount; left > 0; ) 
-    {
-        const std::size_t take = std::min(left, BLOCK);
-        auto block = std::make_unique<PacketNode[]>(take);
-
-        for (auto i : std::views::iota(size_t{ 0 }, take))
-            mFreeList.push(&block[i]);
-
-        mPoolBlocks.emplace_back(std::move(block));
-        left -= take;
-    }
-    return true;
+LogicManager::~LogicManager() 
+{ 
+    Stop(); 
 }
 
 std::size_t LogicManager::ShardIndex(const std::uint64_t sessionId) const noexcept
@@ -36,7 +22,6 @@ bool LogicManager::Init(SessionGetFunc getSession, const int threadCount)
 {
     mGetSessionFunc = std::move(getSession);
 
-    InitPools(FREE_LIST_CAP);
 
     mDispatcher.Register(static_cast<size_t>(PacketType::CHAT), &ProcessChat);
 
@@ -50,7 +35,6 @@ bool LogicManager::Init(SessionGetFunc getSession, const int threadCount)
             mGetSessionFunc,
             mDispatcher,
             *q,
-            mFreeList,
 			ThreadType::Logic
         );
         mShards[i].queue = std::move(q);
@@ -76,8 +60,7 @@ void LogicManager::Stop()
             s.thread->Stop();
     } 
 }
-
-bool LogicManager::DispatchPacket(const std::uint64_t sessionId, std::span<const std::byte> frame) noexcept
+bool LogicManager::DispatchPacket(std::uint64_t sessionId, std::span<const std::byte> frame) noexcept
 {
     std::uint16_t type{};
     std::uint32_t bodyLen{};
@@ -85,26 +68,31 @@ bool LogicManager::DispatchPacket(const std::uint64_t sessionId, std::span<const
     if (!packet_util::ReadHeader(frame, type, bodyLen))
         return false;
 
-    if (bodyLen == 0 || bodyLen > MAX_PACKET_SIZE)
+    if (bodyLen == 0 || bodyLen > NetDefaults::MAX_PACKET_SIZE)
         return false;
 
     if (packet_util::kHeaderSize + static_cast<std::size_t>(bodyLen) > frame.size())
         return false;
 
-    PacketNode* node = nullptr;
-    if (!mFreeList.pop(node))
+    auto& shard = mShards[ShardIndex(sessionId)];
+
+
+    PacketNode* n = new (std::nothrow) PacketNode{};
+    if (!n) 
         return false;
 
-    node->sessionId = sessionId;
-    node->type = static_cast<int>(type);
-    node->size = bodyLen;
+    n->sessionId = sessionId;
+    n->type = type;
+    n->size = bodyLen;
+    n->data = static_cast<std::byte*>(::operator new(bodyLen, std::nothrow));
+    if (!n->data) { delete n; return false; }
 
-    std::copy_n(frame.data() + packet_util::kHeaderSize, bodyLen, node->data.begin());
+    std::memcpy(n->data, frame.data() + packet_util::kHeaderSize, bodyLen);
 
-    auto& q = *mShards[ShardIndex(sessionId)].queue;
-    if (!q.push(node))
+
+    if (!shard.queue->push(n))
     {
-        mFreeList.push(node);
+        delete n;
         return false;
     }
 
