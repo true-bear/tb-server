@@ -85,14 +85,21 @@ bool LogicManager::DispatchPacket(std::uint64_t sessionId, std::span<const std::
     n->type = type;
     n->size = bodyLen;
     n->data = static_cast<std::byte*>(::operator new(bodyLen, std::nothrow));
-    if (!n->data) { delete n; return false; }
+
+    if (!n->data) 
+    { 
+        ::operator delete(n->data);
+        delete n;
+        return false; 
+    }
 
     std::memcpy(n->data, frame.data() + packet_util::kHeaderSize, bodyLen);
 
 
     if (!shard.queue->push(n))
     {
-        delete n;
+        ::operator delete(n->data);
+        delete n;        
         return false;
     }
 
